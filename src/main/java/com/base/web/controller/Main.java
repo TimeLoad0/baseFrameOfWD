@@ -26,6 +26,13 @@ public class Main {
 		return "index";
 	}
 
+    @RequestMapping("/baseweb")
+    public String baseweb(Map<String, Object> model) {
+        model.put("time", new Date());
+        model.put("message","index");
+        return "index";
+    }
+
 	@RequestMapping("/foo")
 	public String foo(Map<String, Object> model) {
 		throw new RuntimeException("Foo");
