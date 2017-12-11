@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE tiles-definitions PUBLIC
+       "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
+       "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
+<tiles-definitions>
+	<!-- Templates -->
+	<!--<definition name="layout.basic" template="/WEB-INF/jsp/layout/basic.jsp">-->
+	<!--</definition>-->
+	<!--<definition name="login" template="/WEB-INF/jsp/view/login.jsp">-->
+	<!--</definition>-->
+	<!-- Pages -->
+
+	<definition name="index" template="/WEB-INF/jsp/index.jsp">
+	</definition>
+	
+	<definition name="welcome" template="/WEB-INF/jsp/welcome.jsp">
+	</definition>
+
+</tiles-definitions>
