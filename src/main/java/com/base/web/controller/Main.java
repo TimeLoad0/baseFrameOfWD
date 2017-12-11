@@ -12,26 +12,19 @@ public class Main {
 	@Value("${application.message:Hello World}")
 	private String message = "Hello World";
 
-	@RequestMapping("/")
-	public String welcome(Map<String, Object> model) {
-		model.put("time", new Date());
-		model.put("message", this.message);
-		return "welcome";
-	}
-
-	@RequestMapping("/index")
+	@RequestMapping({"/","index","baseweb"})
 	public String index(Map<String, Object> model) {
 		model.put("time", new Date());
-		model.put("message","index");
+		model.put("message", this.message);
 		return "index";
 	}
 
-    @RequestMapping("/baseweb")
-    public String baseweb(Map<String, Object> model) {
-        model.put("time", new Date());
-        model.put("message","index");
-        return "index";
-    }
+	@RequestMapping("/welcome")
+	public String welcome(Map<String, Object> model) {
+		model.put("time", new Date());
+		model.put("message","index");
+		return "welcome.page";
+	}
 
 	@RequestMapping("/foo")
 	public String foo(Map<String, Object> model) {

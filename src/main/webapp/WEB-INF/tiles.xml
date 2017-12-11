@@ -4,16 +4,17 @@
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
 	<!-- Templates -->
-	<!--<definition name="layout.basic" template="/WEB-INF/jsp/layout/basic.jsp">-->
-	<!--</definition>-->
-	<!--<definition name="login" template="/WEB-INF/jsp/view/login.jsp">-->
-	<!--</definition>-->
-	<!-- Pages -->
+	<definition name="template" template="/WEB-INF/jsp/layout/template.jsp">
+	</definition>
+
+	<definition name="*.page" extends="template">
+		<put-attribute name="header" value="/WEB-INF/jsp/layout/header.jsp" />
+		<put-attribute name="body" value="/WEB-INF/jsp/{1}.jsp" />
+	</definition>
 
 	<definition name="index" template="/WEB-INF/jsp/index.jsp">
 	</definition>
-	
-	<definition name="welcome" template="/WEB-INF/jsp/welcome.jsp">
-	</definition>
 
+	<definition name="*.*" template="/WEB-INF/jsp/layout/{1}/{2}.jsp">
+	</definition>
 </tiles-definitions>
