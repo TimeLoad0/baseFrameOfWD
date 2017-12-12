@@ -1,21 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
-<%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<html lang="en">
-<script type="text/javascript" src="js/jquery/jquery-3.1.1.min.js"></script>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%
+	String ctx = request.getContextPath();
+%>
+<html>
+<head>
+	<base href="<%=request.getRequestURI()%>">
+	<title>baseFrame系统</title>
+	<style type="text/css">
+		html,body{height:100%;margin:0;padding:0}
+	</style>
+
+	<script type="text/javascript" src="../../js/util/common.js"></script>
+
+	<script>
+        path = '<%=ctx %>';
+	</script>
+</head>
+
 <body>
-	<spring:url value="/resources/text.txt" htmlEscape="true" var="springUrl" />
-	Spring URL: ${springUrl} at ${time}
-	<br>
-	JSTL URL: ${url}
-	<br>
-	Message: ${message}
-	<div id="div_a">
-		index.jsp
-	</div>
+<iframe id="home" name="home" src="<%=ctx%>/layout" width="100%" height="100%" style="margin: 0" scrolling="NO" frameborder="0"></iframe>
 </body>
-<script>
-    alert($('#div_a').text());
-</script>
+
 </html>
