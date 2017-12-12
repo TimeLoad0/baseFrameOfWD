@@ -1,3 +1,5 @@
 $(function(){
-    test();
+    //test();
+    alert(ctx);
 })
+
