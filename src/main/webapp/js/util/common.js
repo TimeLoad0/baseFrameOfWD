@@ -5,8 +5,6 @@
  * wj
  */
 
-var path;
-
 function test(){
     $.confirm("this is test","test");
 }

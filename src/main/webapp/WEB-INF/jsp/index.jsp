@@ -11,15 +11,13 @@
 		html,body{height:100%;margin:0;padding:0}
 	</style>
 
-	<script type="text/javascript" src="../../js/util/common.js"></script>
-
-	<script>
-        path = '<%=ctx %>';
+	<script type="application/javascript">
+        var path = '<%=ctx %>';
 	</script>
 </head>
 
 <body>
-<iframe id="home" name="home" src="<%=ctx%>/layout" width="100%" height="100%" style="margin: 0" scrolling="NO" frameborder="0"></iframe>
+	<iframe id="base" name="base" src="<%=ctx%>/layout" width="100%" height="100%" style="margin: 0" scrolling="NO" frameborder="0"></iframe>
 </body>
 
 </html>
