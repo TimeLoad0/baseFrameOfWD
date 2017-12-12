@@ -40,6 +40,11 @@ public class Main {
 		return "index";
 	}
 
+	@RequestMapping("/test")
+	public String test(Map<String, Object> model) {
+		return "test.page";
+	}
+
     @RequestMapping("/baseweb")
     public String baseweb(Map<String, Object> model) {
         model.put("time", new Date());

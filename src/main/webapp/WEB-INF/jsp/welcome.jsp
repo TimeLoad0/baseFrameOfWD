@@ -3,7 +3,7 @@
 <html lang="zh-CN">
 <body>
 	<div id="div_test">
-		测试界面
+		&nbsp;测试界面
 	</div>
 </body>
 <script type="text/javascript" src="js/welcome.js"></script>
