@@ -6,8 +6,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title></title>
 
+	<script type="application/javascript">
+		var i = 0;
+		function addTab(){
+            parent.right.addTab("a"+i,"测试"+i++,"/test",false,false,true);
+		}
+	</script>
 </head>
 <body>
-	我是左侧菜单
+	<input type="button" value="测试菜单功能" onclick="addTab()">
 </body>
 </html>

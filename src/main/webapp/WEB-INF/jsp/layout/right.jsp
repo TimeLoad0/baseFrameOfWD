@@ -11,9 +11,10 @@
 		body,div,ol,ul,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,p,form,fieldset,legend,input{margin:0; padding:0;}
 		html,body{height:100%;}
 		body{overflow: hidden;background-color: #F5F5F5;}
-
-		.nav > li > a{position: relative;display: block;padding: 1px 15px;}
-
+		.nav > li > a{position: relative;display: block;padding: 1px 10px;}
+		.nav > #li_firstTab > a{position: relative;display: block;padding: 1px 5px;}
+		.nav > #li_lastTab{position: absolute;right: 5px;}
+		.nav > #li_lastTab > a{position: relative;display: block;padding: 1px 5px;}
 		.closeTab{display:inline;margin-left: 5px;margin-bottom: 3px;background-image:url(../../../images/close.png)}
 		.closeTab:hover{background-image:url(../../../images/close_active.png)}
 	</style>
@@ -164,12 +165,14 @@
 <body>
 	<div style="width:98%;height:25px;line-height: 24px;margin:1px auto;margin-bottom:0;font-size: 16px;">
 		<ul id="tabs" class="nav nav-tabs">
-			<li id="li_lastTab" >
-				<a onclick="showTabs(this)">...</a>
-				<div id="hidTabs" style="background-color:#F5F5F5;min-width: 100px;border: 1px solid #dddddd;position: fixed;display: none"></div>
+			<li id="li_firstTab">
+				<a onclick="changeTabs(-1)"><</a>
+			</li>
+			<li id="li_lastTab">
+				<a onclick="changeTabs(1)">></a>
 			</li>
 		</ul>
 	</div>
-	<div id="frames" style="width:98%;height:93%;margin:0 auto;border:1px solid #D6D7D7;background-color: white;border-radius: 0 4px 4px 4px;    box-shadow: -5px 5px 10px #888888;"></div>
+	<div id="frames" style="width:98%;height:93%;margin:0 auto;border:1px solid #D6D7D7;background-color: white;border-radius: 0 4px 4px 4px;"></div>
 </body>
 </html>

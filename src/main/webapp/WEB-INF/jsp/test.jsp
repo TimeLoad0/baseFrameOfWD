@@ -11,6 +11,6 @@
     <title>测试dth</title>
 </head>
 <body>
-
+<input type="text">
 </body>
 </html>
