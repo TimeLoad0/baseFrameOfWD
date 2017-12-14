@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.Date;
 import java.util.Map;
 
 @Controller
@@ -44,13 +43,6 @@ public class Main {
 	public String test(Map<String, Object> model) {
 		return "test.page";
 	}
-
-    @RequestMapping("/baseweb")
-    public String baseweb(Map<String, Object> model) {
-        model.put("time", new Date());
-        model.put("message","index");
-        return "index";
-    }
 
 	@RequestMapping("/foo")
 	public String foo(Map<String, Object> model) {
