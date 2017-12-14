@@ -9,7 +9,7 @@
 	<script type="application/javascript">
 		var i = 0;
 		function addTab(){
-            parent.right.addTab("a"+i,"测试"+i++,"/test",false,false,true);
+            parent.right.addTab("a"+i,"测试可关闭"+i++,"/",false,true,true);
 		}
 	</script>
 </head>

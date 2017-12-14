@@ -10,22 +10,22 @@ $(function() {
     addTab("a","首页","/",true,true,true);
     addTab("b","测试新增b","/test",true,true);
     addTab("c","测试可关闭","/",false,true);
-    addTab("b1","测试新增b1","/test",true,true);
-    addTab("c1","测试可关闭1","/",false,true);
-    addTab("b2","测试新增b2","/test",true,true);
-    addTab("c2","测试可关闭2","/",false,true);
-    addTab("b3","测试新增b3","/test",true,true);
-    addTab("c3","测试可关闭3","/",false,true);
-    addTab("b4","测试新增b4","/test",true,true);
-    addTab("c4","测试可关闭4","/",false,true);
-    addTab("b5","测试新增b5","/test",true,true);
-    addTab("c5","测试可关闭5","/",false,true);
-    addTab("b6","测试新增b6","/test",true,true);
-    addTab("c6","测试可关闭6","/",false,true);
-    addTab("b7","测试新增b7","/test",true,true);
-    addTab("c7","测试可关闭7","/",false,true);
-    addTab("b8","测试新增b8","/test",true,true);
-    addTab("c8","测试可关闭8","/",false,true);
+    // addTab("b1","测试新增b1","/test",true,true);
+    // addTab("c1","测试可关闭1","/",false,true);
+    // addTab("b2","测试新增b2","/test",true,true);
+    // addTab("c2","测试可关闭2","/",false,true);
+    // addTab("b3","测试新增b3","/test",true,true);
+    // addTab("c3","测试可关闭3","/",false,true);
+    // addTab("b4","测试新增b4","/test",true,true);
+    // addTab("c4","测试可关闭4","/",false,true);
+    // addTab("b5","测试新增b5","/test",true,true);
+    // addTab("c5","测试可关闭5","/",false,true);
+    // addTab("b6","测试新增b6","/test",true,true);
+    // addTab("c6","测试可关闭6","/",false,true);
+    // addTab("b7","测试新增b7","/test",true,true);
+    // addTab("c7","测试可关闭7","/",false,true);
+    // addTab("b8","测试新增b8","/test",true,true);
+    // addTab("c8","测试可关闭8","/",false,true);
 
     //页面长度变化时自动调整显示Tab事件
     $(window).resize(function(){
@@ -63,6 +63,7 @@ function addTab(tabId,tabName,url,isColsable,isRefresh,isOpen){
 
         var fram = '<iframe id="frame_'+tabId+'" src="'+ctx+url+'" frameborder="0" style="height: 100%;width: 99%;display:none"></iframe>';
         $('#frames').append(fram);
+
     }
 
     if(isOpen){
@@ -98,7 +99,6 @@ function refreshTabSize(){
         }
 
         currentWidth += $(this).outerWidth(true);
-
 
     });
 
