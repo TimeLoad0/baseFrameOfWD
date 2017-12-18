@@ -8,47 +8,85 @@ var _tableOptions = {}; //表格选项
 var _data = {}; //数据缓存
 
 //创建绑定表格
-function bindTable(options,data) {
+function createPage(options,data) {
     //默认选项
     var _defaultOptions = {
         add:true,           //新增，默认true
         search:true,        //搜索，默认true
         exportData:true,    //导出数据，默认true
         checkBox:true,      //复选框，默认true
-        pagination:true     //分页信息，默认true
+        pagination:true,    //分页信息，默认true
+        serialNumber:true   //序列号，默认true
     };
 
     //合并选项
     _tableOptions = $.extend(true,_defaultOptions,options);
 
+    //创建搜索工具栏
+    createSearchToolBar(_tableOptions);
+
     //创建表格
-    var table = '<table id="dataTable" class="table table-striped">';
-    $('#mainBody').html(table);
+    $('#mainBody').append($('<div class="panel panel-default"><table id="dataTable" class="table table-striped"></table></div>'));
 
     //创建表头
-    createThead(_tableOptions.cells);
+    createThead(_tableOptions);
     //绑定表格数据
-    createTbody(data);
+    bindTbody(data);
+}
+
+//创建搜索工具栏
+function createSearchToolBar(options){
+    var div = $('<div class="panel panel-heading"></div>');
+    var form = $('<form id="search_form" class="form-inline"></form>');
+    var selectDiv = $('<div class="form-group"><label>检索类别：</label><select class="form-control"><option value="1">11</option><option value="2">22</option></select></div>');
+    var inputDiv = $('<div class="form-group"><input type="text" class="form-control"/></div>');
+    var leftBtnDiv = $('<div class="form-group"><div class="btn-group"><a class="btn btn-primary">搜索</a></div></div>');
+    var rightBtnDiv = $('<div class="form-group" style="float: right;"><div class="btn-group"><a class="btn btn-primary">新建</a><a class="btn btn-primary">导出</a></div></div>');
+    form.append(selectDiv).append(inputDiv).append(leftBtnDiv).append(rightBtnDiv);
+    div.append(form);
+    $('#mainBody').append(div);
 }
 
 //创建表头
-function createThead(cells) {
-    var thead = '<thead><tr>';
+function createThead(options) {
+    var thead = $('<thead></thead>');
+    var tr = $('<tr></tr>');
+
+    var cells = options.cells;
+
+    //判断是否添加checkbox
+    if(options.checkBox){
+        tr.append('<th checkbox="true"><div><input type="checkbox" class="checkbox"></div></th>');
+    }
+
+    //判断是否添加serialNumber
+    if(options.serialNumber){
+        tr.append('<th serialNumber="true">序号</th>');
+    }
 
     //循环cells创建表头列
     for(var i=0;i<cells.length;i++) {
-        var display = !nullToTrue(cells[i].display)?"display:none;":"";
+        var th = $('<th field="' + cells[i].field + '">' + cells[i].text + '</th>');
 
-        thead += '<th style="'+display+'" field="' + cells[i].field + '">' + cells[i].text + '</th>';
+        //判断是否显示
+        if(!nullToTrue(cells[i].display)){
+            th.css('display','none');
+        }
+
+        //判断是否添加了列点击事件
+        if(nullToFalse(cells[i].click)){
+            th.attr("click",cells[i].click);
+        }
+
+        tr.append(th);
     }
 
-    thead += '</tr></thead>';
-
-    $('#dataTable').html(thead);
+    thead.append(tr);
+    $('#dataTable').empty().append(thead);
 }
 
 //绑定表格数据
-function createTbody(data) {
+function bindTbody(data) {
     if(isEmpty(data) || data.length <= 0) {
         return false;
     }
@@ -62,11 +100,29 @@ function createTbody(data) {
     var tbody = '<tbody>'; //tbody对象
 
     for(var i=0;i<dataRows.length;i++) {
-        var tr = '<tr>';
+        var tr = '<tr rowData=' + JSON.stringify(dataRows[i]) +'>';
 
         //循环表头
         for(var j=0;j<ths.length;j++) {
-            tr += '<td rowData=' + JSON.stringify(dataRows[i]) + '>' + dataRows[i][$(ths[j]).attr('field')] + '</td>';
+            //判断是否添加checkbox
+            if(nullToFalse($(ths[j]).attr('checkBox'))){
+                tr += '<td><div><input type="checkbox" class="checkbox"></div></td>';
+                continue;
+            }
+
+            //是否添加序号
+            if(nullToFalse($(ths[j]).attr('serialNumber'))){
+                tr += '<td>'+parseInt(i+1)+'</td>';
+                continue;
+            }
+
+            //判断是否显示
+            var display = $(ths[j]).css('display')=="none"?"display:none;":"";
+
+            //判断是否有列click事件
+            var onclick = nullToFalse($(ths[j]).attr('click'))?'onclick='+$(ths[j]).attr('click')+'(this,'+JSON.stringify(_tableOptions)+')':'';
+
+            tr += '<td '+onclick+' style="'+display+'">' + nullToEmpty(dataRows[i][$(ths[j]).attr('field')]) + '</td>';
         }
 
         tr += '</tr>';
@@ -91,6 +147,10 @@ function nullToEmpty(obj) {
 function nullToFalse(obj) {
     if ( undefined == obj || null == obj ) {
         obj = false;
+    }else if("false" == obj || false == obj){
+        obj = false;
+    }else if("true" == obj || true == obj){
+        obj = true;
     }
 
     return obj;
@@ -99,6 +159,10 @@ function nullToFalse(obj) {
 //空转true
 function nullToTrue(obj) {
     if ( undefined == obj || null == obj ) {
+        obj = true;
+    }else if("false" == obj || false == obj){
+        obj = false;
+    }else if("true" == obj || true == obj){
         obj = true;
     }
 
