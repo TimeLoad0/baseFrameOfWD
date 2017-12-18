@@ -1,0 +1,11 @@
+:root{
+    --bgColor:#008080;
+    --fontSize:13px;
+    --sidebarWidth:190px;
+    --headerHeight:70px;
+    --tabHeight:48px;
+}
+body,div,ol,ul,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,p,form,fieldset,legend,input{margin:0; padding:0;}
+html,body{height: 100%;position: relative;font-family: 'Microsoft yahei';font-size: var(--fontSize);font-weight: 400;overflow-y: hidden;padding: 0;margin: 0;}
+a{text-decoration: none}
+a:hover{cursor: pointer}
