@@ -15,7 +15,12 @@ $(function(){
         cells:[
             {text:"列1",field:"c1",type:"text",search:true,click:"cellClick"},
             {text:"列2",field:"c2",type:"datetime",search:true,display:false},
-            {text:"列3",field:"c3",type:"select",search:true,selectOptions:tests,key:"key",view:"view"}
+            {text:"列3",field:"c3",type:"select",search:true,selectOptions:tests,key:"key",view:"view"},
+            {text:"列4",field:"c4",type:"text",search:true},
+            {text:"列4",field:"c4",type:"text",search:true},
+            {text:"列4",field:"c4",type:"text",search:true},
+            {text:"列4",field:"c4",type:"text",search:true},
+            {text:"列5",field:"c5",type:"text",search:true}
         ]};
 
     var data = {
@@ -25,7 +30,7 @@ $(function(){
         pageNo:1,
         totalSize:3,
         dataRows:[
-            {"c1":"aa1","c2":"bb1","c3":"1"},
+            {"c1":"aa1","c2":"bb1","c3":"1","c4":"1","c5":"1"},
             {"c1":"aa2","c2":"bb2","c3":"2"},
             {"c1":"aa2","c2":"bb2","c3":"3"},
             {"c1":"aa2","c2":"bb2","c3":"3"},

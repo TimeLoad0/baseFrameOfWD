@@ -68,8 +68,8 @@ function createSearchToolBar(options){
 
     //是否添加搜索按钮
     if(options.search){
-        var form = $('<form id="search_form" class="form-inline"></form>');
-        var labelSelectDiv = $('<div class="form-group"><label class="search-label text-right">检索类别：</label><select id="selectType" class="form-control search-control"></select></div>');
+        var form = $('<form id="search_form" class="form-inline" style="line-height: 35px;"></form>');
+        var labelSelectDiv = $('<div id="search_type_div" class="form-group"><label class="search-label text-right">检索类别：</label><select id="selectType" class="form-control search-control"></select></div>');
 
         var cells = options.cells;
 
@@ -487,8 +487,19 @@ function searchSelect_onchage(src){
     $('#search_btn_a').parent().parent().nextAll().remove();
 
     if("text" == controlType){
+        $('#controlDiv').prevAll().each(function(){
+            if($(this).index() > 0){
+                $(this).hide();
+            }
+        });
         $('#search_input').show().siblings().hide();
     }else if("select" == controlType){
+        $('#controlDiv').prevAll().each(function(){
+            if($(this).index() > 0){
+                $(this).hide();
+            }
+        });
+
         var selectOptions = JSON.parse(nullToEmpty(optionObj.attr('selectOptions')));
         var key = nullToObject(optionObj.attr("key"),"key");
         var view = nullToObject(optionObj.attr("view"),"view");
@@ -499,7 +510,11 @@ function searchSelect_onchage(src){
             $('#search_select').append($('<option value="'+nullToEmpty(item[key])+'">'+nullToEmpty(item[view])+'</option>'));
         });
     }else if("date" == controlType || "datetime" == controlType || "time" == controlType){
-        $('#controlDiv').children().each(function(){
+        $('#controlDiv').prevAll().each(function(){
+            if($(this).index() > 0){
+                $(this).hide();
+            }
+        }).end().children().each(function(){
             if("search_input_begin" == $(this).attr('id') || "search_input_end" == $(this).attr('id')){
                 $(this).show();
                 laydate.render({
@@ -519,40 +534,59 @@ function searchSelect_onchage(src){
             $(this).hide();
         });
 
-        $(src).find('option').each(function(){
-            var optionType = nullToEmpty($(this).attr("type"));
-            var controlDiv = $('<div class="form-group">');
+        if($('#controlDiv').prevAll().length > 1){
+            $('#controlDiv').prevAll().each(function(){
+                if($(this).index() > 0){
+                    $(this).show();
+                }
+            });
+        }else {
+            $(src).find('option').each(function () {
+                var optionType = nullToEmpty($(this).attr("type"));
+                var controlDiv = $('<div class="form-group">');
+                var field = nullToEmpty($(this).attr('field'));
 
-            if("text" == optionType){
-                controlDiv.append($('<label class="search-label text-right">'+$(this).attr('text')+'：</label>'));
-                controlDiv.append($('<input id="search_input" type="text" class="search-control form-control"/>'));
-                controlDiv.insertAfter($('#search_btn_a').parent().parent());
-            }else if("select" == optionType){
-                var select = $('<select class="form-control search-control">');
+                if ("text" == optionType) {
+                    controlDiv.append($('<label class="search-label text-right">' + $(this).attr('text') + '：</label>'));
+                    controlDiv.append($('<input id="' + field + '" name="' + field + '" type="text" class="search-control form-control"/>'));
+                    controlDiv.insertBefore($('#controlDiv'));
+                } else if ("select" == optionType) {
+                    var select = $('<select class="form-control search-control" id="' + field + '" name="' + field + '">');
 
-                var selectOptions = JSON.parse(nullToEmpty($(this).attr('selectOptions')));
-                var key = nullToObject($(this).attr("key"),"key");
-                var view = nullToObject($(this).attr("view"),"view");
+                    var selectOptions = JSON.parse(nullToEmpty($(this).attr('selectOptions')));
+                    var key = nullToObject($(this).attr("key"), "key");
+                    var view = nullToObject($(this).attr("view"), "view");
 
-                $.each(selectOptions,function(i,item){
-                    select.append($('<option value="'+nullToEmpty(item[key])+'">'+nullToEmpty(item[view])+'</option>'));
-                });
+                    $.each(selectOptions, function (i, item) {
+                        select.append($('<option value="' + nullToEmpty(item[key]) + '">' + nullToEmpty(item[view]) + '</option>'));
+                    });
 
-                controlDiv.append($('<label class="search-label text-right">'+$(this).attr('text')+'：</label>'));
-                controlDiv.append(select);
-                controlDiv.insertAfter($('#search_btn_a').parent().parent());
-            }else if("date" == optionType || "datetime" == optionType || "time" == optionType){
-                controlDiv.append($('<label class="search-label text-right">'+$(this).attr('text')+'起：</label>'));
-                var dateBegin = $('<input placeholder="开始时间" type="text" class="search-control form-control"/>');
-                controlDiv.append(dateBegin);
-                controlDiv.insertAfter($('#search_btn_a').parent().parent());
+                    controlDiv.append($('<label class="search-label text-right">' + $(this).attr('text') + '：</label>'));
+                    controlDiv.append(select);
+                    controlDiv.insertBefore($('#controlDiv'));
+                } else if ("date" == optionType || "datetime" == optionType || "time" == optionType) {
+                    controlDiv.append($('<label class="search-label text-right">' + $(this).attr('text') + '起：</label>'));
+                    var dateBegin = $('<input id="' + field + '_begin" name="' + field + '_begin" placeholder="开始时间" type="text" class="search-control form-control"/>');
+                    controlDiv.append(dateBegin);
+                    controlDiv.insertBefore($('#controlDiv'));
 
-                controlDiv = $('<div class="form-group">');
-                controlDiv.append($('<label class="search-label text-right">'+$(this).attr('text')+'止：</label>'));
-                var dateEnd = $('<input placeholder="结束时间" type="text" class="search-control form-control"/>');
-                controlDiv.append(dateEnd);
-                controlDiv.insertAfter($('#search_btn_a').parent().parent());
-            }
-        })
+                    laydate.render({
+                        elem: '#' + field + '_begin',
+                        type: optionType
+                    });
+
+                    controlDiv = $('<div class="form-group">');
+                    controlDiv.append($('<label class="search-label text-right">' + $(this).attr('text') + '止：</label>'));
+                    var dateEnd = $('<input id="' + field + '_end" name="' + field + '_end" placeholder="结束时间" type="text" class="search-control form-control"/>');
+                    controlDiv.append(dateEnd);
+                    controlDiv.insertBefore($('#controlDiv'));
+
+                    laydate.render({
+                        elem: '#' + field + '_end',
+                        type: optionType
+                    });
+                }
+            })
+        }
     }
 }
