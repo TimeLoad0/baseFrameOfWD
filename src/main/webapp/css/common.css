@@ -9,3 +9,18 @@ body,div,ol,ul,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,p,form,fieldset,legend,input{margin
 html,body{height: 100%;position: relative;font-family: 'Microsoft yahei';font-size: var(--fontSize);font-weight: 400;overflow-y: hidden;padding: 0;margin: 0;}
 a{text-decoration: none}
 a:hover{cursor: pointer}
+
+.search-control{
+    max-width:200px;
+    min-width:200px;
+    padding: 6px;
+    display:inline-block;
+}
+
+.form-group{
+    padding-left: 5px;
+}
+
+.search-label{
+    width:80px;
+}

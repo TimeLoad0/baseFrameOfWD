@@ -7,6 +7,7 @@
 <head>
     <link rel="stylesheet" href="css/bootstrap/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="css/confirm/jquery-confirm.min.css" type="text/css" />
+    <link rel="stylesheet" href="css/common.css" type="text/css" />
 
     <script type="text/javascript" src="js/jquery/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
@@ -14,6 +15,7 @@
     <script type="text/javascript" src="js/jvalidate/jquery.validate.min.js"></script>
     <script type="text/javascript" src="js/jvalidate/additional-methods.min.js"></script>
     <script type="text/javascript" src="js/jvalidate/i18n/messages_zh.js"></script>
+    <script type="text/javascript" src="js/laydate/laydate.js"></script>
     <script type="text/javascript" src="js/util/common.js"></script>
 </head>
 <script type="text/javascript">
