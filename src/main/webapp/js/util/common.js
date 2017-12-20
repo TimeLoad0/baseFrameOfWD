@@ -1,6 +1,6 @@
 /**
  * 工具脚本
- * 需要jQuery、bootstrap，jQuery-confirm、jvalidate等插件支持
+ * 需要jQuery、bootstrap，jQuery-confirm、jvalidate,laydate等插件支持
  * 2017-12-11 20:37:10
  * wj
  */
@@ -21,7 +21,30 @@ $.ajaxSetup({
     }
 });
 
-//创建绑定表格
+/**
+ * 创建绑定表格
+ * @param options,data
+ * options:{
+        add:true,                   //新增，默认true
+        search:true,                //搜索，默认true
+        combineSearch:false,        //组合多条件查询，默认false，当search也为true时会在检索类别里添加组合查询选项用来切换组合查询和普通查询
+        exportData:true,            //导出数据，默认true
+        checkBox:true,              //复选框，默认true
+        pagination:true,            //分页信息，默认true
+        serialNumber:true           //序列号，默认true
+        cells:[{                    //table列集合
+            text:"text",            //表头显示文本
+            field:"field",          //对应数据字段
+            type:"select",          //控件类型，如：text，date，time，datetime，select等
+            search:true,            //是否作为搜索条件，默认false
+            selectOptions:[],       //字典选项数组，当type=select时生效
+            key:"key",              //字典key，当type=select时配合selectOptions使用，可以为空，默认为key
+            view:"view",            //字典view，当type=select时配合selectOptions使用，可以为空，默认为view
+            click:"function name",  //列点击事件，传入方法名字符串，默认回传当前对象和tableOptions表格选项两个参数
+            display:false           //是否显示，默认true
+        }]
+    }
+ */
 function createPage(options,data) {
     //默认选项
     var _defaultOptions = {
@@ -53,6 +76,7 @@ function createPage(options,data) {
 function createSearchToolBar(options){
     var toolBarDiv = $('<div class="panel panel-heading"></div>');
     var leftDiv = $('<div style="width: 80%;"></div>');
+    var form = $('<form id="search_form" class="form-inline" style="line-height: 35px;"></form>');
     var rightDiv = $('<div class="pull-right" style="width: 20%;"></div>');
     var rightBtnGroupDiv = $('<div class="btn-group pull-right"></div>');
 
@@ -66,9 +90,8 @@ function createSearchToolBar(options){
         rightBtnGroupDiv.append($('<a class="btn btn-primary">导出</a>'));
     }
 
-    //是否添加搜索按钮
+    //是否添加搜索栏
     if(options.search){
-        var form = $('<form id="search_form" class="form-inline" style="line-height: 35px;"></form>');
         var labelSelectDiv = $('<div id="search_type_div" class="form-group"><label class="search-label text-right">检索类别：</label><select id="selectType" class="form-control search-control"></select></div>');
 
         var cells = options.cells;
@@ -125,8 +148,6 @@ function createSearchToolBar(options){
 
         var searchBtnDiv = $('<div class="form-group"><div class="btn-group"><a id="search_btn_a" class="btn btn-primary">搜索</a></div></div>');
         form.append(labelSelectDiv).append(controlDiv).append(searchBtnDiv);
-        leftDiv.append(form);
-        toolBarDiv.append(leftDiv);
     }
 
     //判断右侧工具栏是否含有按钮
@@ -134,18 +155,23 @@ function createSearchToolBar(options){
         rightDiv.append(rightBtnGroupDiv);
         toolBarDiv.append(rightDiv);
     }
+
+    leftDiv.append(form);
+    $('#mainBody').append(toolBarDiv.append(leftDiv));
+
     //判断工具栏是否含有按钮
-    if(toolBarDiv.find('div').length > 0){
-        leftDiv.append(form);
-        $('#mainBody').append(toolBarDiv.append(leftDiv));
-
-        //补偿高度
-        toolBarDiv.css('min-width',rightDiv.height()).css('padding','10px 5px');
-
+    if(form.find('div').length > 0){
         //初始化调用检索类别改变事件
         searchSelect_onchage($('#selectType'));
     }else{
-        $('#mainBody').append($('<div style="height: 10px;"></div>'));
+        //补偿高度
+        toolBarDiv.css('min-height',rightDiv.height()+20).css('padding','10px 5px');
+
+        if(options.combineSearch){
+            createCombineSearch();
+        }else{
+            $('#mainBody').append($('<div style="height: 10px;"></div>'));
+        }
     }
 }
 
@@ -530,63 +556,103 @@ function searchSelect_onchage(src){
             }
         })
     }else if("combineSearch" == controlType){
-        $('#controlDiv').children().each(function(){
-            $(this).hide();
-        });
+        createCombineSearch();
+    }
+}
 
-        if($('#controlDiv').prevAll().length > 1){
-            $('#controlDiv').prevAll().each(function(){
+function createCombineSearch(){
+    var controlDiv = $('#controlDiv');
+    var searchForm = $('#search_form');
+
+    if(_tableOptions.search){
+        if(controlDiv.children().length > 1){
+            controlDiv.children().each(function(){
+                $(this).hide();
+            });
+        }
+
+        if(controlDiv.prevAll().length > 1){
+            controlDiv.prevAll().each(function(){
                 if($(this).index() > 0){
                     $(this).show();
                 }
             });
-        }else {
-            $(src).find('option').each(function () {
-                var optionType = nullToEmpty($(this).attr("type"));
-                var controlDiv = $('<div class="form-group">');
-                var field = nullToEmpty($(this).attr('field'));
 
-                if ("text" == optionType) {
-                    controlDiv.append($('<label class="search-label text-right">' + $(this).attr('text') + '：</label>'));
-                    controlDiv.append($('<input id="' + field + '" name="' + field + '" type="text" class="search-control form-control"/>'));
-                    controlDiv.insertBefore($('#controlDiv'));
-                } else if ("select" == optionType) {
-                    var select = $('<select class="form-control search-control" id="' + field + '" name="' + field + '">');
-
-                    var selectOptions = JSON.parse(nullToEmpty($(this).attr('selectOptions')));
-                    var key = nullToObject($(this).attr("key"), "key");
-                    var view = nullToObject($(this).attr("view"), "view");
-
-                    $.each(selectOptions, function (i, item) {
-                        select.append($('<option value="' + nullToEmpty(item[key]) + '">' + nullToEmpty(item[view]) + '</option>'));
-                    });
-
-                    controlDiv.append($('<label class="search-label text-right">' + $(this).attr('text') + '：</label>'));
-                    controlDiv.append(select);
-                    controlDiv.insertBefore($('#controlDiv'));
-                } else if ("date" == optionType || "datetime" == optionType || "time" == optionType) {
-                    controlDiv.append($('<label class="search-label text-right">' + $(this).attr('text') + '起：</label>'));
-                    var dateBegin = $('<input id="' + field + '_begin" name="' + field + '_begin" placeholder="开始时间" type="text" class="search-control form-control"/>');
-                    controlDiv.append(dateBegin);
-                    controlDiv.insertBefore($('#controlDiv'));
-
-                    laydate.render({
-                        elem: '#' + field + '_begin',
-                        type: optionType
-                    });
-
-                    controlDiv = $('<div class="form-group">');
-                    controlDiv.append($('<label class="search-label text-right">' + $(this).attr('text') + '止：</label>'));
-                    var dateEnd = $('<input id="' + field + '_end" name="' + field + '_end" placeholder="结束时间" type="text" class="search-control form-control"/>');
-                    controlDiv.append(dateEnd);
-                    controlDiv.insertBefore($('#controlDiv'));
-
-                    laydate.render({
-                        elem: '#' + field + '_end',
-                        type: optionType
-                    });
-                }
-            })
+            return;
         }
+    }
+
+    var cells = nullToEmpty(_tableOptions.cells);
+
+    $.each(cells,function(index,item){
+        var optionType = nullToEmpty(item.type);
+        var controlsDiv = $('<div class="form-group">');
+        var field = nullToEmpty(item.field);
+
+        if ("text" == optionType) {
+            controlsDiv.append($('<label class="search-label text-right">' + item.text + '：</label>'));
+            controlsDiv.append($('<input id="' + field + '" name="' + field + '" type="text" class="search-control form-control"/>'));
+
+            if(_tableOptions.search){
+                controlsDiv.insertBefore(controlDiv);
+            }else{
+                searchForm.append(controlsDiv);
+            }
+        } else if ("select" == optionType) {
+            var select = $('<select class="form-control search-control" id="' + field + '" name="' + field + '">');
+
+            var selectOptions = nullToEmpty(item.selectOptions);
+            var key = nullToObject(item.key, "key");
+            var view = nullToObject(item.view, "view");
+
+            $.each(selectOptions, function (i, option) {
+                select.append($('<option value="' + nullToEmpty(option[key]) + '">' + nullToEmpty(option[view]) + '</option>'));
+            });
+
+            controlsDiv.append($('<label class="search-label text-right">' + item.text + '：</label>'));
+            controlsDiv.append(select);
+
+            if(_tableOptions.search){
+                controlsDiv.insertBefore(controlDiv);
+            }else{
+                searchForm.append(controlsDiv);
+            }
+        } else if ("date" == optionType || "datetime" == optionType || "time" == optionType) {
+            controlsDiv.append($('<label class="search-label text-right">' + item.text + '起：</label>'));
+            var dateBegin = $('<input id="' + field + '_begin" name="' + field + '_begin" placeholder="开始时间" type="text" class="search-control form-control"/>');
+            controlsDiv.append(dateBegin);
+
+            if(_tableOptions.search){
+                controlsDiv.insertBefore(controlDiv);
+            }else{
+                searchForm.append(controlsDiv);
+            }
+
+            laydate.render({
+                elem: '#' + field + '_begin',
+                type: optionType
+            });
+
+            controlsDiv = $('<div class="form-group">');
+            controlsDiv.append($('<label class="search-label text-right">' + item.text + '止：</label>'));
+            var dateEnd = $('<input id="' + field + '_end" name="' + field + '_end" placeholder="结束时间" type="text" class="search-control form-control"/>');
+            controlsDiv.append(dateEnd);
+
+            if(_tableOptions.search){
+                controlsDiv.insertBefore(controlDiv);
+            }else{
+                searchForm.append(controlsDiv);
+            }
+
+            laydate.render({
+                elem: '#' + field + '_end',
+                type: optionType
+            });
+        }
+    });
+
+    //如果搜素为false，给组合查询添加搜索按钮
+    if(!_tableOptions.search){
+        searchForm.append($('<div class="form-group"><div class="btn-group"><a id="search_btn_a" class="btn btn-primary">搜索</a></div></div>'));
     }
 }
