@@ -1,15 +1,23 @@
 :root{
+    /*基础层级*/
+    --zIndex:0;
+    /*背景颜色*/
     --bgColor:#008080;
-    --fontSize:13px;
-    --sidebarWidth:190px;
+    /*头部高度*/
     --headerHeight:70px;
+    /*头部文字高度*/
+    --systemTitleHeight:48px;
+    /*基础文字大小*/
+    --fontSize:13px;
+    /*菜单宽度*/
+    --sidebarWidth:190px;
+    /*Tab页高度*/
     --tabHeight:48px;
 }
 body,div,ol,ul,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,p,form,fieldset,legend,input{margin:0; padding:0;}
 html,body{height: 100%;position: relative;font-family: 'Microsoft yahei';font-size: var(--fontSize);font-weight: 400;padding: 0;margin: 0;}
-a{text-decoration: none}
+a, a:hover, a:active, a:focus {text-decoration: none; -webkit-user-drag: none;}
 a:hover{cursor: pointer}
-
 .search-control{
     max-width:200px;
     min-width:200px;

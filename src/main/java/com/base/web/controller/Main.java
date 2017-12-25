@@ -39,9 +39,14 @@ public class Main {
 		return "index";
 	}
 
+	@RequestMapping("/index1")
+	public String index1(Map<String, Object> model) {
+		return "index1";
+	}
+
 	@RequestMapping("/test")
 	public String test(Map<String, Object> model) {
-		return "test.page";
+		return "test";
 	}
 
 	@RequestMapping("/foo")

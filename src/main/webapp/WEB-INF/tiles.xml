@@ -15,6 +15,12 @@
 	<definition name="index" template="/WEB-INF/jsp/index.jsp">
 	</definition>
 
+	<definition name="index1" template="/WEB-INF/jsp/index1.jsp">
+	</definition>
+
+	<definition name="test" template="/WEB-INF/jsp/test.jsp">
+	</definition>
+
 	<definition name="*.*" template="/WEB-INF/jsp/{1}/{2}.jsp">
 	</definition>
 </tiles-definitions>

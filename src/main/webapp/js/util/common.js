@@ -8,9 +8,11 @@ var _tableOptions = {}; //表格选项
 var _data = {}; //数据缓存
 
 //laydate全局默认设置
-laydate.set({
-    theme:'#008080'
-});
+if(!isEmpty(laydate)){
+    laydate.set({
+        theme:'#008080'
+    });
+}
 
 //ajax全局默认设置
 $.ajaxSetup({
@@ -655,4 +657,41 @@ function createCombineSearch(){
     if(!_tableOptions.search){
         searchForm.append($('<div class="form-group"><div class="btn-group"><a id="search_btn_a" class="btn btn-primary">搜索</a></div></div>'));
     }
+}
+
+/*
+**
+* 获取顶层页面
+* @param 获取的页面对象
+* @returns
+*/
+function getTopPage(page)
+{
+    if ( isEmpty(page) )
+    {
+        page = this;
+    }
+
+    var cnt = 0;
+
+    while ( !isEmpty(page) && isEmpty(page.document.getElementById("base")) && cnt < 10 )
+    {
+        page = page.parent;
+
+        if ( isEmpty(page) )
+        {
+            return null;
+        }
+
+        cnt++;
+    }
+
+    if ( cnt >= 10 )
+    {
+        page = this;
+
+        return page;
+    }
+
+    return page;
 }
