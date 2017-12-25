@@ -5,6 +5,7 @@
 %>
 <html>
 <head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<base href="<%=request.getRequestURI()%>">
 	<title>baseFrame系统</title>
 	<link rel="stylesheet" href="../../css/common.css">
@@ -13,15 +14,15 @@
 	<link rel="stylesheet" href="../../css/waves/waves.min.css">
 	<style type="text/css">
 		/*顶部框架*/
-		#header{background:	var(--bgColor);width: 100%;height: var(--headerHeight);padding: 0 20px;position: fixed;z-index: calc(var(--zIndex) + 2);left: 0;top: 0;box-shadow: 0 1px 4px rgba(0,0,0,.3);  }
+		#header{background:	#008080;background:	var(--bgColor);width: 100%;height: 70px;height: var(--headerHeight);padding: 0 20px;position: fixed;z-index: 2;z-index: calc(var(--zIndex) + 2);left: 0;top: 0;box-shadow: 0 1px 4px rgba(0,0,0,.3);  }
 		/*顶部整体内容*/
-		.header_content {position: relative;list-style: none;padding: calc((var(--headerHeight) - var(--systemTitleHeight))/2) 0;margin-bottom: 0;}
+		.header_content {position: relative;list-style: none;padding: 11px 0;padding: calc((var(--headerHeight) - var(--systemTitleHeight))/2) 0;margin-bottom: 0;}
 		/*顶部左侧内容*/
 		.header_content>li{float: left;}
 		/*顶部logo*/
 		.header_logo a img {vertical-align: top;}
 		/*顶部文字*/
-		.system_title {color: #fff;height: var(--systemTitleHeight);line-height: var(--systemTitleHeight);font-size: 20px;}
+		.system_title {color: #fff;height: 48px;height: var(--systemTitleHeight);line-height: 48px;line-height: var(--systemTitleHeight);font-size: 20px;}
 
 		/*顶部右侧内容*/
 		.header_right{float: right!important;}
@@ -34,26 +35,26 @@
 		.header_right_img{width:50px;height:50px;line-height: 50px;background-image:url(../../images/tx.jpg);border-radius:50%;  }
 
 		/*内容*/
-		#body{height: calc(100% - var(--headerHeight));padding-top: var(--headerHeight);padding-bottom: 0;}
-		.sidebar {position: fixed;width: var(--sidebarWidth);background: #fff;height: 100%;top: var(--headerHeight);transition: all;-webkit-transition-duration: .3s;transition-duration: .3s;overflow-y: auto;box-shadow: 1px 0 4px rgba(0,0,0,.3);z-index: calc(var(--zIndex) + 1);}
+		#body{height: calc(100% - 70px);height: calc(100% - var(--headerHeight));padding-top: 70px;padding-top: var(--headerHeight);padding-bottom: 0;}
+		.sidebar {position: fixed;width: 190px;width: var(--sidebarWidth);background: #fff;height: 100%;top: 70px;top: var(--headerHeight);transition: all;-webkit-transition-duration: .3s;transition-duration: .3s;overflow-y: auto;box-shadow: 1px 0 4px rgba(0,0,0,.3);z-index: 1;z-index: calc(var(--zIndex) + 1);}
 		.menu{position: relative;overflow: hidden;height: 100%;max-width: 100%;outline: 0;direction: ltr;}
 
-		.content {height: 100%;width: 100%;transition: all;padding-left: var(--sidebarWidth);padding-right: 0;top: var(--headerHeight);position: fixed;}
-		.tabs{background:	var(--bgColor);position: relative;width: 100%;height: var(--tabHeight);overflow: hidden;}
+		.content {height: 100%;width: 100%;transition: all;padding-left: 190px;padding-left: var(--sidebarWidth);padding-right: 0;top: 70px;top: var(--headerHeight);position: fixed;}
+		.tabs{background:	#008080;background:	var(--bgColor);position: relative;width: 100%;height: 48px;height: var(--tabHeight);overflow: hidden;}
         .scroll>.tab_left, .scroll>.tab_right {display: block;}
-        .tab_left, .tab_right {  width: var(--tabHeight);height: var(--tabHeight);  line-height: var(--tabHeight);color: #fff;text-align: center;display: none;}
+        .tab_left, .tab_right {  width: 48px;width: var(--tabHeight);height: 48px;height: var(--tabHeight);line-height: 48px;  line-height: var(--tabHeight);color: #fff;text-align: center;display: none;}
         .tab_left {float: left;margin-right: -40px;}
         .tab_right {float: right;margin-left: -40px;}
         .tab_left>a, .tab_right>a {display: block;width: 100%;color: #fff;font-size: 22px;padding: 13px 0;}
         .scroll>ul { margin: 0 40px;}
         .tabs>ul {padding: 0;font-size: 0;display: block;white-space: nowrap;-webkit-overflow-scrolling: touch;overflow-x: scroll;}
-        .tabs>ul>li {display: inline-block;height: var(--tabHeight);line-height: var(--tabHeight);margin: 0;font-size: 14px;}
-        .tabs>ul>li>a {display: block;height: var(--tabHeight);line-height: var(--tabHeight);color: #fff;padding: 0 28px;transition: background-color .35s cubic-bezier(.35,0,.25,1);border-bottom: none;position: relative;text-decoration: none;}
+        .tabs>ul>li {display: inline-block;height: 48px;height: var(--tabHeight);line-height: 48px;line-height: var(--tabHeight);margin: 0;font-size: 14px;}
+        .tabs>ul>li>a {display: block;height: 48px;height: var(--tabHeight);line-height: 48px;line-height: var(--tabHeight);color: #fff;padding: 0 28px;transition: background-color .35s cubic-bezier(.35,0,.25,1);border-bottom: none;position: relative;text-decoration: none;}
         .tabs>ul>.cur>a {color: #fff;}
         .tabs>ul>.cur>a:after {left: 0;bottom: 1px;width: 100%;opacity: 1;transition: all linear .2s;}
         .tabs>ul>li>a:after {content: "";position: absolute;bottom: 0;left: 50%;right: 50%;width: 0;border-bottom: 3px solid #FFEB3B;transition: all linear .2s;}
 
-		.iframes{height: calc(100% - var(--headerHeight) - var(--tabHeight));}
+		.iframes{height: calc(100% - 70px - 48px);}
 		.iframe {height: 100%;display: none;}
 		.iframes>.cur {display: block;}
 
@@ -63,6 +64,8 @@
 	<script src="../../js/jquery/jquery-3.1.1.min.js"></script>
 	<script src="../../js/bootstrap/bootstrap.min.js"></script>
 	<script src="../../js/bootstrap/BootstrapMenu.min.js"></script>
+	<script src="../../plugins/fullPage/jquery.fullPage.js"></script>
+	<script src="../../plugins/fullPage/jquery.jdirk.min.js"></script>
 	<script src="../../js/waves/waves.min.js"></script>
 	<script src="../../js/laydate/laydate.js"></script>
 	<script src="../../js/util/common.js"></script>
@@ -124,13 +127,8 @@
 						</a>
 						<ul>
 							<li>
-								<a class="waves-effect waves-light" href="javascript:;">
-									<span class="glyphicon glyphicon-search">搜索2</span>
-								</a>
-							</li>
-							<li>
-								<a class="waves-effect waves-light" href="javascript:;">
-									<span class="glyphicon glyphicon-star">收藏内容2</span>
+								<a class="waves-effect waves-light" href="javascript:;fullPage()">
+									<span class="glyphicon glyphicon-search">全屏</span>
 								</a>
 							</li>
 						</ul>
