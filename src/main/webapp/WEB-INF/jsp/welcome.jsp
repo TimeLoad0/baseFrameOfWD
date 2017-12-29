@@ -12,6 +12,7 @@ $(function(){
         combineSearch:true,
         add:true,
         exportData:true,
+        searchFunc:search_onclick,
         cells:[
             {text:"列1",field:"c1",type:"text",search:true,click:"cellClick"},
             {text:"列2",field:"c2",type:"datetime",search:true,display:false},
@@ -41,6 +42,13 @@ $(function(){
 
     function cellClick(src,data){
         alert(JSON.stringify(data));
+    }
+
+    function search_onclick(){
+        $.ajax({
+            url:"test.text",
+            loadindCover:true
+        });
     }
 });
 </script>

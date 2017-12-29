@@ -18,8 +18,17 @@ if(!isEmpty(laydate)){
 $.ajaxSetup({
     type:'POST',
     dataType:'json',
-    error:function(x,e){
+    error:function(xhr,settings){
         return false;
+    },
+    complete:function(){
+        hideLoadingCover();
+    },
+    beforeSend:function(xhr,settings){
+        //判断ajax请求是否显示加载遮罩层，默认false
+        if(nullToFalse(settings.loadindCover)){
+            showLoadingCover();
+        }
     }
 });
 
@@ -29,6 +38,7 @@ $.ajaxSetup({
  * options:{
         add:true,                   //新增，默认true
         search:true,                //搜索，默认true
+        searchFunc:search_onclick,  //搜索按钮点击事件，默认search_onclick
         combineSearch:false,        //组合多条件查询，默认false，当search也为true时会在检索类别里添加组合查询选项用来切换组合查询和普通查询
         exportData:true,            //导出数据，默认true
         checkBox:true,              //复选框，默认true
@@ -52,6 +62,7 @@ function createPage(options,data) {
     var _defaultOptions = {
         add:true,           //新增，默认true
         search:true,        //搜索，默认true
+        searchFunc:search_onclick, //搜索按钮点击事件，默认search_onclick
         combineSearch:false,//组合多条件查询，默认false
         exportData:true,    //导出数据，默认true
         checkBox:true,      //复选框，默认true
@@ -149,6 +160,11 @@ function createSearchToolBar(options){
         controlDiv.append(input).append(select).append(dateBegin).append(dateEnd);
 
         var searchBtnDiv = $('<div class="form-group"><div class="btn-group"><a id="search_btn_a" class="btn btn-primary">搜索</a></div></div>');
+
+        searchBtnDiv.off('click').on('click',function(){
+            options.searchFunc();
+        });
+
         form.append(labelSelectDiv).append(controlDiv).append(searchBtnDiv);
     }
 
@@ -656,6 +672,10 @@ function createCombineSearch(){
     //如果搜素为false，给组合查询添加搜索按钮
     if(!_tableOptions.search){
         searchForm.append($('<div class="form-group"><div class="btn-group"><a id="search_btn_a" class="btn btn-primary">搜索</a></div></div>'));
+
+        $('#search_btn_a').off('click').on('click',function(){
+            _tableOptions.searchFunc();
+        });
     }
 }
 
@@ -694,4 +714,31 @@ function getTopPage(page)
     }
 
     return page;
+}
+
+//隐藏加载遮罩层
+function hideLoadingCover(){
+    $('#loadingCover').hide();
+}
+
+//创建并显示加载遮罩层
+function showLoadingCover(){
+    var loadingCover = $('#loadingCover');
+
+    if(loadingCover.length <= 0){
+        $(document.body).append($('<div id="loadingCover"><div class="coverDiv"></div><div class="loaderDiv"><span></span><span></span><span></span><span></span></div></div>'));
+    }
+
+    loadingCover.show();
+}
+
+//默认搜索方法
+function search_onclick(){
+    alert("default");
+
+    showLoadingCover();
+
+    window.setTimeout(function(){
+        hideLoadingCover();
+    },3000);
 }
