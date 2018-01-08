@@ -8,10 +8,10 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<base href="<%=request.getRequestURI()%>">
 	<title>baseFrame系统</title>
-	<link rel="stylesheet" href="../../css/common.css">
 	<link rel="stylesheet" href="../../css/bootstrap/bootstrap.min.css">
 	<link rel="stylesheet" href="../../css/font-awesome-4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="../../css/waves/waves.min.css">
+	<link rel="stylesheet" href="../../css/common.css">
 	<style type="text/css">
 		/*顶部框架*/
 		#header{background:	#008080;background:	var(--bgColor);width: 100%;height: 70px;height: var(--headerHeight);padding: 0 20px;position: fixed;z-index: 2;z-index: calc(var(--zIndex) + 2);left: 0;top: 0;box-shadow: 0 1px 4px rgba(0,0,0,.3);  }
@@ -36,8 +36,29 @@
 
 		/*内容*/
 		#body{height: calc(100% - 70px);height: calc(100% - var(--headerHeight));padding-top: 70px;padding-top: var(--headerHeight);padding-bottom: 0;}
-		.sidebar {position: fixed;width: 190px;width: var(--sidebarWidth);background: #fff;height: 100%;top: 70px;top: var(--headerHeight);transition: all;-webkit-transition-duration: .3s;transition-duration: .3s;overflow-y: auto;box-shadow: 1px 0 4px rgba(0,0,0,.3);z-index: 1;z-index: calc(var(--zIndex) + 1);}
+		.sidebar {position: fixed;width: 190px;width: var(--sidebarWidth);background: #fff;height: 100%;top: 70px;top: var(--headerHeight);transition: all;-webkit-transition-duration: .3s;transition-duration: .3s;overflow-y: auto;box-shadow: 1px 0 4px rgba(0,0,0,.3);z-index: 4;z-index: calc(var(--zIndex) + 4);}
 		.menu{position: relative;overflow: hidden;height: 100%;max-width: 100%;outline: 0;direction: ltr;}
+		.main-menu,.main-menu-extend {display:none;list-style: none;padding-left: 0;height:calc(100% - 70px - 48px);height:calc(100% - var(--headerHeight) - var(--tabHeight));overflow-y: auto;}
+
+		.main-menu li>a {padding: 14px 0px 14px 15px;display: block;font-weight: 500;position: relative;color: #4C4C4C;}
+		.main-menu-extend li>a {padding: 10px;display: block;font-weight: 500;position: relative;color: #4C4C4C;}
+
+		.sub-menu ul{list-style: none;display: none;padding: 0;}
+		.sub-menu ul>li>a{padding: 8px 0px 8px 30px;font-weight: 500;display: block;color: #4C4C4C;}
+		.sub-menu ul>li>ul>li>a{padding: 8px 0px 8px 55px;font-weight: 500;display: block;color: #4C4C4C;}
+		.sub-menu ul>li>ul>li>ul>li>a{padding: 8px 0px 8px 70px;font-weight: 500;display: block;color: #4C4C4C;}
+		.sub-menu ul>li>ul>li>ul>li>ul>li>a{padding: 8px 0px 8px 85px;font-weight: 500;display: block;color: #4C4C4C;}
+
+		.sub-menu-extend ul{list-style: none;display: none;padding: 0}
+		.sub-menu-extend-ul{position: fixed;background-color: #fff;box-shadow: 1px 0 4px rgba(0,0,0,.3);overflow-y: auto;}
+		.sub-menu-extend-ul>a{padding: 8px 30px 8px 30px;font-weight: 900;display: block;color: #4C4C4C;}
+		.sub-menu-extend ul>li>a{padding: 8px 0px 8px 30px;font-weight: 500;display: block;color: #4C4C4C;}
+		.sub-menu-extend ul>li>ul>li>a{padding: 8px 30px 8px 55px;font-weight: 500;display: block;color: #4C4C4C;}
+		.sub-menu-extend ul>li>ul>li>ul>li>a{padding: 8px 30px 8px 70px;font-weight: 500;display: block;color: #4C4C4C;}
+		.sub-menu-extend ul>li>ul>li>ul>li>ul>li>a{padding: 8px 30px 8px 85px;font-weight: 500;display: block;color: #4C4C4C;}
+
+		.right{float: right;}
+		.active{display:block;}
 
 		.content {height: 100%;width: 100%;transition: all;padding-left: 190px;padding-left: var(--sidebarWidth);padding-right: 0;top: 70px;top: var(--headerHeight);position: fixed;}
 		.tabs{background:	#008080;background:	var(--bgColor);position: relative;width: 100%;height: 48px;height: var(--tabHeight);overflow: hidden;}
@@ -59,6 +80,10 @@
 		.iframes>.cur {display: block;}
 
 		.fa{padding-right:10px;}
+
+		.rightBar{position: fixed;width:10px; height:100%;z-index: 3;z-index: calc(var(--zIndex) + 3);left:190px;left:var(--sidebarWidth)}
+		.right_btn{width:10px; height:100px; position: absolute; right:0; top:45%; margin-top:-50px; background-image: url(../../images/1_07.png); display:none; cursor:pointer;}
+		.right_btn_style{background-image: url(../../images/1_08.png);}
 	</style>
 
 	<script src="../../js/jquery/jquery-3.1.1.min.js"></script>
@@ -72,6 +97,12 @@
 	<script src="../../js/index.js"></script>
 	<script type="application/javascript">
         var path = '<%=ctx %>';
+        $(function() {
+
+
+
+        });
+
 	</script>
 </head>
 
@@ -156,21 +187,23 @@
 
 	<!-- 显示内容 -->
 	<div id="body">
+
 		<!-- 菜单 -->
 		<div class="sidebar">
 			<div class="menu">
-				<div>
-					<a class="waves-effect waves-light" style="width:100%;height:48px;text-decoration: none;background: url(../../images/bg.png) left top no-repeat;" href="javascript:;">
-						<div style="width:100%;height:48px;line-height: 48px;font-size: 20px;background: rgba(0,0,0,.37);padding: 0px 14px;color: #fff;position: relative;">
+				<a class="waves-effect waves-light" style="width:100%;height:48px;text-decoration: none;background: url(../../images/bg.png) left top no-repeat;" href="javascript:;">
+					<div style="width:100%;height:48px;line-height: 48px;font-size: 20px;background: rgba(0,0,0,.37);padding: 0px 14px;color: #fff;position: relative;">
 
-						</div>
-					</a>
-				</div>
-				<div>
-					<input type="button" value="测试Tab" onclick="Tab.addTab('test123','测试Tab页', '/test');">
-				</div>
+					</div>
+				</a>
+
+				<ul class="main-menu active"></ul>
+
+				<ul class="main-menu-extend"></ul>
 			</div>
 		</div>
+
+		<div class="rightBar"><div class="right_btn"></div></div>
 
 		<!-- 功能模块 -->
 		<div class="content">
@@ -178,12 +211,12 @@
                 <div class="tab_left">
                     <a class="waves-effect waves-light" href="javascript:;"><span class="glyphicon glyphicon-chevron-left"></span></a>
                 </div>
+
                 <div class="tab_right">
                     <a class="waves-effect waves-light" href="javascript:;"><span class="glyphicon glyphicon-chevron-right"></span></a>
                 </div>
-                <ul id="tabs">
 
-                </ul>
+                <ul id="tabs"></ul>
             </div>
 
 			<div class="iframes"></div>

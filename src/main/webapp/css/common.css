@@ -144,3 +144,18 @@ a:hover{cursor: pointer}
     50% { transform:scale(0.5); }
     100% { transform:scale(1); }
 }
+
+Body {
+    scrollbar-arrow-color: #eef4ee;  /*图6,三角箭头的颜色*/
+    scrollbar-face-color: #cdd2cd;  /*图5,立体滚动条的颜色*/
+    scrollbar-3dlight-color: #eef4ee;  /*图1,立体滚动条亮边的颜色*/
+    scrollbar-highlight-color: #eef4ee;  /*图2,滚动条空白部分的颜色*/
+    scrollbar-shadow-color: #eef4ee;  /*图3,立体滚动条阴影的颜色*/
+    scrollbar-darkshadow-color: #eef4ee;  /*图4,立体滚动条强阴影的颜色*/
+    scrollbar-track-color: #eef4ee;  /*图7,立体滚动条背景颜色*/
+    scrollbar-base-color:#eef4ee;  /*滚动条的基本颜色*/
+}
+
+::-webkit-scrollbar {width: 4px;height: 4px;}
+::-webkit-scrollbar-thumb {border-radius: 5px;-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.1);background: rgba(0,0,0,0.1);}
+::-webkit-scrollbar-track {-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);border-radius: 0;background: rgba(0,0,0,0.1);}

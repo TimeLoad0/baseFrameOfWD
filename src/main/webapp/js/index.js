@@ -1,6 +1,64 @@
-var topValue = 70 + 48;//iframe距离浏览器顶部距离，头部高度+tab页高度
+//iframe距离浏览器顶部距离，头部高度+tab页高度
+var topValue = 70 + 48;
 
 $(function(){
+    //初始化Tab页
+    initTab();
+
+    //初始菜单
+    initMenu();
+
+    //初始化页面事件
+    initPageEvent();
+
+    //页面大小变化触发事件
+    window.onresize = function() {
+        //调整框架高度
+        resizeFrameHeight();
+
+        //初始化Tab页滚动条
+        initScrollShow();
+
+        //初始化Tab页滚动条状态
+        initScrollState();
+    }
+});
+
+
+function initTab(){
+    Tab.addTab('test','文章管理', '/test');
+    Tab.addTab('test1','文章管理1', '/');
+}
+
+function initMenu(){
+    var data = [
+        {menuNo:'1',title:'首页',url:'/test',icon:'home',parentNo:'0',level:1},
+        {menuNo:'2',title:'系统管理',url:'/',icon:'cog',parentNo:'0',level:1},
+        {menuNo:'21',title:'系统',url:'/test',icon:'cog',parentNo:'2',level:2},
+        {menuNo:'211',title:'系统1',url:'/test',icon:'file',parentNo:'21',level:3},
+        {menuNo:'212',title:'系统2',url:'/test',icon:'file',parentNo:'21',level:3},
+        {menuNo:'213',title:'系统1',url:'/test',icon:'file',parentNo:'21',level:3},
+        {menuNo:'214',title:'系统2',url:'/test',icon:'file',parentNo:'21',level:3},
+        {menuNo:'215',title:'系统1',url:'/test',icon:'file',parentNo:'21',level:3},
+        {menuNo:'216',title:'系统2',url:'/test',icon:'file',parentNo:'21',level:3},
+        {menuNo:'217',title:'系统1',url:'/test',icon:'file',parentNo:'21',level:3},
+        {menuNo:'218',title:'系统2',url:'/test',icon:'file',parentNo:'21',level:3},
+        {menuNo:'22',title:'组织管理',url:'/test',icon:'file',parentNo:'2',level:2},
+        {menuNo:'3',title:'角色用户管理',url:'/test',icon:'folder',parentNo:'0',level:1},
+        {menuNo:'31',title:'角色',url:'/test',icon:'file',parentNo:'3',level:2},
+        {menuNo:'32',title:'用户',url:'/test',icon:'file',parentNo:'3',level:2}
+    ];
+
+    $(".main-menu").empty();
+
+    var context = recursiveMenu(data,1,"0");
+    $(".main-menu").html(context);
+
+    var context = recursiveThinMenu(data,1,"0");
+    $(".main-menu-extend").html(context);
+}
+
+function initPageEvent(){
     //点击波纹效果
     Waves.displayEffect();
 
@@ -17,12 +75,6 @@ $(function(){
             showMenu($(this))
         });
     });
-
-    //初始化Tab页
-    Tab.addTab('test','文章管理', '/test');
-    Tab.addTab('test1','文章管理1', '/');
-    Tab.addTab('test11','文章管理11', '/test');
-    Tab.addTab('test111','文章管理111', '/');
 
     //页面 tabs li 绑定点击事件,切换Tab页
     $(document).on('click', '.tabs li', function() {
@@ -47,6 +99,36 @@ $(function(){
             initScrollState();
         });
     });
+
+    //菜单左右伸缩
+    $(".rightBar").mouseover(function () {
+        $(".right_btn").show();
+    });
+    $(".rightBar").mouseout(function () {
+        $(".right_btn").hide();
+    });
+    $(".right_btn").click(function(){
+        $(".right_btn").hide();
+        $(".right_btn").toggleClass("right_btn_style");
+        $(".main-menu").toggleClass("active");
+        $(".main-menu-extend").toggleClass("active");
+
+        var findWidth = 0;
+
+        //判断收缩还是展开,当前为最小和最大宽度为:50,190
+        if($(".right_btn").hasClass("right_btn_style")){
+            findWidth = 50;
+            $(".content").css("padding-left",findWidth);
+        }
+        else{
+            findWidth = 190;
+        }
+
+        $(".sidebar").width(findWidth);
+        $(".rightBar").animate({left:findWidth});
+        $(".content").animate({paddingLeft:findWidth});
+
+    })
 
     // 选项卡右键菜单
     var menu = new BootstrapMenu('.tabs li', {
@@ -127,18 +209,56 @@ $(function(){
         }
     });
 
-    //页面大小变化触发事件
-    window.onresize = function() {
-        //调整框架高度
-        resizeFrameHeight();
+    $('.main-menu li>a').each(function(){
+        $(this).bind("click",function(){
+            $(this).parent().siblings().find('ul').slideUp();
+            $(this).parent().siblings().find('.fa-angle-up').addClass("fa-angle-down");
 
-        //初始化Tab页滚动条
-        initScrollShow();
+            $(this).next('ul').slideToggle();
 
-        //初始化Tab页滚动条状态
-        initScrollState();
-    }
-})
+            if($(this).find('.right').hasClass("fa-angle-down")){
+                $(this).find('.right').removeClass("fa-angle-down");
+                $(this).find('.right').addClass("fa-angle-up");
+            }else{
+                $(this).find('.right').removeClass("fa-angle-up");
+                $(this).find('.right').addClass("fa-angle-down");
+            }
+        });
+    });
+
+    //瘦菜单展开
+    $(".main-menu-extend>.sub-menu-extend>a").mouseenter(function(){
+        var top = $(this).position().top;
+        var	left = $(this).outerWidth(true);
+        var	height = $(this).outerHeight(true);
+        $(this).next("ul").css("min-height",height);
+        $(this).next("ul").css("max-height",300);
+        $(this).next("ul").css("left",left);
+        $(this).next("ul").css("top",top+70);
+        $(this).next("ul").show();
+
+    });
+
+    //瘦菜单收缩
+    $(".main-menu-extend>.sub-menu-extend").mouseleave(function(){
+        $(this).children("ul").hide();
+    });
+
+    //瘦菜单子菜单展开或收缩
+    $('.main-menu-extend>.sub-menu-extend>ul li>a').each(function(){
+        $(this).bind("click",function(){
+            $(this).next('ul').slideToggle();
+
+            if($(this).find('.right').hasClass("fa-angle-down")){
+                $(this).find('.right').removeClass("fa-angle-down");
+                $(this).find('.right').addClass("fa-angle-up");
+            }else{
+                $(this).find('.right').removeClass("fa-angle-up");
+                $(this).find('.right').addClass("fa-angle-down");
+            }
+        });
+    });
+}
 
 //显示头像隐藏菜单
 function showMenu(obj){
@@ -236,9 +356,86 @@ function resizeFrameHeight() {
     $('.tab_iframe').css('height', document.documentElement.clientHeight - topValue);
 }
 
+function recursiveMenu(data,level,parentNo){
+    var str = '';
+
+    if(level >= 4){
+        return "";
+    }
+
+    for(var i = 0;i < data.length;i++){
+        if(data[i].level != level || (data[i].parentNo != parentNo)){
+            continue;
+        }
+
+        var subStr = recursiveMenu(data,data[i].level+1,data[i].menuNo);
+
+        str += '<li class="sub-menu">';
+
+        str += '<a class="waves-effect" href="javascript:;"';
+        if(subStr == ''){
+            str += ' onclick="Tab.addTab(\''+data[i].menuNo+'\',\''+data[i].title+'\',\''+data[i].url+'\')"';
+        }
+        str += '>';
+
+        str += '<i class="fa fa-'+data[i].icon+'"></i>';
+        str += data[i].title;
+
+        if(subStr != ''){
+            str += '<i class="right fa fa-angle-down"></i>';
+        }
+
+        str += '</a>';
+
+        if(subStr != ''){
+            str += '<ul>';
+            str += subStr;
+            str += '</ul>';
+        }
+
+        str += '</li>';
+    }
+    return str;
+}
+
+function recursiveThinMenu(data){
+    var str = '';
+
+    for(var i = 0;i < data.length;i++){
+        if(data[i].level != 1){
+            continue;
+        }
+
+        var subStr = recursiveMenu(data,data[i].level+1,data[i].menuNo);
+
+        str += '<li class="sub-menu-extend">';
+        str += '<a class="waves-effect" href="javascript:;"';
+        if(subStr == ''){
+            str += ' onclick="Tab.addTab(\''+data[i].menuNo+'\',\''+data[i].title+'\',\''+data[i].url+'\')"';
+        }
+        str += '>'
+        str += '<i class="fa fa-'+data[i].icon+' fa-2x"></i>';
+        str += '</a>';
+
+        str += '<ul class="sub-menu-extend-ul" style="left: 50px;top: 118px;">';
+        str += '<a class="waves-effect" style="font-size: 15px;padding-top: 12px;" href="javascript:;" ';
+        if(subStr == ''){
+            str += ' onclick="Tab.addTab(\''+data[i].menuNo+'\',\''+data[i].title+'\',\''+data[i].url+'\')"';
+        }
+        str += '>'+data[i].title+'</a>';
+
+        if(subStr != ''){
+            str += subStr;
+        }
+
+        str += '</ul>';
+        str += '</li>';
+    }
+    return str;
+}
+
 
 function fullPage() {
-
     if ($.util.supportsFullScreen) {
         if ($.util.isFullScreen()) {
             $.util.cancelFullScreen();
