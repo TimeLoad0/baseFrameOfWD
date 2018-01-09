@@ -212,14 +212,22 @@ function initPageEvent(){
     $('.main-menu li>a').each(function(){
         $(this).bind("click",function(){
             $(this).parent().siblings().find('ul').slideUp();
+            $(".main-menu").find('a').removeClass("active-a");
             $(this).parent().siblings().find('.fa-angle-up').addClass("fa-angle-down");
 
             $(this).next('ul').slideToggle();
+
+            $(this).addClass("active-a");
 
             if($(this).find('.right').hasClass("fa-angle-down")){
                 $(this).find('.right').removeClass("fa-angle-down");
                 $(this).find('.right').addClass("fa-angle-up");
             }else{
+                if($(this).find('.right').hasClass("fa-angle-up")){
+                    $(this).removeClass("active-a");
+                }
+
+                $(this).find(".active-a").removeClass("active-a");
                 $(this).find('.right').removeClass("fa-angle-up");
                 $(this).find('.right').addClass("fa-angle-down");
             }
@@ -248,11 +256,17 @@ function initPageEvent(){
     $('.main-menu-extend>.sub-menu-extend>ul li>a').each(function(){
         $(this).bind("click",function(){
             $(this).next('ul').slideToggle();
+            $('.main-menu-extend').find('.active-a').removeClass("active-a");
+
+            $(this).addClass("active-a");
 
             if($(this).find('.right').hasClass("fa-angle-down")){
                 $(this).find('.right').removeClass("fa-angle-down");
                 $(this).find('.right').addClass("fa-angle-up");
             }else{
+                if($(this).find('.right').hasClass("fa-angle-up")){
+                    $(this).removeClass("active-a");
+                }
                 $(this).find('.right').removeClass("fa-angle-up");
                 $(this).find('.right').addClass("fa-angle-down");
             }

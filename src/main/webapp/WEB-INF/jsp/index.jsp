@@ -59,6 +59,9 @@
 
 		.right{float: right;}
 		.active{display:block;}
+		.active-a{opacity: 1;box-shadow: inset 5px 0 #008080;}
+		.main-menu a,.main-menu-extend a{opacity: 0.85;}
+		.main-menu a:hover,.main-menu-extend a:hover{opacity: 1;box-shadow: inset 5px 0 #008080;}
 
 		.content {height: 100%;width: 100%;transition: all;padding-left: 190px;padding-left: var(--sidebarWidth);padding-right: 0;top: 70px;top: var(--headerHeight);position: fixed;}
 		.tabs{background:	#008080;background:	var(--bgColor);position: relative;width: 100%;height: 48px;height: var(--tabHeight);overflow: hidden;}
@@ -84,6 +87,7 @@
 		.rightBar{position: fixed;width:10px; height:100%;z-index: 3;z-index: calc(var(--zIndex) + 3);left:190px;left:var(--sidebarWidth)}
 		.right_btn{width:10px; height:100px; position: absolute; right:0; top:45%; margin-top:-50px; background-image: url(../../images/1_07.png); display:none; cursor:pointer;}
 		.right_btn_style{background-image: url(../../images/1_08.png);}
+
 	</style>
 
 	<script src="../../js/jquery/jquery-3.1.1.min.js"></script>

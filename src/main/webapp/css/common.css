@@ -58,6 +58,7 @@ a:hover{cursor: pointer}
 }
 
 .loaderDiv span{
+    border-radius: 50%;
     width:20px;
     height:20px;
     position:absolute;

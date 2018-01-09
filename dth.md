@@ -6,8 +6,6 @@ TODO AND DONE
   * 菜单集成
   
 ## TODO
-  * tab页(待测)
-  * 菜单集成
 
 ## DONE
   * 2017-12-12  &emsp;&emsp;构建页面基础框架            
@@ -18,3 +16,4 @@ TODO AND DONE
   * 2018-01-03  &emsp;&emsp;实现动态菜单
   * 2018-01-04  &emsp;&emsp;绑定菜单增加tab页
   * 2018-01-05  &emsp;&emsp;修改页面基础框架的部分bug
+  * 2018-01-05  &emsp;&emsp;增加菜单选中效果
