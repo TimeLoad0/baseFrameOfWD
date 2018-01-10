@@ -26,8 +26,8 @@ $(function(){
 
 
 function initTab(){
-    Tab.addTab('test','文章管理', '/test');
-    Tab.addTab('test1','文章管理1', '/');
+    Tab.addTab('test','文章管理', '/',false);
+    Tab.addTab('test1','测试', '/test');
 }
 
 function initMenu(){
@@ -321,13 +321,13 @@ function initScrollState() {
 
 // 选项卡对象
 var Tab = {
-    addTab: function(key,title, url) {
+    addTab: function(key,title, url,closeable) {
 
         // 如果存在选项卡，则激活，否则创建新选项卡
         if ($('#tab_' + key).length == 0) {
             // 添加选项卡
             $('.tabs li').removeClass('cur');
-            var tab = '<li id="tab_' + key +'" data-key="' + key + '" class="cur"><a class="waves-effect waves-light">' + title + '</a></li>';
+            var tab = '<li id="tab_' + key +'" data-key="' + key + '" data-closeable="' + (closeable==false?false:true) + '" class="cur"><a class="waves-effect waves-light">' + title + '</a></li>';
             $('.tabs>ul').append(tab);
             // 添加iframe
             $('.iframe').removeClass('cur');
