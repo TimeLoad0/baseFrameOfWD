@@ -4,8 +4,10 @@
  * 2017-12-11 20:37:10
  * wj
  */
-var _tableOptions = {}; //表格选项
-var _data = {}; //数据缓存
+//表格选项
+var _tableOptions = {};
+//数据缓存
+var _data = {};
 
 //laydate全局默认设置
 if(!isEmpty(laydate)){
@@ -83,9 +85,18 @@ function createPage(options,data) {
     createThead(_tableOptions);
     //绑定表格数据
     bindTbody(data);
+
+    $(window).on('resize',function(){
+        //调整搜索工具栏
+        searchBar_resize();
+    });
+
 }
 
-//创建搜索工具栏
+/**
+ * 创建搜索工具栏
+ * @param options
+ */
 function createSearchToolBar(options){
     var toolBarDiv = $('<div class="panel panel-heading"></div>');
     var leftDiv = $('<div style="width: 80%;"></div>');
@@ -191,9 +202,15 @@ function createSearchToolBar(options){
             $('#mainBody').append($('<div style="height: 10px;"></div>'));
         }
     }
+
+    //调整搜索工具栏
+    searchBar_resize();
 }
 
-//创建表头
+/**
+ * 创建表头
+ * @param options
+ */
 function createThead(options) {
     var thead = $('<thead></thead>');
     var tr = $('<tr></tr>');
@@ -244,7 +261,11 @@ function createThead(options) {
     $('#dataTable').empty().append(thead);
 }
 
-//绑定表格数据
+/**
+ * 绑定表格数据
+ * @param data
+ * @returns {boolean}
+ */
 function bindTbody(data) {
     if(isEmpty(data) || data.length <= 0) {
         return false;
@@ -309,7 +330,11 @@ function bindTbody(data) {
     dataTable.html(thead + tbody);
 }
 
-//空转空字符串
+/**
+ * 空转空字符串
+ * @param obj
+ * @returns {*}
+ */
 function nullToEmpty(obj) {
     if ( undefined == obj || null == obj ) {
         obj = "";
@@ -318,7 +343,12 @@ function nullToEmpty(obj) {
     return obj;
 }
 
-//空转自定义
+/**
+ * 空转自定义
+ * @param obj
+ * @param str
+ * @returns {*}
+ */
 function nullToObject(obj,str) {
     if ( undefined == obj || null == obj || "" == obj) {
         obj = str;
@@ -327,7 +357,11 @@ function nullToObject(obj,str) {
     return obj;
 }
 
-//空转false
+/**
+ * 空转false
+ * @param obj
+ * @returns {*}
+ */
 function nullToFalse(obj) {
     if ( undefined == obj || null == obj ) {
         obj = false;
@@ -340,7 +374,11 @@ function nullToFalse(obj) {
     return obj;
 }
 
-//空转true
+/**
+ * 空转true
+ * @param obj
+ * @returns {*}
+ */
 function nullToTrue(obj) {
     if ( undefined == obj || null == obj ) {
         obj = true;
@@ -418,7 +456,11 @@ function round(srcValuef, iCount) {
     }
 }
 
-//判断对象是否为空
+/**
+ * 判断对象是否为空
+ * @param src
+ * @returns {boolean}
+ */
 function isEmpty(src) {
     return undefined == src || null == src || "" == src;
 }
@@ -448,7 +490,10 @@ Date.prototype.format = function (format) {
     return format;
 };
 
-//判断是否为IE浏览器
+/**
+ * 判断是否为IE浏览器
+ * @returns {boolean}
+ */
 function isIE() {
     if ( isEmpty(window) ) {
         return false;
@@ -462,7 +507,10 @@ function isIE() {
     }
 }
 
-//获取当前event对象
+/**
+ * 获取当前event对象
+ * @returns {*}
+ */
 function getEvent() {
     var e;
 
@@ -479,7 +527,10 @@ function getEvent() {
     return e;
 }
 
-//阻止父层事件触发
+/**
+ * 阻止父层事件触发
+ * @param e
+ */
 function preventTopEvent(e) {
     e = getEvent();
 
@@ -492,7 +543,11 @@ function preventTopEvent(e) {
     e = null;
 }
 
-//获取按键对应的值
+/**
+ * 获取按键对应的值
+ * @param e
+ * @returns {string}
+ */
 function getKeyCode(e) {
     var key = "";
 
@@ -524,7 +579,10 @@ function getValueOfArray(array,key,view,value){
     }
 }
 
-//检索类别下拉框改变事件
+/**
+ * 检索类别下拉框改变事件
+ * @param src
+ */
 function searchSelect_onchage(src){
     var optionObj = $(src).find('option:selected');
     var controlType = nullToEmpty(optionObj.attr("type"));
@@ -576,8 +634,14 @@ function searchSelect_onchage(src){
     }else if("combineSearch" == controlType){
         createCombineSearch();
     }
+
+    //调整搜索工具栏
+    searchBar_resize();
 }
 
+/**
+ * 创建组合查询栏
+ */
 function createCombineSearch(){
     var controlDiv = $('#controlDiv');
     var searchForm = $('#search_form');
@@ -716,12 +780,16 @@ function getTopPage(page)
     return page;
 }
 
-//隐藏加载遮罩层
+/**
+ * 隐藏加载遮罩层
+ */
 function hideLoadingCover(){
     $('#loadingCover').hide();
 }
 
-//创建并显示加载遮罩层
+/**
+ * 创建并显示加载遮罩层
+ */
 function showLoadingCover(){
     var loadingCover = $('#loadingCover');
 
@@ -732,7 +800,9 @@ function showLoadingCover(){
     loadingCover.show();
 }
 
-//默认搜索方法
+/**
+ * 默认搜索方法
+ */
 function search_onclick(){
     alert("default");
 
@@ -741,4 +811,23 @@ function search_onclick(){
     window.setTimeout(function(){
         hideLoadingCover();
     },3000);
+}
+
+/**
+ * 调整搜索工具栏
+ */
+function searchBar_resize(){
+    if(nullToEmpty($('#controlDiv').offset().top) > 14 && "combineSearch" != $('#search_type_div #selectType option:selected').attr('type')){
+        $('#controlDiv').children().each(function(){
+            $(this).css('margin-left','80px');
+        });
+
+        $('#search_type_div').css('margin-bottom','0px');
+    }else{
+        $('#controlDiv').children().each(function(){
+            $(this).css('margin-left','');
+        });
+
+        $('#search_type_div').css('margin-bottom','');
+    }
 }
