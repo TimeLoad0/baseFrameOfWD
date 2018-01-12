@@ -50,6 +50,7 @@ $.ajaxSetup({
             text:"text",            //表头显示文本
             field:"field",          //对应数据字段
             type:"select",          //控件类型，如：text，date，time，datetime，select等
+            format:"datetime",      //格式化类型，如：date，time，datetime等
             search:true,            //是否作为搜索条件，默认false
             selectOptions:[],       //字典选项数组，当type=select时生效
             key:"key",              //字典key，当type=select时配合selectOptions使用，可以为空，默认为key
@@ -300,7 +301,7 @@ function bindTbody(data) {
             var display = $(ths[j]).css('display')=="none"?"display:none;":"";
 
             //判断是否有列click事件
-            var onclick = nullToFalse($(ths[j]).attr('click'))?'onclick='+$(ths[j]).attr('click')+'(this,'+JSON.stringify(_tableOptions)+')':'';
+            var onclick = nullToFalse($(ths[j]).attr('click'))?'onclick='+$(ths[j]).attr('click')+'(this)':'';
 
             var value = nullToEmpty(dataRows[i][$(ths[j]).attr('field')]);
 
@@ -315,6 +316,21 @@ function bindTbody(data) {
                     value = tempValue;
                 }else if(!isEmpty(dataRows[i][view])){  //如果取不到字典值尝试直接从数据行中获取view值
                     value = dataRows[i][view];
+                }
+            }
+
+            //格式化
+            var format = nullToEmpty($(ths[j]).attr('format'));
+
+            if(!isEmpty(format)){
+                var date = new Date(parseInt(value, 10));
+
+                if ("date" === format) {
+                    value = date.format("yyyy-MM-dd");
+                } else if ("time" === format) {
+                    value = date.format("hh:mm:ss");
+                } else if ("datetime" === format) {
+                    value = date.format("yyyy-MM-dd hh:mm:ss");
                 }
             }
 
