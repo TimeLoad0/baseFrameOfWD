@@ -742,3 +742,38 @@ function search_onclick(){
         hideLoadingCover();
     },3000);
 }
+
+
+//获取页面的宽度
+function getPageWidth(page) {
+    if (isEmpty(page)) {
+        if (parseInt(document.documentElement.clientWidth) != 0) {
+            return document.documentElement.clientWidth;
+        }
+
+        return document.body.clientWidth;
+    }
+
+    if (parseInt(page.document.documentElement.clientWidth) != 0) {
+        return page.document.documentElement.clientWidth;
+    }
+
+    return page.document.body.clientWidth;
+}
+
+//获取页面的高度
+function getPageHeight(page) {
+    if (isEmpty(page)) {
+        if (parseInt(document.documentElement.clientHeight) != 0) {
+            return document.documentElement.clientHeight;
+        }
+
+        return document.body.clientHeight;
+    }
+
+    if (parseInt(page.document.documentElement.clientHeight) != 0) {
+        return page.document.documentElement.clientHeight;
+    }
+
+    return page.document.body.clientHeight;
+}

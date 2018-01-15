@@ -11,6 +11,7 @@
 	<link rel="stylesheet" href="../../css/bootstrap/bootstrap.min.css">
 	<link rel="stylesheet" href="../../css/font-awesome-4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="../../css/waves/waves.min.css">
+	<link rel="stylesheet" href="../../css/confirm/jquery-confirm.min.css" type="text/css" />
 	<link rel="stylesheet" href="../../css/common.css">
 	<style type="text/css">
 		/*顶部框架*/
@@ -97,10 +98,12 @@
 	<script src="../../plugins/fullPage/jquery.jdirk.min.js"></script>
 	<script src="../../js/waves/waves.min.js"></script>
 	<script src="../../js/laydate/laydate.js"></script>
+	<script src="../../js/confirm/jquery-confirm.min.js"></script>
 	<script src="../../js/util/common.js"></script>
 	<script src="../../js/index.js"></script>
 	<script type="application/javascript">
         var path = '<%=ctx %>';
+        var params = {a:1};
         $(function() {
 
 
@@ -110,7 +113,7 @@
 	</script>
 </head>
 
-<body>
+<body id="base">
 	<!-- 顶部内容 -->
 	<div id="header">
 		<ul class="header_content">
