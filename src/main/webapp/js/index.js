@@ -331,11 +331,11 @@ var Tab = {
             $('.tabs>ul').append(tab);
             // 添加iframe
             $('.iframe').removeClass('cur');
-            var iframeDiv = $('<div id="iframe_' + key + '" class="iframe cur"></div>');
+            var iframeDiv = $('<div id="iframe_' + key + '" class="iframe cur" style="position:relative"></div>');
             var iframe = $('<iframe class="tab_iframe" src="' + path + url + '" width="100%" frameborder="0" scrolling="auto"></iframe>');
 
             //添加遮罩层
-            var loadingCover = $('<div id="loadingCover_'+key+'"><div class="coverDiv" style="top:50px;"></div><div class="loaderDiv"><span></span><span></span><span></span><span></span></div></div>');
+            var loadingCover = $('<div id="loadingCover_'+key+'"><div class="coverDiv"></div><div class="loaderDiv"><span></span><span></span><span></span><span></span></div></div>');
 
             iframe.off('load').on('load',function(){
                 changeFrameHeight(this);
