@@ -28,7 +28,7 @@
         var d = null;
         $(function(){
              d = getTopPage().params.dialog;
-            showLoadingCover();
+            initPage();
 
             $('#sljb').click(function(){
                 Alert('测试','测试123321',"30%",function(){alert(123)});
@@ -91,8 +91,6 @@
                     content: 'Simple modal!',
                 });
             });
-
-            hideLoadingCover();
         });
 
         function Alert(title,content,width,callback){

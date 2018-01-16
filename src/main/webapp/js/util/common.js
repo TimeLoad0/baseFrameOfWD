@@ -34,7 +34,8 @@ $.ajaxSetup({
 
 /**
  * 创建绑定表格
- * @param options,data
+ * @param options
+ * @param data
  * options:{
         add:true,                   //新增，默认true
         search:true,                //搜索，默认true
@@ -776,4 +777,12 @@ function getPageHeight(page) {
     }
 
     return page.document.body.clientHeight;
+}
+
+//初始化页面事件
+function initPage(){
+    if($('#tabs .cur',getTopPage().document).length > 0){
+        var dataKey = $('#tabs .cur',getTopPage().document).attr('data-key');
+        $('#loadingCover_'+dataKey,getTopPage().document).show();
+    }
 }
