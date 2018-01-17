@@ -25,10 +25,10 @@
     <script type="text/javascript" src="../../js/confirm/jquery-confirm.min.js"></script>
     <script type="text/javascript" src="../../js/util/common.js"></script>
     <script type="text/javascript">
-        var d = null;
+
+        initPage();
+
         $(function(){
-             d = getTopPage().params.dialog;
-            initPage();
 
             $('#sljb').click(function(){
                 Alert('测试','测试123321',"30%",function(){alert(123)});
@@ -44,52 +44,6 @@
                 Dialog('测试','test',1000,500,{},{cs:function(){
                     alert(123);
                 },ok:{text:'确认',action:function(){alert('12321')}}},window.parent);
-            });
-
-            $('#slts').click(function(){
-                $.confirm({
-                    title: 'Prompt!',
-                    content: '' +
-                    '<form action="" class="formName">' +
-                    '<div class="form-group">' +
-                    '<label>Enter something here</label>' +
-                    '<input type="text" placeholder="Your name" class="name form-control" required />' +
-                    '</div>' +
-                    '</form>',
-                    buttons: {
-                        formSubmit: {
-                            text: 'Submit',
-                            btnClass: 'btn-blue',
-                            action: function () {
-                                var name = this.$content.find('.name').val();
-                                if(!name){
-                                    $.alert('provide a valid name');
-                                    return false;
-                                }
-                                $.alert('Your name is ' + name);
-                            }
-                        },
-                        cancel: function () {
-                            //close
-                        },
-                    },
-                    onContentReady: function () {
-                        // bind to events
-                        var jc = this;
-                        this.$content.find('form').on('submit', function (e) {
-                            // if the user submits the form by pressing enter in the field.
-                            e.preventDefault();
-                            jc.$$formSubmit.trigger('click'); // reference the button and click it
-                        });
-                    }
-                });
-            });
-
-            $('#sldhk').click(function(){
-                $.dialog({
-                    title: 'Text content!',
-                    content: 'Simple modal!',
-                });
             });
         });
 
@@ -227,6 +181,17 @@
                 option.buttons = buttons;
             }
 
+            //打开页面前事件
+            option.onOpenBefore = function () {
+                var self = this;
+                this.$content.append('<div id="loadingCover_dialog"><div class="coverDiv"></div><div class="loaderDiv"><span></span><span></span><span></span><span></span></div></div>');
+            };
+
+            //页面加载后事件
+            option.onContentReady = function(){
+                this.$content.find('#loadingCover_dialog').remove();
+            };
+
             var page = getTopPage();
 
             page.params = isEmpty(params) ? {} : params;
@@ -247,7 +212,7 @@
             <a id="sldhk" class="btn btn-primary" style="display: none;">示例对话框</a>
         </div>
     </div>
-    <input type="button" value="关闭" onclick="d.close()">
+    <input type="button" value="关闭" onclick="_dialog.close()">
     <input type="button" value="提示" onclick="Dialog('测试123321','test',0,0,{},{},parent);">
 </body>
 </html>

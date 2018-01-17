@@ -6,6 +6,9 @@
  */
 var _tableOptions = {}; //表格选项
 var _data = {}; //数据缓存
+var _dialogParams = {}//对话框传参
+var _dialog = null;//对话框对象
+
 
 //laydate全局默认设置
 if(!isEmpty(laydate)){
@@ -781,8 +784,13 @@ function getPageHeight(page) {
 
 //初始化页面事件
 function initPage(){
-    if($('#tabs .cur',getTopPage().document).length > 0){
-        var dataKey = $('#tabs .cur',getTopPage().document).attr('data-key');
-        $('#loadingCover_'+dataKey,getTopPage().document).show();
+    _dialogParams = getTopPage().params;
+    _dialog = getTopPage().params.dialog;
+
+    if(_dialog == null){
+        if($('#tabs .cur',getTopPage().document).length > 0){
+            var dataKey = $('#tabs .cur',getTopPage().document).attr('data-key');
+            $('#loadingCover_'+dataKey,getTopPage().document).show();
+        }
     }
 }
