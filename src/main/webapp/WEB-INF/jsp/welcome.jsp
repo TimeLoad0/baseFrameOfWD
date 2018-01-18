@@ -96,10 +96,17 @@ function cellClick(src){
 }
 
 function search_onclick(){
-    $.ajax({
-        url:"test.text",
-        loadindCover:true
-    });
+    $.confirm({
+        title:"test",
+        theme: 'wd-theme',
+        closeIcon:true,
+        content:"Artifact baseFrameOfWD:war exploded: Artifact is deployed successfully.Artifact baseFrameOfWD:war exploded: Deploy took 12,332 milliseconds.",
+        useBootstrap:false
+    })
+//    $.ajax({
+//        url:"test.text",
+//        loadindCover:true
+//    });
 }
 </script>
 </html>
