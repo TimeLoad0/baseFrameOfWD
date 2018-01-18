@@ -806,7 +806,6 @@ function initPage(){
 function Alert(title,content,width,callback){
     var object = window;
 
-    var maxHeight = getPageHeight(object) - 80 - 112;
     var maxWidth = getPageWidth(object) - 50;
 
     var option = {};
@@ -855,7 +854,6 @@ function Confirm(title,content,width,buttons,object){
         object = window;
     }
 
-    var maxHeight = getPageHeight(object) - 80 - 112;
     var maxWidth = getPageWidth(object) - 50;
 
     var option = {};
