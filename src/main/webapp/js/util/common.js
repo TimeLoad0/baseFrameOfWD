@@ -4,11 +4,14 @@
  * 2017-12-11 20:37:10
  * wj
  */
-var _tableOptions = {}; //表格选项
-var _data = {}; //数据缓存
-var _dialogParams = {}//对话框传参
-var _dialog = null;//对话框对象
-
+//表格选项
+var _tableOptions = {};
+//数据缓存
+var _data = {};
+//对话框传参
+var _dialogParams = {};
+//对话框对象
+var _dialog = null;
 
 //laydate全局默认设置
 if(!isEmpty(laydate)){
@@ -811,6 +814,7 @@ function Alert(title,content,width,callback){
     var option = {};
 
     option.title = title;
+    option.content = content;
 
     if(isEmpty(width)){
         width = maxWidth;
@@ -859,6 +863,7 @@ function Confirm(title,content,width,buttons,object){
     var option = {};
 
     option.title = title;
+    option.content = content;
 
     if(isEmpty(width)){
         width = maxWidth;
@@ -957,7 +962,6 @@ function Dialog(title,url,width,height,params,buttons,object){
 
     //打开页面前事件
     option.onOpenBefore = function () {
-        var self = this;
         this.$content.append('<div id="loadingCover_dialog"><div class="coverDiv"></div><div class="loaderDiv"><span></span><span></span><span></span><span></span></div></div>');
     };
 
