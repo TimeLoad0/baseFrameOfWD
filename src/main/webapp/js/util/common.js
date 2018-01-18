@@ -814,7 +814,7 @@ function showAlert(content,title, width, level, callback){
     option.content = content;
 
     if(isEmpty(title)){
-        title = "系统通知";
+        title = "系统信息";
     }
 
     option.boxWidth = nullToObject(width,"400px");
@@ -865,27 +865,21 @@ function showAlert(content,title, width, level, callback){
  * @param buttons
  * @param object
  */
-function showConfirm(title, content, width, buttons, object){
+function showConfirm(content,title, width, buttons, object){
     if(isEmpty(object)){
         object = window;
     }
 
-    var maxWidth = getPageWidth(object) - 50;
-
     var option = {};
+
+    if(isEmpty(title)){
+        title = "系统信息";
+    }
 
     option.title = title;
     option.content = content;
 
-    if(isEmpty(width)){
-        width = maxWidth;
-    }
-    else{
-        if( width > maxWidth){
-            width = maxWidth;
-        }
-    }
-    option.boxWidth = width;
+    option.boxWidth = nullToObject(width,"400px");
     option.useBootstrap=false;
 
     option.closeIcon = true;
@@ -986,4 +980,17 @@ function showDialog(title, url, width, height, params, buttons, object){
     page.params = isEmpty(params) ? {} : params;
 
     page.params.dialog = object.$.confirm(option);
+}
+
+//获取搜索条件
+function getSearchParams(){
+    var params = {};
+
+    var controlType = nullToEmpty($('#search_type_div #selectType option:selected').attr("type"));
+
+    if("text" === controlType){
+    }else if("select" === controlType){
+    }else if("date" === controlType || "datetime" === controlType || "time" === controlType){
+    }else if("combineSearch" === controlType){
+    }
 }

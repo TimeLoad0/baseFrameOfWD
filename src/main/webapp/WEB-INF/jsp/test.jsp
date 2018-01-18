@@ -35,7 +35,7 @@
             });
 
             $('#slqr').click(function(){
-                showConfirm('测试','测试确认','30%',{cs:function(){
+                showConfirm('测试确认','测试','30%',{cs:function(){
                     alert(123);
                 },ok:{text:'确认',action:function(){alert('12321')}}},window.parent);
             });
