@@ -919,31 +919,15 @@ function showDialog(title, url, width, height, params, buttons, object){
     }
 
     var maxHeight = getPageHeight(object) - 80 - 112;
-    var maxWidth = getPageWidth(object) - 50;
 
     var option = {};
 
     option.title = title;
 
-    if(isEmpty(width)){
-        width = maxWidth;
-    }
-    else{
-        if( width > maxWidth){
-            width = maxWidth;
-        }
-    }
-    option.boxWidth = width;
+    option.boxWidth = nullToObject(width,"400px");
     option.useBootstrap=false;
 
-    if(isEmpty(height)){
-        height = maxHeight;
-    }
-    else{
-        if( height > maxHeight){
-            height = maxHeight;
-        }
-    }
+    height = nullToObject(height,(getPageHeight(object) - 80 - 112) + "px");
 
     option.content = '<iframe style="width:100%;height:'+height+'px;" frameborder="no" border="0" marginwidth="0" marginheight="0" src="'+getTopPage().path+'/'+url+'"></iframe>';
 
