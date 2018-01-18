@@ -100,7 +100,7 @@ function search_onclick(){
         title:"test",
         theme: 'wd-theme',
         closeIcon:true,
-        content:"Artifact baseFrameOfWD:war exploded: Artifact is deployed successfully.Artifact baseFrameOfWD:war exploded: Deploy took 12,332 milliseconds.",
+        content:"ArtifactbaseFrameOfWD:warexploded:Artifactisdeployedsuccessfully.ArtifactbaseFrameOfWD:warexploded:Deploytook12,332milliseconds.",
         useBootstrap:false
     })
 //    $.ajax({

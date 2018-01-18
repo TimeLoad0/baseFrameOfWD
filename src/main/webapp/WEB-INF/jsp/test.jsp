@@ -31,17 +31,17 @@
         $(function(){
 
             $('#sljb').click(function(){
-                Alert('测试','测试123321',"30%",function(){alert(123)});
+                showAlert('测试','测试123321',"30%",function(){alert(123)});
             });
 
             $('#slqr').click(function(){
-                Confirm('测试','测试确认','30%',{cs:function(){
+                showConfirm('测试','测试确认','30%',{cs:function(){
                     alert(123);
                 },ok:{text:'确认',action:function(){alert('12321')}}},window.parent);
             });
 
             $('#sljz').click(function(){
-                Dialog('测试','test',1000,500,{},{cs:function(){
+                showDialog('测试','test',1000,500,{},{cs:function(){
                     alert(123);
                 },ok:{text:'确认',action:function(){alert('12321')}}},window.parent);
             });
@@ -61,6 +61,6 @@
         </div>
     </div>
     <input type="button" value="关闭" onclick="_dialog.close()">
-    <input type="button" value="提示" onclick="Dialog('测试123321','test',0,0,{},{},parent);">
+    <input type="button" value="提示" onclick="showDialog('测试123321','test',0,0,{},{},parent);">
 </body>
 </html>

@@ -806,7 +806,7 @@ function initPage(){
  * @param callback
  * @constructor
  */
-function Alert(title,content,width,callback){
+function showAlert(title, content, width, callback){
     var object = window;
 
     var maxWidth = getPageWidth(object) - 50;
@@ -853,7 +853,7 @@ function Alert(title,content,width,callback){
  * @param object
  * @constructor
  */
-function Confirm(title,content,width,buttons,object){
+function showConfirm(title, content, width, buttons, object){
     if(isEmpty(object)){
         object = window;
     }
@@ -908,7 +908,7 @@ function Confirm(title,content,width,buttons,object){
  * @param object
  * @constructor
  */
-function Dialog(title,url,width,height,params,buttons,object){
+function showDialog(title, url, width, height, params, buttons, object){
     if(isEmpty(object)){
         object = window;
     }
