@@ -12,6 +12,8 @@ var _data = {};
 var _dialogParams = {};
 //对话框对象
 var _dialog = null;
+//搜索工具栏数据字典缓存
+var _selectOptions = {};
 
 //laydate全局默认设置
 if(!isEmpty(laydate)){
@@ -122,7 +124,9 @@ function createSearchToolBar(options){
 
                 //判断selectOptions是否为空
                 if(!isEmpty(cells[index].selectOptions)){
-                    option.attr("selectOptions",JSON.stringify(cells[index].selectOptions));
+                    var optionName = nullToObject(cells[index].field,cells[index].type+index) + "_options";
+                    _selectOptions[optionName] = cells[index].selectOptions;
+                    option.attr("optionName",optionName);
                 }
 
                 //判断key是否为空
@@ -551,7 +555,8 @@ function searchSelect_onchage(src){
             }
         });
 
-        var selectOptions = JSON.parse(nullToEmpty(optionObj.attr('selectOptions')));
+        var optionName = nullToEmpty(optionObj.attr('optionName'));
+        var selectOptions = nullToEmpty(_selectOptions[optionName]);
         var key = nullToObject(optionObj.attr("key"),"key");
         var view = nullToObject(optionObj.attr("view"),"view");
 
@@ -741,13 +746,7 @@ function showLoadingCover(){
 
 //默认搜索方法
 function search_onclick(){
-    alert("default");
-
-    showLoadingCover();
-
-    window.setTimeout(function(){
-        hideLoadingCover();
-    },3000);
+    showAlert("缺少查询方法，请实现查询方法!",null,null,"warning");
 }
 
 
@@ -804,27 +803,40 @@ function initPage(){
  * @param content
  * @param width
  * @param callback
- * @constructor
+ * @param level
  */
-function showAlert(title, content, width, callback){
+function showAlert(content,title, width, level, callback){
     var object = window;
 
-    var maxWidth = getPageWidth(object) - 50;
-
     var option = {};
+    var btnClass = "btn-default";
 
-    option.title = title;
     option.content = content;
 
-    if(isEmpty(width)){
-        width = maxWidth;
+    if(isEmpty(title)){
+        title = "系统通知";
     }
-    else{
-        if( width > maxWidth){
-            width = maxWidth;
+
+    option.boxWidth = nullToObject(width,"400px");
+
+    if(!isEmpty(level)){
+        if("danger" === level){
+            option.title = "<span class='fa fa-warning' style='color:#e74c3c;'>&nbsp;</span>"+title;
+            option.type = "red";
+            btnClass = "btn-red";
+        }else if("info" === level){
+            option.title = "<span class='fa fa-info-circle' style='color:#3498db;'>&nbsp;</span>"+title;
+            option.type = "blue";
+            btnClass = 'btn-blue';
+        }else if("warning" === level){
+            option.title = "<span class='fa fa-exclamation-circle' style='color:#f1c40f;'>&nbsp;</span>"+title;
+            option.type = "orange";
+            btnClass = 'btn-orange';
         }
+    }else{
+        option.title = title;
     }
-    option.boxWidth = width;
+
     option.useBootstrap=false;
 
     option.closeIcon = true;
@@ -832,6 +844,7 @@ function showAlert(title, content, width, callback){
     option.buttons = {
         confirm:{
             text: '确认',
+            btnClass: btnClass,
             action: function(){
                 if(!isEmpty(callback)){
                     callback();
@@ -851,7 +864,6 @@ function showAlert(title, content, width, callback){
  * @param width
  * @param buttons
  * @param object
- * @constructor
  */
 function showConfirm(title, content, width, buttons, object){
     if(isEmpty(object)){
@@ -906,7 +918,6 @@ function showConfirm(title, content, width, buttons, object){
  * @param params
  * @param buttons
  * @param object
- * @constructor
  */
 function showDialog(title, url, width, height, params, buttons, object){
     if(isEmpty(object)){
@@ -940,7 +951,7 @@ function showDialog(title, url, width, height, params, buttons, object){
         }
     }
 
-    option.content = '<iframe style="width:100%;height:'+height+'px;" frameborder="no" border="0" marginwidth="0" marginheight="0" src="<%=ctx%>/'+url+'"></iframe>';
+    option.content = '<iframe style="width:100%;height:'+height+'px;" frameborder="no" border="0" marginwidth="0" marginheight="0" src="'+getTopPage().path+'/'+url+'"></iframe>';
 
     option.closeIcon = true;
 
@@ -974,7 +985,5 @@ function showDialog(title, url, width, height, params, buttons, object){
 
     page.params = isEmpty(params) ? {} : params;
 
-    var dialog = object.$.confirm(option);
-
-    page.params.dialog = dialog;
+    page.params.dialog = object.$.confirm(option);
 }

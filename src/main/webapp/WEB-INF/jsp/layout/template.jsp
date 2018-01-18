@@ -7,6 +7,7 @@
 <head>
     <link rel="stylesheet" href="css/bootstrap/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="css/confirm/jquery-confirm.min.css" type="text/css" />
+    <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/common.css" type="text/css" />
 
     <script type="text/javascript" src="js/jquery/jquery-3.1.1.min.js"></script>

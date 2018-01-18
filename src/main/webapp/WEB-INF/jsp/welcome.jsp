@@ -65,7 +65,6 @@ $(function(){
         combineSearch:true,
         add:true,
         exportData:true,
-        searchFunc:search_onclick,
         cells:[
             {text:"账户编号",field:"tradingAccount",type:"text",search:true,click:"cellClick"},
             {text:"账户名称",field:"tradingAccountName",type:"text",search:true,display:false},
@@ -96,17 +95,7 @@ function cellClick(src){
 }
 
 function search_onclick(){
-    $.confirm({
-        title:"test",
-        theme: 'wd-theme',
-        closeIcon:true,
-        content:"ArtifactbaseFrameOfWD:warexploded:Artifactisdeployedsuccessfully.ArtifactbaseFrameOfWD:warexploded:Deploytook12,332milliseconds.",
-        useBootstrap:false
-    })
-//    $.ajax({
-//        url:"test.text",
-//        loadindCover:true
-//    });
+    showAlert($('#search_form').serializeArray(),null,null,"info");
 }
 </script>
 </html>

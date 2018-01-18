@@ -31,7 +31,7 @@
         $(function(){
 
             $('#sljb').click(function(){
-                showAlert('测试','测试123321',"30%",function(){alert(123)});
+                showAlert('测试123321','测试',"30%",null,function(){alert(123)});
             });
 
             $('#slqr').click(function(){
