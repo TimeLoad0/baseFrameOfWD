@@ -95,7 +95,7 @@ function cellClick(src){
 }
 
 function search_onclick(){
-    showAlert($('#search_form').serializeArray(),null,null,"info");
+    showAlert(JSON.stringify(getSearchParams()),null,null,"info");
 }
 </script>
 </html>

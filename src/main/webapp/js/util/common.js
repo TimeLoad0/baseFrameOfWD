@@ -125,6 +125,7 @@ function createSearchToolBar(options){
                 //判断selectOptions是否为空
                 if(!isEmpty(cells[index].selectOptions)){
                     var optionName = nullToObject(cells[index].field,cells[index].type+index) + "_options";
+                    //将数据字典缓存起来
                     _selectOptions[optionName] = cells[index].selectOptions;
                     option.attr("optionName",optionName);
                 }
@@ -556,6 +557,7 @@ function searchSelect_onchage(src){
         });
 
         var optionName = nullToEmpty(optionObj.attr('optionName'));
+        //从缓存中获取数据字典
         var selectOptions = nullToEmpty(_selectOptions[optionName]);
         var key = nullToObject(optionObj.attr("key"),"key");
         var view = nullToObject(optionObj.attr("view"),"view");
@@ -970,11 +972,21 @@ function showDialog(title, url, width, height, params, buttons, object){
 function getSearchParams(){
     var params = {};
 
-    var controlType = nullToEmpty($('#search_type_div #selectType option:selected').attr("type"));
+    var selectedOption = $('#search_type_div').find('#selectType option:selected');
+    var controlType = nullToEmpty(selectedOption.attr("type"));
+    var field = nullToEmpty(selectedOption.attr("field"));
+    var controlDiv = $('#controlDiv');
 
     if("text" === controlType){
+        params[field] = controlDiv.find('#search_input').val();
     }else if("select" === controlType){
+        params[field] = controlDiv.find('#search_select option:selected').val();
     }else if("date" === controlType || "datetime" === controlType || "time" === controlType){
+        params[field+"_begin"] = controlDiv.find('#search_input_begin').val();
+        params[field+"_end"] = controlDiv.find('#search_input_end').val();
     }else if("combineSearch" === controlType){
+
     }
+
+    return params;
 }
