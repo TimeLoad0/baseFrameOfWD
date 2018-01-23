@@ -214,3 +214,8 @@ jquery-confirm 自定义上下横线主题样式(wd-theme)开始
 /*
 jquery-confirm 自定义上下横线主题样式结束
  */
+
+/*jquery-confirm 强制换行*/
+.jconfirm-content{
+    word-wrap: break-word;
+}

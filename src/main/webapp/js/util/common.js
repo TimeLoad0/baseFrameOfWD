@@ -807,9 +807,13 @@ function initPage(){
  * @param callback
  * @param level
  */
-function showAlert(content,title, width, level, callback){
+function showAlert(content,title, width, level, callback,object){
+    if(isEmpty(object)){
+        object = window;
+    }
+
     var option = {};
-    var type = "";
+    var type;
 
     var btnClass = "btn-default";
 
@@ -839,9 +843,12 @@ function showAlert(content,title, width, level, callback){
         option.title = title;
     }
 
+    //不使用bootstrap样式
     option.useBootstrap=false;
-
+    //显示右上角关闭图标
     option.closeIcon = true;
+    //使用懒加载
+    option.lazyOpen = true;
 
     option.buttons = {
         confirm:{
@@ -855,12 +862,13 @@ function showAlert(content,title, width, level, callback){
         }
     };
 
-    option.lazyOpen = true;
+    var jAlert = object.$.alert(option);
 
-    var ja = $.alert(option);
+    jAlert.open();
 
-    ja.open();
-    ja.setType(type);
+    if(!isEmpty(type)){
+        jAlert.setType(type);
+    }
 }
 
 /**
@@ -989,7 +997,20 @@ function getSearchParams(){
         params[field+"_begin"] = controlDiv.find('#search_input_begin').val();
         params[field+"_end"] = controlDiv.find('#search_input_end').val();
     }else if("combineSearch" === controlType){
+        $('#selectType').find('option').each(function(){
+            field = $(this).attr('field');
 
+            if(!isEmpty(field)){
+                controlType = $(this).attr('type');
+
+                if("text" === controlType || "select" === controlType){
+                    params[field] = $('#'+field).val();
+                }else if("date" === controlType || "datetime" === controlType || "time" === controlType){
+                    params[field+"_begin"] = $('#'+field+'_begin').val();
+                    params[field+"_end"] = $('#'+field+'_end').val();
+                }
+            }
+        })
     }
 
     return params;
