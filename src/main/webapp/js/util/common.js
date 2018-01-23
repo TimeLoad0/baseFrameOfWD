@@ -772,14 +772,14 @@ function getPageWidth(page) {
 //获取页面的高度
 function getPageHeight(page) {
     if (isEmpty(page)) {
-        if (parseInt(document.documentElement.clientHeight) != 0) {
+        if (parseInt(document.documentElement.clientHeight) !== 0) {
             return document.documentElement.clientHeight;
         }
 
         return document.body.clientHeight;
     }
 
-    if (parseInt(page.document.documentElement.clientHeight) != 0) {
+    if (parseInt(page.document.documentElement.clientHeight) !== 0) {
         return page.document.documentElement.clientHeight;
     }
 
@@ -791,7 +791,7 @@ function initPage(){
     _dialogParams = getTopPage().params;
     _dialog = getTopPage().params.dialog;
 
-    if(_dialog == null){
+    if(_dialog === null){
         if($('#tabs .cur',getTopPage().document).length > 0){
             var dataKey = $('#tabs .cur',getTopPage().document).attr('data-key');
             $('#loadingCover_'+dataKey,getTopPage().document).show();
@@ -808,9 +808,9 @@ function initPage(){
  * @param level
  */
 function showAlert(content,title, width, level, callback){
-    var object = window;
-
     var option = {};
+    var type = "";
+
     var btnClass = "btn-default";
 
     option.content = content;
@@ -824,15 +824,15 @@ function showAlert(content,title, width, level, callback){
     if(!isEmpty(level)){
         if("danger" === level){
             option.title = "<span class='fa fa-warning' style='color:#e74c3c;'>&nbsp;</span>"+title;
-            option.type = "red";
+            type = "red";
             btnClass = "btn-red";
         }else if("info" === level){
             option.title = "<span class='fa fa-info-circle' style='color:#3498db;'>&nbsp;</span>"+title;
-            option.type = "blue";
+            type = "blue";
             btnClass = 'btn-blue';
         }else if("warning" === level){
             option.title = "<span class='fa fa-exclamation-circle' style='color:#f1c40f;'>&nbsp;</span>"+title;
-            option.type = "orange";
+            type = "orange";
             btnClass = 'btn-orange';
         }
     }else{
@@ -851,12 +851,16 @@ function showAlert(content,title, width, level, callback){
                 if(!isEmpty(callback)){
                     callback();
                 }
-
             }
         }
     };
 
-    object.$.alert(option);
+    option.lazyOpen = true;
+
+    var ja = $.alert(option);
+
+    ja.open();
+    ja.setType(type);
 }
 
 /**

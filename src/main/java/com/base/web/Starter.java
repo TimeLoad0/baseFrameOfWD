@@ -5,6 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 
+/**
+ * springBoot 启动类
+ * @author wd
+ */
 @SpringBootApplication
 public class Starter extends SpringBootServletInitializer {
 
