@@ -81,9 +81,9 @@ $(function(){
     var data = {
         success:true,
         message:"success",
-        pageSize:20,
+        pageSize:10,
         pageNo:1,
-        totalSize:23,
+        totalSize:21,
         dataRows:dataRows
     };
 

@@ -52,6 +52,7 @@ $.ajaxSetup({
         exportData:true,            //导出数据，默认true
         checkBox:true,              //复选框，默认true
         pagination:true,            //分页信息，默认true
+        pageList:[10,20,50,100],    //默认分页条数
         serialNumber:true           //序列号，默认true
         cells:[{                    //table列集合
             text:"text",            //表头显示文本
@@ -69,14 +70,15 @@ $.ajaxSetup({
 function createPage(options,data) {
     //默认选项
     var _defaultOptions = {
-        add:true,           //新增，默认true
-        search:true,        //搜索，默认true
+        add:true,                   //新增，默认true
+        search:true,                //搜索，默认true
         searchFunc:search_onclick, //搜索按钮点击事件，默认search_onclick
-        combineSearch:false,//组合多条件查询，默认false
-        exportData:true,    //导出数据，默认true
-        checkBox:true,      //复选框，默认true
-        pagination:true,    //分页信息，默认true
-        serialNumber:true   //序列号，默认true
+        combineSearch:false,        //组合多条件查询，默认false
+        exportData:true,            //导出数据，默认true
+        checkBox:true,              //复选框，默认true
+        pagination:true,            //分页信息，默认true
+        pageList:[10,20,50,100],    //默认分页条数
+        serialNumber:true           //序列号，默认true
     };
 
     //合并选项
@@ -92,6 +94,11 @@ function createPage(options,data) {
     createThead(_tableOptions);
     //绑定表格数据
     bindTbody(data);
+
+    //是否创建分页信息
+    if(_defaultOptions.pagination){
+        createPagination(data.pageSize,data.pageNo,data.totalSize,_tableOptions.pageList);
+    }
 }
 
 //创建搜索工具栏
@@ -321,6 +328,57 @@ function bindTbody(data) {
     dataTable.html(thead + tbody);
 }
 
+//创建分页
+function createPagination(pageSize,pageNo,totalSize,pageList){
+    if(isEmpty(pageSize) || isEmpty(pageNo) || isEmpty(totalSize)){
+        showAlert("创建分页信息错误，分页信息不完整，请检查数据！",null,null,"danger");
+        return;
+    }
+
+    if(isEmpty(pageList)){
+        pageList = [10,20,50,100];
+    }
+
+    var pages = 0;
+
+    //计算分页总数
+    if(0 < totalSize){
+        if(totalSize % pageSize === 0){
+            pages = parseInt(totalSize / pageSize,10);
+        }else{
+            pages = parseInt(totalSize / pageSize,10) + 1;
+        }
+    }else{
+        pageNo = pages;
+    }
+
+    //判断分页元素是否已经存在
+    if($('#table_pagination').length <= 0){
+        var table_pagination = $('<div id="table_pagination" style="display: block;height: 40px;line-height: 40px;font-size:14px;"></div>');
+        var dataTable_info = $('<div id="dataTable_info" style="float: left;"><div style="padding-left:10px;">每页显示 <select id="paginate_select"></select> 条记录&nbsp;共<span style="color:#3da6f7" id="paginate_totalSize"></span>条&nbsp;&nbsp;当前第<span style="color:#3da6f7" id="paginate_pageNo"></span>页 /共<span style="color:#3da6f7" id="paginate_pages"></span>页</div></div>');
+        var dataTable_paginate = $('<div id="dataTable_paginate" style="float: right;padding-right: 10px;"><div class="btn-group"><a class="btn btn-default" id="paginate_first">首页</a><a class="btn btn-default" id="paginate_previous">上一页</a></div><span><a class="btn btn-primary" style="margin: 0 3px;" id="paginate_current"></a></span><div class="btn-group"><a class="btn btn-default" id="paginate_next">下一页</a><a class="btn btn-default" id="paginate_last">尾页</a></div></div>');
+
+        $(table_pagination).append(dataTable_info).append(dataTable_paginate).insertAfter($('#dataTable'));
+    }
+
+    $('#paginate_select').empty();
+
+    $.each(pageList,function(key,value){
+        var option = $('<option value="'+value+'">'+value+'</option>');
+
+        if(pageSize === value){
+            $(option).prop('selected',true);
+        }
+
+        $('#paginate_select').append(option);
+    });
+
+    $('#paginate_totalSize').text(totalSize);
+    $('#paginate_pageNo').text(pageNo);
+    $('#paginate_pages').text(pages);
+    $('#paginate_current').text(pageNo);
+}
+
 //空转空字符串
 function nullToEmpty(obj) {
     if ( undefined == obj || null == obj ) {
@@ -432,7 +490,7 @@ function round(srcValuef, iCount) {
 
 //判断对象是否为空
 function isEmpty(src) {
-    return undefined == src || null == src || "" == src;
+    return undefined === src || null === src || "" === src;
 }
 
 //date格式化
@@ -806,6 +864,7 @@ function initPage(){
  * @param width
  * @param callback
  * @param level
+ * @param object
  */
 function showAlert(content,title, width, level, callback,object){
     if(isEmpty(object)){
@@ -932,8 +991,6 @@ function showDialog(title, url, width, height, params, buttons, object){
         object = window;
     }
 
-    var maxHeight = getPageHeight(object) - 80 - 112;
-
     var option = {};
 
     option.title = title;
@@ -943,7 +1000,7 @@ function showDialog(title, url, width, height, params, buttons, object){
 
     height = nullToObject(height,(getPageHeight(object) - 80 - 112) + "px");
 
-    option.content = '<iframe style="width:100%;height:'+height+'px;" frameborder="no" border="0" marginwidth="0" marginheight="0" src="'+getTopPage().path+'/'+url+'"></iframe>';
+    option.content = '<iframe style="width:100%;height:'+height+'px;border: none" frameborder="no" marginwidth="0" marginheight="0" src="'+getTopPage().path+'/'+url+'"></iframe>';
 
     option.closeIcon = true;
 
