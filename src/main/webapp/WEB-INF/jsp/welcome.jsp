@@ -5,6 +5,59 @@
 <div id="mainBody" class="container-fluid"></div>
 </body>
 <script type="text/javascript">
+var dataRowArray = [
+    {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"860012B","createdDate":"1505457055000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698825000","organCode":"704041011","productAccount":"860012","reMarks":"","registerDate":"1509698825000","tradingAccount":"860012B4","tradingAccountName":"组合B4","tradingAccountType":"10"},
+    {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"860011A","createdDate":"1505459728000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698821000","organCode":"704041011","productAccount":"860011","reMarks":"","registerDate":"1509698821000","tradingAccount":"860011A2","tradingAccountName":"组合A2","tradingAccountType":"10"},
+    {"AssetProp":"0","accountStatus":"1","actpermissionstr":"","actrestrictionstr":"","assetAccount":"assetAccount","createdDate":"1505956359000","investorAccount":"1","isEdit":"true","modifiedDate":"1505956359000","organCode":"704041011","productAccount":"productAccount","reMarks":"","registerDate":"1505956359000","tradingAccount":"123","tradingAccountName":"213213","tradingAccountType":"10"},
+    {"AssetProp":"8","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"666","createdDate":"1505956384000","investorAccount":"1","isEdit":"true","modifiedDate":"1505956384000","organCode":"704041011","productAccount":"2","reMarks":"","registerDate":"1505956384000","tradingAccount":"as123","tradingAccountName":"21321","tradingAccountType":"10"},
+    {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"860013C","createdDate":"1506316536000","investorAccount":"1","isEdit":"true","modifiedDate":"1507624966000","organCode":"704041011","productAccount":"860013","reMarks":"","registerDate":"1507624966000","tradingAccount":"test","tradingAccountName":"test","tradingAccountType":"10"},
+    {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"zccs003","createdDate":"1506579276000","investorAccount":"jgcs001","isEdit":"true","modifiedDate":"1510303964000","organCode":"123456789","productAccount":"cpcs002","reMarks":"12321","registerDate":"1510303964000","tradingAccount":"jycs004","tradingAccountName":"交易测试","tradingAccountType":"10"},
+    {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"bccs003","createdDate":"1507542985000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1508483367000","organCode":"704041011","productAccount":"bccs002","reMarks":"1213213","registerDate":"1508483367000","tradingAccount":"bccs004","tradingAccountName":"bccs004","tradingAccountType":"10"},
+    {"AssetProp":"7","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"zccs05","createdDate":"1508723091000","investorAccount":"tzzcs05","isEdit":"true","modifiedDate":"1509066583000","organCode":"704041011","productAccount":"cpcs05","reMarks":"大12321","registerDate":"1509066583000","tradingAccount":"jycs05","tradingAccountName":"交易测试05","tradingAccountType":"10"},
+    {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"zccs05","createdDate":"1509503534000","investorAccount":"tzzcs05","isEdit":"true","modifiedDate":"1509503534000","organCode":"704041011","productAccount":"cpcs05","reMarks":"","registerDate":"1509503534000","tradingAccount":"jycs111","tradingAccountName":"交易测试111","tradingAccountType":"10"},
+    {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"83201","createdDate":"1509698759000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698818000","organCode":"704041011","productAccount":"830002","reMarks":"","registerDate":"1509698818000","tradingAccount":"3201a","tradingAccountName":"","tradingAccountType":"10"},
+    {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"860011A","createdDate":"1509698773000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698822000","organCode":"704041011","productAccount":"860011","reMarks":"","registerDate":"1509698822000","tradingAccount":"860011A3","tradingAccountName":"组合A3","tradingAccountType":"10"},
+    {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"860011A","createdDate":"1509698773000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698822000","organCode":"704041011","productAccount":"860011","reMarks":"","registerDate":"1509698822000","tradingAccount":"860011A4","tradingAccountName":"组合A4","tradingAccountType":"10"},
+    {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"860012B","createdDate":"1509698797000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698824000","organCode":"704041011","productAccount":"860012","reMarks":"","registerDate":"1509698824000","tradingAccount":"860012B2","tradingAccountName":"组合B2","tradingAccountType":"10"},
+    {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"860012B","createdDate":"1509698798000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698824000","organCode":"704041011","productAccount":"860012","reMarks":"","registerDate":"1509698824000","tradingAccount":"860012B3","tradingAccountName":"组合B3","tradingAccountType":"10"},
+    {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"860013C","createdDate":"1509698800000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698826000","organCode":"704041011","productAccount":"860013","reMarks":"","registerDate":"1509698826000","tradingAccount":"860013C2","tradingAccountName":"组合C2","tradingAccountType":"10"},
+    {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"860013C","createdDate":"fdasfdasfd","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698827000","organCode":"704041011","productAccount":"860013","reMarks":"","registerDate":"1509698827000","tradingAccount":"860013C3","tradingAccountName":"组合C3","tradingAccountType":"10"},
+    {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"860013C","createdDate":"1509698801000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698827000","organCode":"704041011","productAccount":"860013","reMarks":"","registerDate":"1509698827000","tradingAccount":"860013C4","tradingAccountName":"组合C4","tradingAccountType":"10"},
+    {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"8320100","createdDate":"1509698829000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698829000","organCode":"704041011","productAccount":"83201","reMarks":"","registerDate":"1509698829000","tradingAccount":"83201","tradingAccountName":"缺省组合","tradingAccountType":"10"},
+    {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"8320200","createdDate":"1509698830000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698830000","organCode":"704041011","productAccount":"83202","reMarks":"","registerDate":"1509698830000","tradingAccount":"83202","tradingAccountName":"缺省组合","tradingAccountType":"10"},
+    {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"8320300","createdDate":"1509698830000","investorAccount":"bccs001", "isEdit":"true","modifiedDate":"1509698830000","organCode":"704041011","productAccount":"83203","reMarks":"","registerDate":"1509698830000", "tradingAccount":"83203","tradingAccountName":"缺省组合","tradingAccountType":"10"},
+    {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"8320302","createdDate":"1509698330000","investorAccount":"bccs001", "isEdit":"true","modifiedDate":"1509698830000","organCode":"704041011","productAccount":"83203","reMarks":"","registerDate":"1509698830000", "tradingAccount":"83203","tradingAccountName":"缺省组合","tradingAccountType":"10"}
+];
+
+var datas = [
+    {
+        data:{
+            success:true,
+            message:"success",
+            pageSize:10,
+            pageNo:1,
+            totalSize:21
+        }
+    },
+    {
+        data:{
+            success:true,
+            message:"success",
+            pageSize:10,
+            pageNo:2,
+            totalSize:21
+        }
+    },
+    {
+        data:{
+            success:true,
+            message:"success",
+            pageSize:10,
+            pageNo:3,
+            totalSize:21
+        }
+    }];
+
 $(function(){
     var accountStatuss = [
         {"accessLevel":"1","dictEntry":"10118","dictPrompt":"正常","dictType":"1","organCode":"800000","subEntry":"0","tableColumn":"AccountStatus"},
@@ -38,29 +91,6 @@ $(function(){
 
     var tradingAccountTypes = [{"accessLevel":"1","dictEntry":"10106","dictPrompt":"普通","dictType":"1","organCode":"800000","subEntry":"10","tableColumn":"TradingAccountType"}];
 
-    var dataRows = [
-        {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"860012B","createdDate":"1505457055000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698825000","organCode":"704041011","productAccount":"860012","reMarks":"","registerDate":"1509698825000","tradingAccount":"860012B4","tradingAccountName":"组合B4","tradingAccountType":"10"},
-        {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"860011A","createdDate":"1505459728000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698821000","organCode":"704041011","productAccount":"860011","reMarks":"","registerDate":"1509698821000","tradingAccount":"860011A2","tradingAccountName":"组合A2","tradingAccountType":"10"},
-        {"AssetProp":"0","accountStatus":"1","actpermissionstr":"","actrestrictionstr":"","assetAccount":"assetAccount","createdDate":"1505956359000","investorAccount":"1","isEdit":"true","modifiedDate":"1505956359000","organCode":"704041011","productAccount":"productAccount","reMarks":"","registerDate":"1505956359000","tradingAccount":"123","tradingAccountName":"213213","tradingAccountType":"10"},
-        {"AssetProp":"8","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"666","createdDate":"1505956384000","investorAccount":"1","isEdit":"true","modifiedDate":"1505956384000","organCode":"704041011","productAccount":"2","reMarks":"","registerDate":"1505956384000","tradingAccount":"as123","tradingAccountName":"21321","tradingAccountType":"10"},
-        {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"860013C","createdDate":"1506316536000","investorAccount":"1","isEdit":"true","modifiedDate":"1507624966000","organCode":"704041011","productAccount":"860013","reMarks":"","registerDate":"1507624966000","tradingAccount":"test","tradingAccountName":"test","tradingAccountType":"10"},
-        {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"zccs003","createdDate":"1506579276000","investorAccount":"jgcs001","isEdit":"true","modifiedDate":"1510303964000","organCode":"123456789","productAccount":"cpcs002","reMarks":"12321","registerDate":"1510303964000","tradingAccount":"jycs004","tradingAccountName":"交易测试","tradingAccountType":"10"},
-        {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"bccs003","createdDate":"1507542985000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1508483367000","organCode":"704041011","productAccount":"bccs002","reMarks":"1213213","registerDate":"1508483367000","tradingAccount":"bccs004","tradingAccountName":"bccs004","tradingAccountType":"10"},
-        {"AssetProp":"7","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"zccs05","createdDate":"1508723091000","investorAccount":"tzzcs05","isEdit":"true","modifiedDate":"1509066583000","organCode":"704041011","productAccount":"cpcs05","reMarks":"大12321","registerDate":"1509066583000","tradingAccount":"jycs05","tradingAccountName":"交易测试05","tradingAccountType":"10"},
-        {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"zccs05","createdDate":"1509503534000","investorAccount":"tzzcs05","isEdit":"true","modifiedDate":"1509503534000","organCode":"704041011","productAccount":"cpcs05","reMarks":"","registerDate":"1509503534000","tradingAccount":"jycs111","tradingAccountName":"交易测试111","tradingAccountType":"10"},
-        {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"83201","createdDate":"1509698759000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698818000","organCode":"704041011","productAccount":"830002","reMarks":"","registerDate":"1509698818000","tradingAccount":"3201a","tradingAccountName":"","tradingAccountType":"10"},
-        {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"860011A","createdDate":"1509698773000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698822000","organCode":"704041011","productAccount":"860011","reMarks":"","registerDate":"1509698822000","tradingAccount":"860011A3","tradingAccountName":"组合A3","tradingAccountType":"10"},
-        {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"860011A","createdDate":"1509698773000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698822000","organCode":"704041011","productAccount":"860011","reMarks":"","registerDate":"1509698822000","tradingAccount":"860011A4","tradingAccountName":"组合A4","tradingAccountType":"10"},
-        {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"860012B","createdDate":"1509698797000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698824000","organCode":"704041011","productAccount":"860012","reMarks":"","registerDate":"1509698824000","tradingAccount":"860012B2","tradingAccountName":"组合B2","tradingAccountType":"10"},
-        {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"860012B","createdDate":"1509698798000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698824000","organCode":"704041011","productAccount":"860012","reMarks":"","registerDate":"1509698824000","tradingAccount":"860012B3","tradingAccountName":"组合B3","tradingAccountType":"10"},
-        {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"860013C","createdDate":"1509698800000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698826000","organCode":"704041011","productAccount":"860013","reMarks":"","registerDate":"1509698826000","tradingAccount":"860013C2","tradingAccountName":"组合C2","tradingAccountType":"10"},
-        {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"860013C","createdDate":"fdasfdasfd","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698827000","organCode":"704041011","productAccount":"860013","reMarks":"","registerDate":"1509698827000","tradingAccount":"860013C3","tradingAccountName":"组合C3","tradingAccountType":"10"},
-        {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"860013C","createdDate":"1509698801000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698827000","organCode":"704041011","productAccount":"860013","reMarks":"","registerDate":"1509698827000","tradingAccount":"860013C4","tradingAccountName":"组合C4","tradingAccountType":"10"},
-        {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"8320100","createdDate":"1509698829000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698829000","organCode":"704041011","productAccount":"83201","reMarks":"","registerDate":"1509698829000","tradingAccount":"83201","tradingAccountName":"缺省组合","tradingAccountType":"10"},
-        {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"8320200","createdDate":"1509698830000","investorAccount":"bccs001","isEdit":"true","modifiedDate":"1509698830000","organCode":"704041011","productAccount":"83202","reMarks":"","registerDate":"1509698830000","tradingAccount":"83202","tradingAccountName":"缺省组合","tradingAccountType":"10"},
-        {"AssetProp":"0","accountStatus":"0","actpermissionstr":"","actrestrictionstr":"","assetAccount":"8320300","createdDate":"1509698830000","investorAccount":"bccs001", "isEdit":"true","modifiedDate":"1509698830000","organCode":"704041011","productAccount":"83203","reMarks":"","registerDate":"1509698830000", "tradingAccount":"83203","tradingAccountName":"缺省组合","tradingAccountType":"10"}
-    ];
-
     var tableOptions = {
         combineSearch:true,
         add:true,
@@ -78,24 +108,39 @@ $(function(){
             {text:"创建时间",field:"createdDate",type:"datetime",format:"datetime",search:true}
         ]};
 
-    var data = {
-        success:true,
-        message:"success",
-        pageSize:10,
-        pageNo:1,
-        totalSize:21,
-        dataRows:dataRows
-    };
-
-    createPage(tableOptions,data);
+    createPage(tableOptions);
+    search_onclick(1);
 });
 
 function cellClick(src){
     alert(JSON.stringify($(src).parent().attr("rowData")));
 }
 
-function search_onclick(){
-    showAlert(JSON.stringify(getSearchParams()),null,null,"info");
+function search_onclick(pageIndex){
+    var searchParams = getSearchParams();
+
+    if(pageIndex === -1){
+        pageIndex = 3;
+    }
+
+    var data = datas[pageIndex-1].data;
+    var dataRows = [];
+
+    data.pageSize = searchParams.pageSize;
+
+    var beginIndex =(data.pageNo - 1) * data.pageSize;
+    var endIndex = beginIndex + data.pageSize - 1;
+
+    $.each(dataRowArray,function(index,item){
+        if(beginIndex <= index && index <= endIndex){
+            dataRows.push(item);
+        }
+    });
+
+    data['dataRows'] = dataRows;
+
+    bindTbody(data);
+    createPagination(data.pageSize,data.pageNo,data.totalSize);
 }
 </script>
 </html>

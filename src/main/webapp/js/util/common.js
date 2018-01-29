@@ -97,7 +97,17 @@ function createPage(options,data) {
 
     //是否创建分页信息
     if(_defaultOptions.pagination){
-        createPagination(data.pageSize,data.pageNo,data.totalSize,_tableOptions.pageList);
+        var pageSize = 0;
+        var pageNo = 1;
+        var totalSize = 0;
+
+        if(!isEmpty(data)){
+            pageSize = nullToObject(data.pageSize,0);
+            pageNo = nullToObject(data.pageNo,1);
+            totalSize = nullToObject(data.totalSize,0);
+        }
+
+        createPagination(pageSize,pageNo,totalSize,_tableOptions.pageList);
     }
 }
 
@@ -181,7 +191,7 @@ function createSearchToolBar(options){
         var searchBtnDiv = $('<div class="form-group"><div class="btn-group"><a id="search_btn_a" class="btn btn-primary">搜索</a></div></div>');
 
         searchBtnDiv.off('click').on('click',function(){
-            options.searchFunc();
+            options.searchFunc(1);
         });
 
         form.append(labelSelectDiv).append(controlDiv).append(searchBtnDiv);
@@ -234,12 +244,12 @@ function createThead(options) {
         var th = $('<th field="' + cells[i].field + '">' + cells[i].text + '</th>');
 
         for(var key in cells[i]){
-            if("text" == key || "field" == key){
+            if("text" === key || "field" === key){
                 continue;
             }
 
             //如果是字典数组需要转成字符串
-            if("selectOptions" == key){
+            if("selectOptions" === key){
                 th.attr(key,JSON.stringify(cells[i][key]));
             }else{
                 th.attr(key,cells[i][key]);
@@ -266,16 +276,22 @@ function createThead(options) {
 //绑定表格数据
 function bindTbody(data) {
     if(isEmpty(data) || data.length <= 0) {
-        return false;
+        return;
     }
 
     _data = data; //缓存数据data
 
     var dataRows = data.dataRows; //获取数据行
+
+    if(isEmpty(dataRows)){
+        return;
+    }
+
     var dataTable = $('#dataTable'); //获取dataTable对象
-    var thead = dataTable.html(); //获取表头html
+    var thead = dataTable.find('thead').prop('outerHTML'); //获取表头html
     var ths = dataTable.find('thead tr th'); //获取表头所有th
     var tbody = '<tbody>'; //tbody对象
+    $(dataTable).find('tbody').remove(); //清除表格数据
 
     for(var i=0;i<dataRows.length;i++) {
         var tr = '<tr rowData=' + JSON.stringify(dataRows[i]) +'>';
@@ -295,7 +311,7 @@ function bindTbody(data) {
             }
 
             //判断是否显示
-            var display = $(ths[j]).css('display')=="none"?"display:none;":"";
+            var display = $(ths[j]).css('display')==="none"?"display:none;":"";
 
             //判断是否有列click事件
             var onclick = nullToFalse($(ths[j]).attr('click'))?'onclick='+$(ths[j]).attr('click')+'(this,'+JSON.stringify(_tableOptions)+')':'';
@@ -303,7 +319,7 @@ function bindTbody(data) {
             var value = nullToEmpty(dataRows[i][$(ths[j]).attr('field')]);
 
             //判断是否字典
-            if("select" == nullToEmpty($(ths[j]).attr('type'))){
+            if("select" === nullToEmpty($(ths[j]).attr('type'))){
                 var selectOptions = JSON.parse(nullToEmpty($(ths[j]).attr('selectOptions')));
                 var view = nullToObject($(ths[j]).attr('view'),"view");
                 var key = nullToObject($(ths[j]).attr('key'),"key");
@@ -313,6 +329,21 @@ function bindTbody(data) {
                     value = tempValue;
                 }else if(!isEmpty(dataRows[i][view])){  //如果取不到字典值尝试直接从数据行中获取view值
                     value = dataRows[i][view];
+                }
+            }
+
+            //格式化
+            var format = nullToEmpty($(ths[j]).attr('format'));
+
+            if(!isEmpty(format)){
+                var date = new Date(parseInt(value, 10));
+
+                if ("date" === format) {
+                    value = date.format("yyyy-MM-dd");
+                } else if ("time" === format) {
+                    value = date.format("hh:mm:ss");
+                } else if ("datetime" === format) {
+                    value = date.format("yyyy-MM-dd hh:mm:ss");
                 }
             }
 
@@ -330,13 +361,17 @@ function bindTbody(data) {
 
 //创建分页
 function createPagination(pageSize,pageNo,totalSize,pageList){
-    if(isEmpty(pageSize) || isEmpty(pageNo) || isEmpty(totalSize)){
-        showAlert("创建分页信息错误，分页信息不完整，请检查数据！",null,null,"danger");
+    var dataTable = $('#dataTable');
+
+    //判断数据表格是否存在
+    if(dataTable.length <= 0){
+        showAlert("创建分页信息错误，不存在数据表格！",null,null,"danger");
         return;
     }
 
-    if(isEmpty(pageList)){
-        pageList = [10,20,50,100];
+    if(isEmpty(pageSize) || isEmpty(pageNo) || isEmpty(totalSize)){
+        showAlert("创建分页信息错误，分页信息不完整，请检查数据！",null,null,"danger");
+        return;
     }
 
     var pages = 0;
@@ -354,29 +389,63 @@ function createPagination(pageSize,pageNo,totalSize,pageList){
 
     //判断分页元素是否已经存在
     if($('#table_pagination').length <= 0){
-        var table_pagination = $('<div id="table_pagination" style="display: block;height: 40px;line-height: 40px;font-size:14px;"></div>');
+        var table_pagination = $('<div id="table_pagination" style="display: block;height: 45px;line-height: 45px;font-size:14px;"></div>');
         var dataTable_info = $('<div id="dataTable_info" style="float: left;"><div style="padding-left:10px;">每页显示 <select id="paginate_select"></select> 条记录&nbsp;共<span style="color:#3da6f7" id="paginate_totalSize"></span>条&nbsp;&nbsp;当前第<span style="color:#3da6f7" id="paginate_pageNo"></span>页 /共<span style="color:#3da6f7" id="paginate_pages"></span>页</div></div>');
-        var dataTable_paginate = $('<div id="dataTable_paginate" style="float: right;padding-right: 10px;"><div class="btn-group"><a class="btn btn-default" id="paginate_first">首页</a><a class="btn btn-default" id="paginate_previous">上一页</a></div><span><a class="btn btn-primary" style="margin: 0 3px;" id="paginate_current"></a></span><div class="btn-group"><a class="btn btn-default" id="paginate_next">下一页</a><a class="btn btn-default" id="paginate_last">尾页</a></div></div>');
+        var dataTable_paginate = $('<div id="dataTable_paginate" style="float: right;padding-right: 5px;padding-top:5px;"><div class="btn-group"><a class="btn btn-default" id="paginate_first">首页</a><a class="btn btn-default" id="paginate_previous">上一页</a></div><span><a class="btn btn-primary" style="margin: 0 3px;" id="paginate_current"></a></span><div class="btn-group"><a class="btn btn-default" id="paginate_next">下一页</a><a class="btn btn-default" id="paginate_last">尾页</a></div></div>');
 
-        $(table_pagination).append(dataTable_info).append(dataTable_paginate).insertAfter($('#dataTable'));
-    }
+        $(table_pagination).append(dataTable_info).append(dataTable_paginate).insertAfter($(dataTable));
 
-    $('#paginate_select').empty();
-
-    $.each(pageList,function(key,value){
-        var option = $('<option value="'+value+'">'+value+'</option>');
-
-        if(pageSize === value){
-            $(option).prop('selected',true);
+        if(isEmpty(pageList)){
+            pageList = [10,20,50,100];
         }
 
-        $('#paginate_select').append(option);
-    });
+        var paginate_pages = $('#paginate_pages');
+
+        //绑定切换每页显示条数事件
+        $('#paginate_select').empty().off('change').on('change',function(){
+            search_onclick(getCurrentPageIndex());
+        });
+
+        $.each(pageList,function(key,value){
+            var option = $('<option value="'+value+'">'+value+'</option>');
+
+            if(pageSize === value){
+                $(option).prop('selected',true);
+            }
+
+            $('#paginate_select').append(option);
+        });
+
+        //绑定首页按钮事件
+        $('#paginate_first').off('click').on('click',function(){
+            search_onclick(1);
+        });
+
+        //绑定上一页按钮事件
+        $('#paginate_previous').off('click').on('click',function(){
+            search_onclick(getCurrentPageIndex() - 1 > 0 ? getCurrentPageIndex() - 1 : 1 );
+        });
+
+        //绑定下一页按钮事件
+        $('#paginate_next').off('click').on('click',function(){
+            search_onclick(getCurrentPageIndex() + 1 < parseInt($(paginate_pages).text(),10) ? getCurrentPageIndex() + 1 : parseInt($(paginate_pages).text(),10));
+        });
+
+        //绑定尾页按钮事件
+        $('#paginate_last').off('click').on('click',function(){
+            search_onclick(-1);
+        });
+    }
 
     $('#paginate_totalSize').text(totalSize);
     $('#paginate_pageNo').text(pageNo);
     $('#paginate_pages').text(pages);
     $('#paginate_current').text(pageNo);
+}
+
+//获取当前页码
+function getCurrentPageIndex(){
+    return parseInt(nullToObject($('#paginate_pageNo').text(),1),10);
 }
 
 //空转空字符串
@@ -1069,6 +1138,9 @@ function getSearchParams(){
             }
         })
     }
+
+    params.pageNo = getCurrentPageIndex();
+    params.pageSize = parseInt(nullToObject($('#paginate_select').val(),10),10);
 
     return params;
 }
