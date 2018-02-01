@@ -33,6 +33,14 @@ a:hover{cursor: pointer}
     width:80px;
 }
 
+.panel-table{
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    margin-left: 1px;
+    margin-right: 1px;
+}
+
 /*
 loader样式开始
  */

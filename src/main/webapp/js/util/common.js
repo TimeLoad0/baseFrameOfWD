@@ -88,7 +88,7 @@ function createPage(options,data) {
     createSearchToolBar(_tableOptions);
 
     //创建表格
-    $('#mainBody').append($('<div class="panel panel-default"><table id="dataTable" class="table table-striped"></table></div>'));
+    $('#mainBody').append($('<div class="panel panel-default panel-table"><table id="dataTable" class="table table-striped table-hover"></table></div>'));
 
     //创建表头
     createThead(_tableOptions);
@@ -389,9 +389,9 @@ function createPagination(pageSize,pageNo,totalSize,pageList){
 
     //判断分页元素是否已经存在
     if($('#table_pagination').length <= 0){
-        var table_pagination = $('<div id="table_pagination" style="display: block;height: 45px;line-height: 45px;font-size:14px;"></div>');
-        var dataTable_info = $('<div id="dataTable_info" style="float: left;"><div style="padding-left:10px;">每页显示 <select id="paginate_select"></select> 条记录&nbsp;共<span style="color:#3da6f7" id="paginate_totalSize"></span>条&nbsp;&nbsp;当前第<span style="color:#3da6f7" id="paginate_pageNo"></span>页 /共<span style="color:#3da6f7" id="paginate_pages"></span>页</div></div>');
-        var dataTable_paginate = $('<div id="dataTable_paginate" style="float: right;padding-right: 5px;padding-top:5px;"><div class="btn-group"><a class="btn btn-default" id="paginate_first">首页</a><a class="btn btn-default" id="paginate_previous">上一页</a></div><span><a class="btn btn-primary" style="margin: 0 3px;" id="paginate_current"></a></span><div class="btn-group"><a class="btn btn-default" id="paginate_next">下一页</a><a class="btn btn-default" id="paginate_last">尾页</a></div></div>');
+        var table_pagination = $('<div id="table_pagination" class="container-fluid" style="height: 45px;line-height: 45px;font-size:14px;"></div>');
+        var dataTable_info = $('<div id="dataTable_info" class="pull-left"><div>每页显示 <select id="paginate_select"></select> 条记录&nbsp;共<span style="color:#3da6f7" id="paginate_totalSize"></span>条&nbsp;&nbsp;当前第<span style="color:#3da6f7" id="paginate_pageNo"></span>页 /共<span style="color:#3da6f7" id="paginate_pages"></span>页</div></div>');
+        var dataTable_paginate = $('<div id="dataTable_paginate" class="pull-right" style="padding-top:5px;"><div class="btn-group"><a class="btn btn-default" id="paginate_first">首页</a><a class="btn btn-default" id="paginate_previous">上一页</a></div><span><a class="btn btn-primary" style="margin: 0 3px;" id="paginate_current"></a></span><div class="btn-group"><a class="btn btn-default" id="paginate_next">下一页</a><a class="btn btn-default" id="paginate_last">尾页</a></div></div>');
 
         $(table_pagination).append(dataTable_info).append(dataTable_paginate).insertAfter($(dataTable));
 
