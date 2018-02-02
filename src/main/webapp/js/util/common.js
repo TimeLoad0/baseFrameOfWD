@@ -115,7 +115,7 @@ function createPage(options,data) {
 function createSearchToolBar(options){
     var toolBarDiv = $('<div class="panel panel-heading"></div>');
     var leftDiv = $('<div style="width: 80%;"></div>');
-    var form = $('<form id="search_form" class="form-inline" style="line-height: 35px;"></form>');
+    var form = $('<form id="search_form" class="form-inline" style="line-height: 34px;"></form>');
     var rightDiv = $('<div class="pull-right" style="width: 20%;"></div>');
     var rightBtnGroupDiv = $('<div class="btn-group pull-right"></div>');
 

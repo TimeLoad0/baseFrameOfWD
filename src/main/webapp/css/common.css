@@ -23,6 +23,7 @@ a:hover{cursor: pointer}
     min-width:200px;
     padding: 6px;
     display:inline-block;
+    margin-top: 1px;
 }
 
 .form-group{
