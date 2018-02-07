@@ -6,8 +6,6 @@
  */
 //表格选项
 var _tableOptions = {};
-//数据缓存
-var _data = {};
 //对话框传参
 var _dialogParams = {};
 //对话框对象
@@ -54,6 +52,7 @@ $.ajaxSetup({
         pagination:true,            //分页信息，默认true
         pageList:[10,20,50,100],    //默认分页条数
         serialNumber:true           //序列号，默认true
+        cellVisible:false,          //列可见选项，默认false
         cells:[{                    //table列集合
             text:"text",            //表头显示文本
             field:"field",          //对应数据字段
@@ -88,7 +87,7 @@ function createPage(options,data) {
     createSearchToolBar(_tableOptions);
 
     //创建表格
-    $('#mainBody').append($('<div class="panel panel-default panel-table"><table id="dataTable" class="table table-striped table-hover"></table></div>'));
+    $('#mainBody').append('<div class="panel panel-default panel-table" style="position: relative"><table id="dataTable" class="table table-striped table-hover"></table></div>');
 
     //创建表头
     createThead(_tableOptions);
@@ -226,6 +225,7 @@ function createSearchToolBar(options){
 function createThead(options) {
     var thead = $('<thead></thead>');
     var tr = $('<tr></tr>');
+    var ulList = $('<ul class="dropdown-menu"></ul>');
 
     var cells = options.cells;
 
@@ -242,6 +242,30 @@ function createThead(options) {
     //循环cells创建表头列
     for(var i=0;i<cells.length;i++) {
         var th = $('<th field="' + cells[i].field + '">' + cells[i].text + '</th>');
+        var li = $('<li class="form-inline"><label style="padding: 3px 15px;font-weight: 400;" field="' + cells[i].field + '"><input type="checkbox" class="checkbox" style="width: 15px;height: 15px;margin-right: 5px;" checked /><span>'+cells[i].text+'</span></label></li>');
+
+        //绑定是否显示列checkbox点击事件及文本事件
+        $(li).find('input').off('click').on('click',function(){
+            var checked = $(this).prop('checked');
+            var field = $(this).parent().attr('field');
+
+            $('#dataTable').find('thead tr th').each(function(){
+                if(field === $(this).attr('field')){
+                    if(checked){
+                        $(this).show();
+                    }else{
+                        $(this).hide();
+                    }
+
+                    $(this).attr('display',checked);
+                }
+            });
+
+            bindTbody({dataRows:getTBodyData()});
+        }).end().find('span').off('click').on('click',function(event){
+            $(this).prev().prop('checked',$(this).prev().prop('checked'));
+            event.stopPropagation();
+        });
 
         for(var key in cells[i]){
             if("text" === key || "field" === key){
@@ -259,6 +283,7 @@ function createThead(options) {
         //判断是否显示
         if(!nullToTrue(cells[i].display)){
             th.css('display','none');
+            li.find('input').prop('checked',false);
         }
 
         //判断是否添加了列点击事件
@@ -266,11 +291,21 @@ function createThead(options) {
             th.attr("click",cells[i].click);
         }
 
+        $(ulList).append(li);
         tr.append(th);
     }
 
+    //添加列是否显示选框
+    var cellDisplay = $('<div class="btn-group pull-right"><a class="btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">显示<span class="caret"></span></a></div>');
+    $(cellDisplay).append(ulList);
+
+    //判断列显示选框是否可见
+    if(!options.cellVisible){
+        $(cellDisplay).hide();
+    }
+
     thead.append(tr);
-    $('#dataTable').empty().append(thead);
+    $('#dataTable').empty().append(thead).before(cellDisplay);
 }
 
 //绑定表格数据
@@ -278,8 +313,6 @@ function bindTbody(data) {
     if(isEmpty(data) || data.length <= 0) {
         return;
     }
-
-    _data = data; //缓存数据data
 
     var dataRows = data.dataRows; //获取数据行
 
@@ -314,7 +347,7 @@ function bindTbody(data) {
             var display = $(ths[j]).css('display')==="none"?"display:none;":"";
 
             //判断是否有列click事件
-            var onclick = nullToFalse($(ths[j]).attr('click'))?'onclick='+$(ths[j]).attr('click')+'(this,'+JSON.stringify(_tableOptions)+')':'';
+            var onclick = nullToFalse($(ths[j]).attr('click'))?'onclick='+$(ths[j]).attr('click')+'(this)':'';
 
             var value = nullToEmpty(dataRows[i][$(ths[j]).attr('field')]);
 
@@ -1143,4 +1176,25 @@ function getSearchParams(){
     params.pageSize = parseInt(nullToObject($('#paginate_select').val(),10),10);
 
     return params;
+}
+
+//获取表格数据
+function getTBodyData(){
+    var jsonData = [];
+
+    var tbody = $('#dataTable').find('tbody');
+
+    if(tbody.length <= 0){
+        return jsonData;
+    }
+
+    $(tbody).find('tr').each(function(){
+        var rowData = $(this).attr('rowData');
+
+        if(!isEmpty(rowData)){
+            jsonData.push(JSON.parse(rowData));
+        }
+    });
+
+    return jsonData;
 }

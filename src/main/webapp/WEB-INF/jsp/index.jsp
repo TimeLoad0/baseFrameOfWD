@@ -7,7 +7,9 @@
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<base href="<%=request.getRequestURI()%>">
-	<title>baseFrame系统</title>
+	<title>baseFrame</title>
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico"/>
+    <link rel="bookmark" href="${pageContext.request.contextPath}/favicon.ico"/>
 	<link rel="stylesheet" href="../../css/bootstrap/bootstrap.min.css">
 	<link rel="stylesheet" href="../../css/font-awesome-4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="../../css/waves/waves.min.css">

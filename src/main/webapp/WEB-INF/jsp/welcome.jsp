@@ -95,6 +95,7 @@ $(function(){
         combineSearch:true,
         add:true,
         exportData:true,
+        cellVisible:true,
         cells:[
             {text:"账户编号",field:"tradingAccount",type:"text",search:true,click:"cellClick"},
             {text:"账户名称",field:"tradingAccountName",type:"text",search:true,display:false},
@@ -113,7 +114,10 @@ $(function(){
 });
 
 function cellClick(src){
-    alert(JSON.stringify($(src).parent().attr("rowData")));
+//    alert(JSON.stringify($(src).parent().attr("rowData")));
+    $('#dataTable thead tr th:eq(5)').toggle();
+
+    bindTbody({dataRows:getTBodyData()});
 }
 
 function search_onclick(pageIndex){

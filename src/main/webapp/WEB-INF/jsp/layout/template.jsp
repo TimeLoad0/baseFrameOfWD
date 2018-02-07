@@ -5,6 +5,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
+    <link rel="shortcut icon" href="${pageContext.request.contextPath}/favicon.ico"/>
+    <link rel="bookmark" href="${pageContext.request.contextPath}/favicon.ico"/>
+
     <link rel="stylesheet" href="css/bootstrap/bootstrap.css" type="text/css" />
     <link rel="stylesheet" href="css/confirm/jquery-confirm.min.css" type="text/css" />
     <link rel="stylesheet" href="css/font-awesome-4.7.0/css/font-awesome.min.css">
