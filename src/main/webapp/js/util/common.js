@@ -14,25 +14,25 @@ var _dialog = null;
 var _selectOptions = {};
 
 //laydate全局默认设置
-if(!isEmpty(laydate)){
+if (!isEmpty(laydate)) {
     laydate.set({
-        theme:'#008080'
+        theme: '#008080'
     });
 }
 
 //ajax全局默认设置
 $.ajaxSetup({
-    type:'POST',
-    dataType:'json',
-    error:function(xhr,settings){
+    type: 'POST',
+    dataType: 'json',
+    error: function (xhr, settings) {
         return false;
     },
-    complete:function(){
+    complete: function () {
         hideLoadingCover();
     },
-    beforeSend:function(xhr,settings){
+    beforeSend: function (xhr, settings) {
         //判断ajax请求是否显示加载遮罩层，默认false
-        if(nullToFalse(settings.loadindCover)){
+        if (nullToFalse(settings.loadindCover)) {
             showLoadingCover();
         }
     }
@@ -66,22 +66,22 @@ $.ajaxSetup({
         }]
     }
  */
-function createPage(options,data) {
+function createPage(options, data) {
     //默认选项
     var _defaultOptions = {
-        add:true,                   //新增，默认true
-        search:true,                //搜索，默认true
-        searchFunc:search_onclick, //搜索按钮点击事件，默认search_onclick
-        combineSearch:false,        //组合多条件查询，默认false
-        exportData:true,            //导出数据，默认true
-        checkBox:true,              //复选框，默认true
-        pagination:true,            //分页信息，默认true
-        pageList:[10,20,50,100],    //默认分页条数
-        serialNumber:true           //序列号，默认true
+        add: true,                   //新增，默认true
+        search: true,                //搜索，默认true
+        searchFunc: search_onclick, //搜索按钮点击事件，默认search_onclick
+        combineSearch: false,        //组合多条件查询，默认false
+        exportData: true,            //导出数据，默认true
+        checkBox: true,              //复选框，默认true
+        pagination: true,            //分页信息，默认true
+        pageList: [10, 20, 50, 100],    //默认分页条数
+        serialNumber: true           //序列号，默认true
     };
 
     //合并选项
-    _tableOptions = $.extend(true,_defaultOptions,options);
+    _tableOptions = $.extend(true, _defaultOptions, options);
 
     //创建搜索工具栏
     createSearchToolBar(_tableOptions);
@@ -95,23 +95,23 @@ function createPage(options,data) {
     bindTbody(data);
 
     //是否创建分页信息
-    if(_defaultOptions.pagination){
+    if (_defaultOptions.pagination) {
         var pageSize = 0;
         var pageNo = 1;
         var totalSize = 0;
 
-        if(!isEmpty(data)){
-            pageSize = nullToObject(data.pageSize,0);
-            pageNo = nullToObject(data.pageNo,1);
-            totalSize = nullToObject(data.totalSize,0);
+        if (!isEmpty(data)) {
+            pageSize = nullToObject(data.pageSize, 0);
+            pageNo = nullToObject(data.pageNo, 1);
+            totalSize = nullToObject(data.totalSize, 0);
         }
 
-        createPagination(pageSize,pageNo,totalSize,_tableOptions.pageList);
+        createPagination(pageSize, pageNo, totalSize, _tableOptions.pageList);
     }
 }
 
 //创建搜索工具栏
-function createSearchToolBar(options){
+function createSearchToolBar(options) {
     var toolBarDiv = $('<div class="panel panel-heading"></div>');
     var leftDiv = $('<div style="width: 80%;"></div>');
     var form = $('<form id="search_form" class="form-inline" style="line-height: 34px;"></form>');
@@ -119,51 +119,56 @@ function createSearchToolBar(options){
     var rightBtnGroupDiv = $('<div class="btn-group pull-right"></div>');
 
     //是否添加新增按钮
-    if(options.add){
+    if (options.add) {
         rightBtnGroupDiv.append($('<a class="btn btn-primary">新建</a>'));
     }
 
     //是否添加导出按钮
-    if(options.exportData){
+    if (options.exportData) {
         rightBtnGroupDiv.append($('<a class="btn btn-primary">导出</a>'));
     }
 
+    //是否添加列是否显示选框
+    if (options.cellVisible) {
+        rightBtnGroupDiv.append($('<div id="cellVisible" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">显示 <span class="caret"></span></div>'));
+    }
+
     //是否添加搜索栏
-    if(options.search){
+    if (options.search) {
         var labelSelectDiv = $('<div id="search_type_div" class="form-group"><label class="search-label text-right">检索类别：</label><select id="selectType" class="form-control search-control"></select></div>');
 
         var cells = options.cells;
 
-        for(var index in cells){
-            if(nullToFalse(cells[index].search)){
-                var option = $('<option type="'+cells[index].type+'">'+cells[index].text+'</option>');
+        for (var index = 0; index < cells.length; index++) {
+            if (nullToFalse(cells[index].search)) {
+                var option = $('<option type="' + cells[index].type + '">' + cells[index].text + '</option>');
 
                 //判断selectOptions是否为空
-                if(!isEmpty(cells[index].selectOptions)){
-                    var optionName = nullToObject(cells[index].field,cells[index].type+index) + "_options";
+                if (!isEmpty(cells[index].selectOptions)) {
+                    var optionName = nullToObject(cells[index].field, cells[index].type + index) + "_options";
                     //将数据字典缓存起来
                     _selectOptions[optionName] = cells[index].selectOptions;
-                    option.attr("optionName",optionName);
+                    option.attr("optionName", optionName);
                 }
 
                 //判断key是否为空
-                if(!isEmpty(cells[index].key)){
-                    option.attr("key",cells[index].key);
+                if (!isEmpty(cells[index].key)) {
+                    option.attr("key", cells[index].key);
                 }
 
                 //判断view是否为空
-                if(!isEmpty(cells[index].view)){
-                    option.attr("view",cells[index].view);
+                if (!isEmpty(cells[index].view)) {
+                    option.attr("view", cells[index].view);
                 }
 
                 //判断field是否为空
-                if(!isEmpty(cells[index].field)){
-                    option.attr("field",cells[index].field);
+                if (!isEmpty(cells[index].field)) {
+                    option.attr("field", cells[index].field);
                 }
 
                 //判断text是否为空
-                if(!isEmpty(cells[index].text)){
-                    option.attr("text",cells[index].text);
+                if (!isEmpty(cells[index].text)) {
+                    option.attr("text", cells[index].text);
                 }
 
                 labelSelectDiv.find('select').append(option);
@@ -171,12 +176,12 @@ function createSearchToolBar(options){
         }
 
         //是否组合多条件查询
-        if(options.combineSearch){
+        if (options.combineSearch) {
             labelSelectDiv.find('select').append($('<option type="combineSearch">组合查询</option>'));
         }
 
         //下拉框绑定事件
-        labelSelectDiv.find('select').off('change').on('change',function(){
+        labelSelectDiv.find('select').off('change').on('change', function () {
             searchSelect_onchage(this);
         });
 
@@ -189,7 +194,7 @@ function createSearchToolBar(options){
 
         var searchBtnDiv = $('<div class="form-group"><div class="btn-group"><a id="search_btn_a" class="btn btn-primary">搜索</a></div></div>');
 
-        searchBtnDiv.off('click').on('click',function(){
+        searchBtnDiv.off('click').on('click', function () {
             options.searchFunc(1);
         });
 
@@ -197,7 +202,7 @@ function createSearchToolBar(options){
     }
 
     //判断右侧工具栏是否含有按钮
-    if(rightBtnGroupDiv.find('a').length > 0){
+    if (rightBtnGroupDiv.find('a').length > 0) {
         rightDiv.append(rightBtnGroupDiv);
         toolBarDiv.append(rightDiv);
     }
@@ -206,16 +211,16 @@ function createSearchToolBar(options){
     $('#mainBody').append(toolBarDiv.append(leftDiv));
 
     //判断工具栏是否含有按钮
-    if(form.find('div').length > 0){
+    if (form.find('div').length > 0) {
         //初始化调用检索类别改变事件
         searchSelect_onchage($('#selectType'));
-    }else{
+    } else {
         //补偿高度
-        toolBarDiv.css('min-height',rightDiv.height()+20).css('padding','10px 5px');
+        toolBarDiv.css('min-height', rightDiv.height() + 20).css('padding', '10px 5px');
 
-        if(options.combineSearch){
+        if (options.combineSearch) {
             createCombineSearch();
-        }else{
+        } else {
             $('#mainBody').append($('<div style="height: 10px;"></div>'));
         }
     }
@@ -230,93 +235,90 @@ function createThead(options) {
     var cells = options.cells;
 
     //判断是否添加checkbox
-    if(options.checkBox){
+    if (options.checkBox) {
         tr.append('<th checkbox="true"><div><input type="checkbox" class="checkbox"></div></th>');
     }
 
     //判断是否添加serialNumber
-    if(options.serialNumber){
+    if (options.serialNumber) {
         tr.append('<th serialNumber="true">序号</th>');
     }
 
     //循环cells创建表头列
-    for(var i=0;i<cells.length;i++) {
+    for (var i = 0; i < cells.length; i++) {
         var th = $('<th field="' + cells[i].field + '">' + cells[i].text + '</th>');
-        var li = $('<li class="form-inline"><label style="padding: 3px 15px;font-weight: 400;" field="' + cells[i].field + '"><input type="checkbox" class="checkbox" style="width: 15px;height: 15px;margin-right: 5px;" checked /><span>'+cells[i].text+'</span></label></li>');
+        var li = $('<li class="form-inline"><label style="padding: 3px 15px;font-weight: 400;" field="' + cells[i].field + '"><input type="checkbox" class="checkbox" style="width: 15px;height: 15px;margin-right: 5px;" checked /><span>' + cells[i].text + '</span></label></li>');
 
         //绑定是否显示列checkbox点击事件及文本事件
-        $(li).find('input').off('click').on('click',function(){
+        $(li).find('input').off('click').on('click', function () {
             var checked = $(this).prop('checked');
             var field = $(this).parent().attr('field');
 
-            $('#dataTable').find('thead tr th').each(function(){
-                if(field === $(this).attr('field')){
-                    if(checked){
+            $('#dataTable').find('thead tr th').each(function () {
+                if (field === $(this).attr('field')) {
+                    if (checked) {
                         $(this).show();
-                    }else{
+                    } else {
                         $(this).hide();
                     }
 
-                    $(this).attr('display',checked);
+                    $(this).attr('display', checked);
                 }
             });
 
-            bindTbody({dataRows:getTBodyData()});
-        }).end().find('span').off('click').on('click',function(event){
-            $(this).prev().prop('checked',$(this).prev().prop('checked'));
+            bindTbody({dataRows: getTBodyData()});
+        }).end().find('span').off('click').on('click', function (event) {
+            $(this).prev().prop('checked', $(this).prev().prop('checked'));
             event.stopPropagation();
         });
 
-        for(var key in cells[i]){
-            if("text" === key || "field" === key){
+        for (var key in cells[i]) {
+            if ("text" === key || "field" === key) {
                 continue;
             }
 
             //如果是字典数组需要转成字符串
-            if("selectOptions" === key){
-                th.attr(key,JSON.stringify(cells[i][key]));
-            }else{
-                th.attr(key,cells[i][key]);
+            if ("selectOptions" === key) {
+                th.attr("optionName", nullToObject(cells[i]["field"], cells[i].type + i) + "_options");
+            } else {
+                th.attr(key, cells[i][key]);
             }
         }
 
         //判断是否显示
-        if(!nullToTrue(cells[i].display)){
-            th.css('display','none');
-            li.find('input').prop('checked',false);
+        if (!nullToTrue(cells[i].display)) {
+            th.css('display', 'none');
+            li.find('input').prop('checked', false);
         }
 
         //判断是否添加了列点击事件
-        if(nullToFalse(cells[i].click)){
-            th.attr("click",cells[i].click);
+        if (nullToFalse(cells[i].click)) {
+            th.attr("click", cells[i].click);
         }
 
         $(ulList).append(li);
         tr.append(th);
     }
 
-    //添加列是否显示选框
-    var cellDisplay = $('<div class="btn-group pull-right"><a class="btn-sm btn-primary dropdown-toggle" data-toggle="dropdown">显示<span class="caret"></span></a></div>');
-    $(cellDisplay).append(ulList);
-
-    //判断列显示选框是否可见
-    if(!options.cellVisible){
-        $(cellDisplay).hide();
+    //判断列显示控制按钮是否存在，存在则生成控制列表
+    var cellVisible = $('#cellVisible');
+    if($(cellVisible).length > 0){
+        $(cellVisible).parent().append(ulList);
     }
 
     thead.append(tr);
-    $('#dataTable').empty().append(thead).before(cellDisplay);
+    $('#dataTable').empty().append(thead);
 }
 
 //绑定表格数据
 function bindTbody(data) {
-    if(isEmpty(data) || data.length <= 0) {
+    if (isEmpty(data) || data.length <= 0) {
         return;
     }
 
     var dataRows = data.dataRows; //获取数据行
 
-    if(isEmpty(dataRows)){
+    if (isEmpty(dataRows)) {
         return;
     }
 
@@ -326,41 +328,41 @@ function bindTbody(data) {
     var tbody = '<tbody>'; //tbody对象
     $(dataTable).find('tbody').remove(); //清除表格数据
 
-    for(var i=0;i<dataRows.length;i++) {
-        var tr = '<tr rowData=' + JSON.stringify(dataRows[i]) +'>';
+    for (var i = 0; i < dataRows.length; i++) {
+        var tr = '<tr rowData=' + JSON.stringify(dataRows[i]) + '>';
 
         //循环表头
-        for(var j=0;j<ths.length;j++) {
+        for (var j = 0; j < ths.length; j++) {
             //判断是否添加checkbox
-            if(nullToFalse($(ths[j]).attr('checkBox'))){
+            if (nullToFalse($(ths[j]).attr('checkBox'))) {
                 tr += '<td><div><input type="checkbox" class="checkbox"></div></td>';
                 continue;
             }
 
             //是否添加序号
-            if(nullToFalse($(ths[j]).attr('serialNumber'))){
-                tr += '<td>'+parseInt(i+1)+'</td>';
+            if (nullToFalse($(ths[j]).attr('serialNumber'))) {
+                tr += '<td>' + parseInt(i + 1) + '</td>';
                 continue;
             }
 
             //判断是否显示
-            var display = $(ths[j]).css('display')==="none"?"display:none;":"";
+            var display = $(ths[j]).css('display') === "none" ? "display:none;" : "";
 
             //判断是否有列click事件
-            var onclick = nullToFalse($(ths[j]).attr('click'))?'onclick='+$(ths[j]).attr('click')+'(this)':'';
+            var onclick = nullToFalse($(ths[j]).attr('click')) ? 'onclick=' + $(ths[j]).attr('click') + '(this)' : '';
 
             var value = nullToEmpty(dataRows[i][$(ths[j]).attr('field')]);
 
             //判断是否字典
-            if("select" === nullToEmpty($(ths[j]).attr('type'))){
-                var selectOptions = JSON.parse(nullToEmpty($(ths[j]).attr('selectOptions')));
-                var view = nullToObject($(ths[j]).attr('view'),"view");
-                var key = nullToObject($(ths[j]).attr('key'),"key");
-                var tempValue = getValueOfArray(selectOptions,key,view,value);
+            if ("select" === nullToEmpty($(ths[j]).attr('type'))) {
+                var selectOptions = _selectOptions[nullToEmpty($(ths[j]).attr('optionName'))];
+                var view = nullToObject($(ths[j]).attr('view'), "view");
+                var key = nullToObject($(ths[j]).attr('key'), "key");
+                var tempValue = getValueOfArray(selectOptions, key, view, value);
 
-                if(!isEmpty(tempValue)){
+                if (!isEmpty(tempValue)) {
                     value = tempValue;
-                }else if(!isEmpty(dataRows[i][view])){  //如果取不到字典值尝试直接从数据行中获取view值
+                } else if (!isEmpty(dataRows[i][view])) {  //如果取不到字典值尝试直接从数据行中获取view值
                     value = dataRows[i][view];
                 }
             }
@@ -368,7 +370,7 @@ function bindTbody(data) {
             //格式化
             var format = nullToEmpty($(ths[j]).attr('format'));
 
-            if(!isEmpty(format)){
+            if (!isEmpty(format)) {
                 var date = new Date(parseInt(value, 10));
 
                 if ("date" === format) {
@@ -380,7 +382,7 @@ function bindTbody(data) {
                 }
             }
 
-            tr += '<td '+onclick+' style="'+display+'">' + value + '</td>';
+            tr += '<td ' + onclick + ' style="' + display + '">' + value + '</td>';
         }
 
         tr += '</tr>';
@@ -393,79 +395,79 @@ function bindTbody(data) {
 }
 
 //创建分页
-function createPagination(pageSize,pageNo,totalSize,pageList){
+function createPagination(pageSize, pageNo, totalSize, pageList) {
     var dataTable = $('#dataTable');
 
     //判断数据表格是否存在
-    if(dataTable.length <= 0){
-        showAlert("创建分页信息错误，不存在数据表格！",null,null,"danger");
+    if (dataTable.length <= 0) {
+        showAlert("创建分页信息错误，不存在数据表格！", null, null, "danger");
         return;
     }
 
-    if(isEmpty(pageSize) || isEmpty(pageNo) || isEmpty(totalSize)){
-        showAlert("创建分页信息错误，分页信息不完整，请检查数据！",null,null,"danger");
+    if (isEmpty(pageSize) || isEmpty(pageNo) || isEmpty(totalSize)) {
+        showAlert("创建分页信息错误，分页信息不完整，请检查数据！", null, null, "danger");
         return;
     }
 
     var pages = 0;
 
     //计算分页总数
-    if(0 < totalSize){
-        if(totalSize % pageSize === 0){
-            pages = parseInt(totalSize / pageSize,10);
-        }else{
-            pages = parseInt(totalSize / pageSize,10) + 1;
+    if (0 < totalSize) {
+        if (totalSize % pageSize === 0) {
+            pages = parseInt(totalSize / pageSize, 10);
+        } else {
+            pages = parseInt(totalSize / pageSize, 10) + 1;
         }
-    }else{
+    } else {
         pageNo = pages;
     }
 
     //判断分页元素是否已经存在
-    if($('#table_pagination').length <= 0){
+    if ($('#table_pagination').length <= 0) {
         var table_pagination = $('<div id="table_pagination" class="container-fluid" style="height: 45px;line-height: 45px;font-size:14px;"></div>');
         var dataTable_info = $('<div id="dataTable_info" class="pull-left"><div>每页显示 <select id="paginate_select"></select> 条记录&nbsp;共<span style="color:#3da6f7" id="paginate_totalSize"></span>条&nbsp;&nbsp;当前第<span style="color:#3da6f7" id="paginate_pageNo"></span>页 /共<span style="color:#3da6f7" id="paginate_pages"></span>页</div></div>');
         var dataTable_paginate = $('<div id="dataTable_paginate" class="pull-right" style="padding-top:5px;"><div class="btn-group"><a class="btn btn-default" id="paginate_first">首页</a><a class="btn btn-default" id="paginate_previous">上一页</a></div><span><a class="btn btn-primary" style="margin: 0 3px;" id="paginate_current"></a></span><div class="btn-group"><a class="btn btn-default" id="paginate_next">下一页</a><a class="btn btn-default" id="paginate_last">尾页</a></div></div>');
 
         $(table_pagination).append(dataTable_info).append(dataTable_paginate).insertAfter($(dataTable));
 
-        if(isEmpty(pageList)){
-            pageList = [10,20,50,100];
+        if (isEmpty(pageList)) {
+            pageList = [10, 20, 50, 100];
         }
 
         var paginate_pages = $('#paginate_pages');
 
         //绑定切换每页显示条数事件
-        $('#paginate_select').empty().off('change').on('change',function(){
+        $('#paginate_select').empty().off('change').on('change', function () {
             search_onclick(getCurrentPageIndex());
         });
 
-        $.each(pageList,function(key,value){
-            var option = $('<option value="'+value+'">'+value+'</option>');
+        $.each(pageList, function (key, value) {
+            var option = $('<option value="' + value + '">' + value + '</option>');
 
-            if(pageSize === value){
-                $(option).prop('selected',true);
+            if (pageSize === value) {
+                $(option).prop('selected', true);
             }
 
             $('#paginate_select').append(option);
         });
 
         //绑定首页按钮事件
-        $('#paginate_first').off('click').on('click',function(){
+        $('#paginate_first').off('click').on('click', function () {
             search_onclick(1);
         });
 
         //绑定上一页按钮事件
-        $('#paginate_previous').off('click').on('click',function(){
-            search_onclick(getCurrentPageIndex() - 1 > 0 ? getCurrentPageIndex() - 1 : 1 );
+        $('#paginate_previous').off('click').on('click', function () {
+            search_onclick(getCurrentPageIndex() - 1 > 0 ? getCurrentPageIndex() - 1 : 1);
         });
 
         //绑定下一页按钮事件
-        $('#paginate_next').off('click').on('click',function(){
-            search_onclick(getCurrentPageIndex() + 1 < parseInt($(paginate_pages).text(),10) ? getCurrentPageIndex() + 1 : parseInt($(paginate_pages).text(),10));
+        $('#paginate_next').off('click').on('click', function () {
+            search_onclick(getCurrentPageIndex() + 1 < parseInt($(paginate_pages).text(), 10) ? getCurrentPageIndex() + 1 : parseInt($(paginate_pages).text(), 10));
         });
 
         //绑定尾页按钮事件
-        $('#paginate_last').off('click').on('click',function(){
+        $('#paginate_last').off('click').on('click', function () {
             search_onclick(-1);
         });
     }
@@ -477,13 +479,13 @@ function createPagination(pageSize,pageNo,totalSize,pageList){
 }
 
 //获取当前页码
-function getCurrentPageIndex(){
-    return parseInt(nullToObject($('#paginate_pageNo').text(),1),10);
+function getCurrentPageIndex() {
+    return parseInt(nullToObject($('#paginate_pageNo').text(), 1), 10);
 }
 
 //空转空字符串
 function nullToEmpty(obj) {
-    if ( undefined == obj || null == obj ) {
+    if (undefined == obj || null == obj) {
         obj = "";
     }
 
@@ -491,8 +493,8 @@ function nullToEmpty(obj) {
 }
 
 //空转自定义
-function nullToObject(obj,str) {
-    if ( undefined == obj || null == obj || "" == obj) {
+function nullToObject(obj, str) {
+    if (undefined == obj || null == obj || "" == obj) {
         obj = str;
     }
 
@@ -501,11 +503,11 @@ function nullToObject(obj,str) {
 
 //空转false
 function nullToFalse(obj) {
-    if ( undefined == obj || null == obj ) {
+    if (undefined == obj || null == obj) {
         obj = false;
-    }else if("false" == obj || false == obj){
+    } else if ("false" == obj || false == obj) {
         obj = false;
-    }else if("true" == obj || true == obj){
+    } else if ("true" == obj || true == obj) {
         obj = true;
     }
 
@@ -514,11 +516,11 @@ function nullToFalse(obj) {
 
 //空转true
 function nullToTrue(obj) {
-    if ( undefined == obj || null == obj ) {
+    if (undefined == obj || null == obj) {
         obj = true;
-    }else if("false" == obj || false == obj){
+    } else if ("false" == obj || false == obj) {
         obj = false;
-    }else if("true" == obj || true == obj){
+    } else if ("true" == obj || true == obj) {
         obj = true;
     }
 
@@ -526,7 +528,7 @@ function nullToTrue(obj) {
 }
 
 /** 把一个浮点数，以小数点后几位四舍五入
- *   @param srcValue 要舍位的值
+ *   @param srcValuef 要舍位的值
  *   @param iCount  要舍位到小数点后几位
  *   @return number
  */
@@ -536,7 +538,7 @@ function round(srcValuef, iCount) {
     var zs = true;
 
     //判断是否是负数
-    if ( srcValue < 0 ) {
+    if (srcValue < 0) {
         srcValue = Math.abs(srcValue);
         zs = false;
     }
@@ -554,36 +556,36 @@ function round(srcValuef, iCount) {
     var idot = value2.indexOf(".");
 
     //如果是小数
-    if ( idot != -1 ) {
+    if (idot != -1) {
         anumber = srcValue.toString().split(".");
 
         //如果是科学计数法结果
-        if ( anumber[1].indexOf("e") != -1 ) {
+        if (anumber[1].indexOf("e") != -1) {
             return Math.round(value1) / iB;
         }
 
-        anumber1=value2.split(".");
+        anumber1 = value2.split(".");
 
-        if ( anumber[1].length <= iCount ) {
-            return parseFloat(srcValuef,10);
+        if (anumber[1].length <= iCount) {
+            return parseFloat(srcValuef, 10);
         }
 
-        var fvalue3 = parseInt(anumber[1].substring(iCount,iCount+1),10);
+        var fvalue3 = parseInt(anumber[1].substring(iCount, iCount + 1), 10);
 
-        if ( fvalue3 >= 5 ) {
-            fvalue = parseInt(anumber1[0],10) + 1;
+        if (fvalue3 >= 5) {
+            fvalue = parseInt(anumber1[0], 10) + 1;
         } else {
             //对于传入的形如111.834999999998 的处理（传入的计算结果就是错误的，应为111.835）
-            if ( fvalue3 == 4 && anumber[1].length > 10 && parseInt(anumber[1].substring(iCount+1,iCount+2),10) == 9 ) {
-                fvalue = parseInt(anumber1[0],10) + 1;
+            if (fvalue3 == 4 && anumber[1].length > 10 && parseInt(anumber[1].substring(iCount + 1, iCount + 2), 10) == 9) {
+                fvalue = parseInt(anumber1[0], 10) + 1;
             } else {
-                fvalue = parseInt(anumber1[0],10);
+                fvalue = parseInt(anumber1[0], 10);
             }
         }
     }
 
     //如果是负数就用0减四舍五入的绝对值
-    if ( zs ) {
+    if (zs) {
         return fvalue / iB;
     } else {
         return 0 - fvalue / iB;
@@ -607,12 +609,12 @@ Date.prototype.format = function (format) {
         "S": this.getMilliseconds()
     };
 
-    if ( /(y+)/.test(format) ) {
+    if (/(y+)/.test(format)) {
         format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
     }
 
-    for ( var k in o ) {
-        if ( new RegExp("(" + k + ")").test(format) ) {
+    for (var k in o) {
+        if (new RegExp("(" + k + ")").test(format)) {
             format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
         }
     }
@@ -622,12 +624,12 @@ Date.prototype.format = function (format) {
 
 //判断是否为IE浏览器
 function isIE() {
-    if ( isEmpty(window) ) {
+    if (isEmpty(window)) {
         return false;
     }
 
     //判断是否为IE浏览器
-    if ( navigator.userAgent.indexOf("MSIE") > 0 ) {
+    if (navigator.userAgent.indexOf("MSIE") > 0) {
         return true;
     } else {
         return "ActiveXObject" in window;
@@ -638,8 +640,8 @@ function isIE() {
 function getEvent() {
     var e;
 
-    if ( !isIE() ) {
-        if ( isEmpty(arguments.callee.caller) ) {
+    if (!isIE()) {
+        if (isEmpty(arguments.callee.caller)) {
             e = arguments.callee.arguments[0];
         } else {
             e = arguments.callee.caller.arguments[0];
@@ -655,7 +657,7 @@ function getEvent() {
 function preventTopEvent(e) {
     e = getEvent();
 
-    if ( isIE() ) {
+    if (isIE()) {
         e.cancelBubble = true;
     } else {
         e.stopPropagation();
@@ -668,7 +670,7 @@ function preventTopEvent(e) {
 function getKeyCode(e) {
     var key = "";
 
-    if ( isIE() ) {
+    if (isIE()) {
         key = e.keyCode;
     } else {
         key = e.which;
@@ -684,34 +686,34 @@ function getKeyCode(e) {
  * view 数组中数据行的view
  * value 需要匹配的值
  */
-function getValueOfArray(array,key,view,value){
-    if(isEmpty(array)){
+function getValueOfArray(array, key, view, value) {
+    if (isEmpty(array)) {
         return null;
     }
 
-    for(var i=0;i<array.length;i++){
-        if(value == nullToEmpty(array[i][key])){
+    for (var i = 0; i < array.length; i++) {
+        if (value == nullToEmpty(array[i][key])) {
             return array[i][view];
         }
     }
 }
 
 //检索类别下拉框改变事件
-function searchSelect_onchage(src){
+function searchSelect_onchage(src) {
     var optionObj = $(src).find('option:selected');
     var controlType = nullToEmpty(optionObj.attr("type"));
     $('#search_btn_a').parent().parent().nextAll().remove();
 
-    if("text" == controlType){
-        $('#controlDiv').prevAll().each(function(){
-            if($(this).index() > 0){
+    if ("text" == controlType) {
+        $('#controlDiv').prevAll().each(function () {
+            if ($(this).index() > 0) {
                 $(this).hide();
             }
         });
         $('#search_input').show().siblings().hide();
-    }else if("select" == controlType){
-        $('#controlDiv').prevAll().each(function(){
-            if($(this).index() > 0){
+    } else if ("select" == controlType) {
+        $('#controlDiv').prevAll().each(function () {
+            if ($(this).index() > 0) {
                 $(this).hide();
             }
         });
@@ -719,53 +721,53 @@ function searchSelect_onchage(src){
         var optionName = nullToEmpty(optionObj.attr('optionName'));
         //从缓存中获取数据字典
         var selectOptions = nullToEmpty(_selectOptions[optionName]);
-        var key = nullToObject(optionObj.attr("key"),"key");
-        var view = nullToObject(optionObj.attr("view"),"view");
+        var key = nullToObject(optionObj.attr("key"), "key");
+        var view = nullToObject(optionObj.attr("view"), "view");
 
         $('#search_select').empty().show().siblings().hide();
 
-        $.each(selectOptions,function(i,item){
-            $('#search_select').append($('<option value="'+nullToEmpty(item[key])+'">'+nullToEmpty(item[view])+'</option>'));
+        $.each(selectOptions, function (i, item) {
+            $('#search_select').append($('<option value="' + nullToEmpty(item[key]) + '">' + nullToEmpty(item[view]) + '</option>'));
         });
-    }else if("date" == controlType || "datetime" == controlType || "time" == controlType){
-        $('#controlDiv').prevAll().each(function(){
-            if($(this).index() > 0){
+    } else if ("date" == controlType || "datetime" == controlType || "time" == controlType) {
+        $('#controlDiv').prevAll().each(function () {
+            if ($(this).index() > 0) {
                 $(this).hide();
             }
-        }).end().children().each(function(){
-            if("search_input_begin" == $(this).attr('id') || "search_input_end" == $(this).attr('id')){
+        }).end().children().each(function () {
+            if ("search_input_begin" == $(this).attr('id') || "search_input_end" == $(this).attr('id')) {
                 $(this).show();
                 laydate.render({
-                    elem:'#search_input_begin',
-                    type:controlType
+                    elem: '#search_input_begin',
+                    type: controlType
                 });
                 laydate.render({
-                    elem:'#search_input_end',
-                    type:controlType
+                    elem: '#search_input_end',
+                    type: controlType
                 });
-            }else{
+            } else {
                 $(this).hide();
             }
         })
-    }else if("combineSearch" == controlType){
+    } else if ("combineSearch" == controlType) {
         createCombineSearch();
     }
 }
 
-function createCombineSearch(){
+function createCombineSearch() {
     var controlDiv = $('#controlDiv');
     var searchForm = $('#search_form');
 
-    if(_tableOptions.search){
-        if(controlDiv.children().length > 1){
-            controlDiv.children().each(function(){
+    if (_tableOptions.search) {
+        if (controlDiv.children().length > 1) {
+            controlDiv.children().each(function () {
                 $(this).hide();
             });
         }
 
-        if(controlDiv.prevAll().length > 1){
-            controlDiv.prevAll().each(function(){
-                if($(this).index() > 0){
+        if (controlDiv.prevAll().length > 1) {
+            controlDiv.prevAll().each(function () {
+                if ($(this).index() > 0) {
                     $(this).show();
                 }
             });
@@ -776,7 +778,7 @@ function createCombineSearch(){
 
     var cells = nullToEmpty(_tableOptions.cells);
 
-    $.each(cells,function(index,item){
+    $.each(cells, function (index, item) {
         var optionType = nullToEmpty(item.type);
         var controlsDiv = $('<div class="form-group">');
         var field = nullToEmpty(item.field);
@@ -785,9 +787,9 @@ function createCombineSearch(){
             controlsDiv.append($('<label class="search-label text-right">' + item.text + '：</label>'));
             controlsDiv.append($('<input id="' + field + '" name="' + field + '" type="text" class="search-control form-control"/>'));
 
-            if(_tableOptions.search){
+            if (_tableOptions.search) {
                 controlsDiv.insertBefore(controlDiv);
-            }else{
+            } else {
                 searchForm.append(controlsDiv);
             }
         } else if ("select" == optionType) {
@@ -804,9 +806,9 @@ function createCombineSearch(){
             controlsDiv.append($('<label class="search-label text-right">' + item.text + '：</label>'));
             controlsDiv.append(select);
 
-            if(_tableOptions.search){
+            if (_tableOptions.search) {
                 controlsDiv.insertBefore(controlDiv);
-            }else{
+            } else {
                 searchForm.append(controlsDiv);
             }
         } else if ("date" == optionType || "datetime" == optionType || "time" == optionType) {
@@ -814,9 +816,9 @@ function createCombineSearch(){
             var dateBegin = $('<input id="' + field + '_begin" name="' + field + '_begin" placeholder="开始时间" type="text" class="search-control form-control"/>');
             controlsDiv.append(dateBegin);
 
-            if(_tableOptions.search){
+            if (_tableOptions.search) {
                 controlsDiv.insertBefore(controlDiv);
-            }else{
+            } else {
                 searchForm.append(controlsDiv);
             }
 
@@ -830,9 +832,9 @@ function createCombineSearch(){
             var dateEnd = $('<input id="' + field + '_end" name="' + field + '_end" placeholder="结束时间" type="text" class="search-control form-control"/>');
             controlsDiv.append(dateEnd);
 
-            if(_tableOptions.search){
+            if (_tableOptions.search) {
                 controlsDiv.insertBefore(controlDiv);
-            }else{
+            } else {
                 searchForm.append(controlsDiv);
             }
 
@@ -844,10 +846,10 @@ function createCombineSearch(){
     });
 
     //如果搜素为false，给组合查询添加搜索按钮
-    if(!_tableOptions.search){
+    if (!_tableOptions.search) {
         searchForm.append($('<div class="form-group"><div class="btn-group"><a id="search_btn_a" class="btn btn-primary">搜索</a></div></div>'));
 
-        $('#search_btn_a').off('click').on('click',function(){
+        $('#search_btn_a').off('click').on('click', function () {
             _tableOptions.searchFunc();
         });
     }
@@ -859,29 +861,24 @@ function createCombineSearch(){
 * @param 获取的页面对象
 * @returns
 */
-function getTopPage(page)
-{
-    if ( isEmpty(page) )
-    {
+function getTopPage(page) {
+    if (isEmpty(page)) {
         page = this;
     }
 
     var cnt = 0;
 
-    while ( !isEmpty(page) && isEmpty(page.document.getElementById("base")) && cnt < 10 )
-    {
+    while (!isEmpty(page) && isEmpty(page.document.getElementById("base")) && cnt < 10) {
         page = page.parent;
 
-        if ( isEmpty(page) )
-        {
+        if (isEmpty(page)) {
             return null;
         }
 
         cnt++;
     }
 
-    if ( cnt >= 10 )
-    {
+    if (cnt >= 10) {
         page = this;
 
         return page;
@@ -891,15 +888,15 @@ function getTopPage(page)
 }
 
 //隐藏加载遮罩层
-function hideLoadingCover(){
+function hideLoadingCover() {
     $('#loadingCover').hide();
 }
 
 //创建并显示加载遮罩层
-function showLoadingCover(){
+function showLoadingCover() {
     var loadingCover = $('#loadingCover');
 
-    if(loadingCover.length <= 0){
+    if (loadingCover.length <= 0) {
         $(document.body).append($('<div id="loadingCover"><div class="coverDiv"></div><div class="loaderDiv"><span></span><span></span><span></span><span></span></div></div>'));
     }
 
@@ -907,8 +904,8 @@ function showLoadingCover(){
 }
 
 //默认搜索方法
-function search_onclick(){
-    showAlert("缺少查询方法，请实现查询方法!",null,null,"warning");
+function search_onclick() {
+    showAlert("缺少查询方法，请实现查询方法!", null, null, "warning");
 }
 
 
@@ -947,14 +944,14 @@ function getPageHeight(page) {
 }
 
 //初始化页面事件
-function initPage(){
+function initPage() {
     _dialogParams = getTopPage().params;
     _dialog = getTopPage().params.dialog;
 
-    if(_dialog === null){
-        if($('#tabs .cur',getTopPage().document).length > 0){
-            var dataKey = $('#tabs .cur',getTopPage().document).attr('data-key');
-            $('#loadingCover_'+dataKey,getTopPage().document).show();
+    if (_dialog === null) {
+        if ($('#tabs .cur', getTopPage().document).length > 0) {
+            var dataKey = $('#tabs .cur', getTopPage().document).attr('data-key');
+            $('#loadingCover_' + dataKey, getTopPage().document).show();
         }
     }
 }
@@ -968,8 +965,8 @@ function initPage(){
  * @param level
  * @param object
  */
-function showAlert(content,title, width, level, callback,object){
-    if(isEmpty(object)){
+function showAlert(content, title, width, level, callback, object) {
+    if (isEmpty(object)) {
         object = window;
     }
 
@@ -980,43 +977,43 @@ function showAlert(content,title, width, level, callback,object){
 
     option.content = content;
 
-    if(isEmpty(title)){
+    if (isEmpty(title)) {
         title = "系统信息";
     }
 
-    option.boxWidth = nullToObject(width,"400px");
+    option.boxWidth = nullToObject(width, "400px");
 
-    if(!isEmpty(level)){
-        if("danger" === level){
-            option.title = "<span class='fa fa-warning' style='color:#e74c3c;'>&nbsp;</span>"+title;
+    if (!isEmpty(level)) {
+        if ("danger" === level) {
+            option.title = "<span class='fa fa-warning' style='color:#e74c3c;'>&nbsp;</span>" + title;
             type = "red";
             btnClass = "btn-red";
-        }else if("info" === level){
-            option.title = "<span class='fa fa-info-circle' style='color:#3498db;'>&nbsp;</span>"+title;
+        } else if ("info" === level) {
+            option.title = "<span class='fa fa-info-circle' style='color:#3498db;'>&nbsp;</span>" + title;
             type = "blue";
             btnClass = 'btn-blue';
-        }else if("warning" === level){
-            option.title = "<span class='fa fa-exclamation-circle' style='color:#f1c40f;'>&nbsp;</span>"+title;
+        } else if ("warning" === level) {
+            option.title = "<span class='fa fa-exclamation-circle' style='color:#f1c40f;'>&nbsp;</span>" + title;
             type = "orange";
             btnClass = 'btn-orange';
         }
-    }else{
+    } else {
         option.title = title;
     }
 
     //不使用bootstrap样式
-    option.useBootstrap=false;
+    option.useBootstrap = false;
     //显示右上角关闭图标
     option.closeIcon = true;
     //使用懒加载
     option.lazyOpen = true;
 
     option.buttons = {
-        confirm:{
+        confirm: {
             text: '确认',
             btnClass: btnClass,
-            action: function(){
-                if(!isEmpty(callback)){
+            action: function () {
+                if (!isEmpty(callback)) {
                     callback();
                 }
             }
@@ -1027,7 +1024,7 @@ function showAlert(content,title, width, level, callback,object){
 
     jAlert.open();
 
-    if(!isEmpty(type)){
+    if (!isEmpty(type)) {
         jAlert.setType(type);
     }
 }
@@ -1040,37 +1037,39 @@ function showAlert(content,title, width, level, callback,object){
  * @param buttons
  * @param object
  */
-function showConfirm(content,title, width, buttons, object){
-    if(isEmpty(object)){
+function showConfirm(content, title, width, buttons, object) {
+    if (isEmpty(object)) {
         object = window;
     }
 
     var option = {};
 
-    if(isEmpty(title)){
+    if (isEmpty(title)) {
         title = "系统信息";
     }
 
     option.title = title;
     option.content = content;
 
-    option.boxWidth = nullToObject(width,"400px");
-    option.useBootstrap=false;
+    option.boxWidth = nullToObject(width, "400px");
+    option.useBootstrap = false;
 
     option.closeIcon = true;
 
     var defaultButtons = {
-        cancel:{
+        cancel: {
             text: '取消',
             keys: ['esc'],
-            action: function(){}
-        }};
+            action: function () {
+            }
+        }
+    };
 
-    if(isEmpty(buttons)){
+    if (isEmpty(buttons)) {
         option.buttons = defaultButtons;
     }
-    else{
-        $.extend(true,buttons,defaultButtons);
+    else {
+        $.extend(true, buttons, defaultButtons);
 
         option.buttons = buttons;
     }
@@ -1088,8 +1087,8 @@ function showConfirm(content,title, width, buttons, object){
  * @param buttons
  * @param object
  */
-function showDialog(title, url, width, height, params, buttons, object){
-    if(isEmpty(object)){
+function showDialog(title, url, width, height, params, buttons, object) {
+    if (isEmpty(object)) {
         object = window;
     }
 
@@ -1097,27 +1096,29 @@ function showDialog(title, url, width, height, params, buttons, object){
 
     option.title = title;
 
-    option.boxWidth = nullToObject(width,"400px");
-    option.useBootstrap=false;
+    option.boxWidth = nullToObject(width, "400px");
+    option.useBootstrap = false;
 
-    height = nullToObject(height,(getPageHeight(object) - 80 - 112) + "px");
+    height = nullToObject(height, (getPageHeight(object) - 80 - 112) + "px");
 
-    option.content = '<iframe style="width:100%;height:'+height+'px;border: none" frameborder="no" marginwidth="0" marginheight="0" src="'+getTopPage().path+'/'+url+'"></iframe>';
+    option.content = '<iframe style="width:100%;height:' + height + 'px;border: none" frameborder="no" marginwidth="0" marginheight="0" src="' + getTopPage().path + '/' + url + '"></iframe>';
 
     option.closeIcon = true;
 
     var defaultButtons = {
-        cancel:{
+        cancel: {
             text: '取消',
             keys: ['esc'],
-            action: function(){}
-        }};
+            action: function () {
+            }
+        }
+    };
 
-    if(isEmpty(buttons)){
+    if (isEmpty(buttons)) {
         option.buttons = defaultButtons;
     }
-    else{
-        $.extend(true,buttons,defaultButtons);
+    else {
+        $.extend(true, buttons, defaultButtons);
 
         option.buttons = buttons;
     }
@@ -1128,7 +1129,7 @@ function showDialog(title, url, width, height, params, buttons, object){
     };
 
     //页面加载后事件
-    option.onContentReady = function(){
+    option.onContentReady = function () {
         this.$content.find('#loadingCover_dialog').remove();
     };
 
@@ -1140,7 +1141,7 @@ function showDialog(title, url, width, height, params, buttons, object){
 }
 
 //获取搜索条件
-function getSearchParams(){
+function getSearchParams() {
     var params = {};
 
     var selectedOption = $('#search_type_div').find('#selectType option:selected');
@@ -1148,50 +1149,50 @@ function getSearchParams(){
     var field = nullToEmpty(selectedOption.attr("field"));
     var controlDiv = $('#controlDiv');
 
-    if("text" === controlType){
+    if ("text" === controlType) {
         params[field] = controlDiv.find('#search_input').val();
-    }else if("select" === controlType){
+    } else if ("select" === controlType) {
         params[field] = controlDiv.find('#search_select option:selected').val();
-    }else if("date" === controlType || "datetime" === controlType || "time" === controlType){
-        params[field+"_begin"] = controlDiv.find('#search_input_begin').val();
-        params[field+"_end"] = controlDiv.find('#search_input_end').val();
-    }else if("combineSearch" === controlType){
-        $('#selectType').find('option').each(function(){
+    } else if ("date" === controlType || "datetime" === controlType || "time" === controlType) {
+        params[field + "_begin"] = controlDiv.find('#search_input_begin').val();
+        params[field + "_end"] = controlDiv.find('#search_input_end').val();
+    } else if ("combineSearch" === controlType) {
+        $('#selectType').find('option').each(function () {
             field = $(this).attr('field');
 
-            if(!isEmpty(field)){
+            if (!isEmpty(field)) {
                 controlType = $(this).attr('type');
 
-                if("text" === controlType || "select" === controlType){
-                    params[field] = $('#'+field).val();
-                }else if("date" === controlType || "datetime" === controlType || "time" === controlType){
-                    params[field+"_begin"] = $('#'+field+'_begin').val();
-                    params[field+"_end"] = $('#'+field+'_end').val();
+                if ("text" === controlType || "select" === controlType) {
+                    params[field] = $('#' + field).val();
+                } else if ("date" === controlType || "datetime" === controlType || "time" === controlType) {
+                    params[field + "_begin"] = $('#' + field + '_begin').val();
+                    params[field + "_end"] = $('#' + field + '_end').val();
                 }
             }
         })
     }
 
     params.pageNo = getCurrentPageIndex();
-    params.pageSize = parseInt(nullToObject($('#paginate_select').val(),10),10);
+    params.pageSize = parseInt(nullToObject($('#paginate_select').val(), 10), 10);
 
     return params;
 }
 
 //获取表格数据
-function getTBodyData(){
+function getTBodyData() {
     var jsonData = [];
 
     var tbody = $('#dataTable').find('tbody');
 
-    if(tbody.length <= 0){
+    if (tbody.length <= 0) {
         return jsonData;
     }
 
-    $(tbody).find('tr').each(function(){
+    $(tbody).find('tr').each(function () {
         var rowData = $(this).attr('rowData');
 
-        if(!isEmpty(rowData)){
+        if (!isEmpty(rowData)) {
             jsonData.push(JSON.parse(rowData));
         }
     });

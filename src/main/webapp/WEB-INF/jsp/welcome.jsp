@@ -115,7 +115,7 @@ $(function(){
 
 function cellClick(src){
 //    alert(JSON.stringify($(src).parent().attr("rowData")));
-    $('#dataTable thead tr th:eq(5)').toggle();
+    $('#dataTable').find('thead tr th:eq(5)').toggle();
 
     bindTbody({dataRows:getTBodyData()});
 }
