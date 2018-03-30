@@ -96,6 +96,7 @@ $(function(){
         add:true,
         exportData:true,
         cellVisible:true,
+        searchFunc:search_onclick,
         cells:[
             {text:"账户编号",field:"tradingAccount",type:"text",search:true,click:"cellClick"},
             {text:"账户名称",field:"tradingAccountName",type:"text",search:true,display:false},
@@ -109,19 +110,21 @@ $(function(){
             {text:"创建时间",field:"createdDate",type:"datetime",format:"datetime",search:true}
         ]};
 
-    createPage(tableOptions);
+//    createPage(tableOptions);
+    $.initPage();
+    $('#mainBody').createTable(tableOptions);
     search_onclick(1);
 });
 
 function cellClick(src){
-//    alert(JSON.stringify($(src).parent().attr("rowData")));
-    $('#dataTable').find('thead tr th:eq(5)').toggle();
-
-    bindTbody({dataRows:getTBodyData()});
+    alert(JSON.stringify($(src).parent().attr("rowData")));
+//    $('#dataTable').find('thead tr th:eq(5)').toggle();
+//
+//    $.bindTbody({dataRows:$.getTBodyData()});
 }
 
 function search_onclick(pageIndex){
-    var searchParams = getSearchParams();
+    var searchParams = $.getSearchParams();
 
     if(pageIndex === -1){
         pageIndex = 3;
@@ -143,8 +146,12 @@ function search_onclick(pageIndex){
 
     data['dataRows'] = dataRows;
 
-    bindTbody(data);
-    createPagination(data.pageSize,data.pageNo,data.totalSize);
+    $.bindTbody(data);
+    $.createPagination(data.pageSize,data.pageNo,data.totalSize);
+}
+
+function search_onclick1(){
+    alert(1);
 }
 </script>
 </html>

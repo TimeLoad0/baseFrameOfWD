@@ -95,7 +95,7 @@ function createPage(options, data) {
     bindTbody(data);
 
     //是否创建分页信息
-    if (_defaultOptions.pagination) {
+    if (_tableOptions.pagination) {
         var pageSize = 0;
         var pageNo = 1;
         var totalSize = 0;
