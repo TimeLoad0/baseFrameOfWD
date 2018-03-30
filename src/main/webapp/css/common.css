@@ -1,40 +1,61 @@
-:root{
+:root {
     /*基础层级*/
-    --zIndex:0;
+    --zIndex: 0;
     /*背景颜色*/
-    --bgColor:#008080;
+    --bgColor: #008080;
     /*头部高度*/
-    --headerHeight:70px;
+    --headerHeight: 70px;
     /*头部文字高度*/
-    --systemTitleHeight:48px;
+    --systemTitleHeight: 48px;
     /*基础文字大小*/
-    --fontSize:13px;
+    --fontSize: 13px;
     /*菜单宽度*/
-    --sidebarWidth:190px;
+    --sidebarWidth: 190px;
     /*Tab页高度*/
-    --tabHeight:48px;
+    --tabHeight: 48px;
 }
-body,div,ol,ul,li,dl,dt,dd,h1,h2,h3,h4,h5,h6,p,form,fieldset,legend,input{margin:0; padding:0;}
-html,body{height: 100%;position: relative;font-family: 'Microsoft yahei';font-size: var(--fontSize);font-weight: 400;padding: 0;margin: 0;}
-a, a:hover, a:active, a:focus {text-decoration: none; -webkit-user-drag: none;}
-a:hover{cursor: pointer}
-.search-control{
-    max-width:200px;
-    min-width:200px;
+
+body, div, ol, ul, li, dl, dt, dd, h1, h2, h3, h4, h5, h6, p, form, fieldset, legend, input {
+    margin: 0;
+    padding: 0;
+}
+
+html, body {
+    height: 100%;
+    position: relative;
+    font-family: 'Microsoft yahei';
+    font-size: var(--fontSize);
+    font-weight: 400;
+    padding: 0;
+    margin: 0;
+}
+
+a, a:hover, a:active, a:focus {
+    text-decoration: none;
+    -webkit-user-drag: none;
+}
+
+a:hover {
+    cursor: pointer
+}
+
+.search-control {
+    max-width: 200px;
+    min-width: 200px;
     padding: 6px;
-    display:inline-block;
+    display: inline-block;
     margin-top: 1px;
 }
 
-.form-group{
+.form-group {
     padding-left: 5px;
 }
 
-.search-label{
-    width:80px;
+.search-label {
+    width: 80px;
 }
 
-.panel-table{
+.panel-table {
     overflow-x: auto;
     overflow-y: hidden;
     white-space: nowrap;
@@ -45,19 +66,19 @@ a:hover{cursor: pointer}
 /*
 loader样式开始
  */
-.coverDiv{
+.coverDiv {
     position: absolute;
-    top:0;
-    left:0;
-    height:100%;
-    width:100%;
-    background:#ecf0f1;
-    opacity:0.5;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: #ecf0f1;
+    opacity: 0.5;
     z-index: 99998;
 }
 
-.loaderDiv{
-    position:absolute;
+.loaderDiv {
+    position: absolute;
     top: 50%;
     left: 50%;
     width: 42px;
@@ -69,45 +90,45 @@ loader样式开始
     animation: loaderDiv_keyFrames 5s infinite linear;
 }
 
-.loaderDiv span{
+.loaderDiv span {
     border-radius: 50%;
-    width:20px;
-    height:20px;
-    position:absolute;
-    background:red;
-    display:block;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    background: red;
+    display: block;
     -webkit-animation: loaderDiv_keyFrames_span 1s infinite linear;
     -moz-animation: loaderDiv_keyFrames_span 1s infinite linear;
     -ms-animation: loaderDiv_keyFrames_span 1s infinite linear;
     animation: loaderDiv_keyFrames_span 1s infinite linear;
 }
 
-.loaderDiv span:nth-child(1){
-    background:#2ecc71;
+.loaderDiv span:nth-child(1) {
+    background: #2ecc71;
 }
 
-.loaderDiv span:nth-child(2){
-    left:22px;
-    background:#9b59b6;
+.loaderDiv span:nth-child(2) {
+    left: 22px;
+    background: #9b59b6;
     -webkit-animation-delay: .2s;
     -moz-animation-delay: .2s;
     -ms-animation-delay: .2s;
     animation-delay: .2s;
 }
 
-.loaderDiv span:nth-child(3){
-    top:22px;
-    background:#3498db;
+.loaderDiv span:nth-child(3) {
+    top: 22px;
+    background: #3498db;
     -webkit-animation-delay: .4s;
     -moz-animation-delay: .4s;
     -ms-animation-delay: .4s;
     animation-delay: .4s;
 }
 
-.loaderDiv span:nth-child(4){
-    top:22px;
-    left:22px;
-    background:#f1c40f;
+.loaderDiv span:nth-child(4) {
+    top: 22px;
+    left: 22px;
+    background: #f1c40f;
     -webkit-animation-delay: .6s;
     -moz-animation-delay: .6s;
     -ms-animation-delay: .6s;
@@ -115,116 +136,206 @@ loader样式开始
 }
 
 @-webkit-keyframes loaderDiv_keyFrames {
-    from {-webkit-transform: rotate(0deg);}
-    to {-webkit-transform: rotate(360deg);}
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(360deg);
+    }
 }
 
 @-webkit-keyframes loaderDiv_keyFrames_span {
-    0% { -webkit-transform:scale(1); }
-    50% { -webkit-transform:scale(0.5); }
-    100% { -webkit-transform:scale(1); }
+    0% {
+        -webkit-transform: scale(1);
+    }
+    50% {
+        -webkit-transform: scale(0.5);
+    }
+    100% {
+        -webkit-transform: scale(1);
+    }
 }
 
 @-moz-keyframes loaderDiv_keyFrames {
-    from {-moz-transform: rotate(0deg);}
-    to {-moz-transform: rotate(360deg);}
+    from {
+        -moz-transform: rotate(0deg);
+    }
+    to {
+        -moz-transform: rotate(360deg);
+    }
 }
 
 @-moz-keyframes loaderDiv_keyFrames_span {
-    0% { -moz-transform:scale(1); }
-    50% { -moz-transform:scale(0.5); }
-    100% { -moz-transform:scale(1); }
+    0% {
+        -moz-transform: scale(1);
+    }
+    50% {
+        -moz-transform: scale(0.5);
+    }
+    100% {
+        -moz-transform: scale(1);
+    }
 }
 
 @-ms-keyframes loaderDiv_keyFrames {
-    from {-ms-transform: rotate(0deg);}
-    to {-ms-transform: rotate(360deg);}
+    from {
+        -ms-transform: rotate(0deg);
+    }
+    to {
+        -ms-transform: rotate(360deg);
+    }
 }
 
 @-ms-keyframes loaderDiv_keyFrames_span {
-    0% { -ms-transform:scale(1); }
-    50% { -ms-transform:scale(0.5); }
-    100% { -ms-transform:scale(1); }
+    0% {
+        -ms-transform: scale(1);
+    }
+    50% {
+        -ms-transform: scale(0.5);
+    }
+    100% {
+        -ms-transform: scale(1);
+    }
 }
 
 @-ms-keyframes loaderDiv_keyFrames {
-    from {-ms-transform: rotate(0deg);}
-    to {-ms-transform: rotate(360deg);}
+    from {
+        -ms-transform: rotate(0deg);
+    }
+    to {
+        -ms-transform: rotate(360deg);
+    }
 }
 
 @keyframes loaderDiv_keyFrames_span {
-    0% { transform:scale(1); }
-    50% { transform:scale(0.5); }
-    100% { transform:scale(1); }
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(0.5);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
+
 /*
 loader样式结束
  */
 
 Body {
-    scrollbar-arrow-color: #eef4ee;  /*图6,三角箭头的颜色*/
-    scrollbar-face-color: #cdd2cd;  /*图5,立体滚动条的颜色*/
-    scrollbar-3dlight-color: #eef4ee;  /*图1,立体滚动条亮边的颜色*/
-    scrollbar-highlight-color: #eef4ee;  /*图2,滚动条空白部分的颜色*/
-    scrollbar-shadow-color: #eef4ee;  /*图3,立体滚动条阴影的颜色*/
-    scrollbar-darkshadow-color: #eef4ee;  /*图4,立体滚动条强阴影的颜色*/
-    scrollbar-track-color: #eef4ee;  /*图7,立体滚动条背景颜色*/
-    scrollbar-base-color:#eef4ee;  /*滚动条的基本颜色*/
+    scrollbar-arrow-color: #eef4ee; /*图6,三角箭头的颜色*/
+    scrollbar-face-color: #cdd2cd; /*图5,立体滚动条的颜色*/
+    scrollbar-3dlight-color: #eef4ee; /*图1,立体滚动条亮边的颜色*/
+    scrollbar-highlight-color: #eef4ee; /*图2,滚动条空白部分的颜色*/
+    scrollbar-shadow-color: #eef4ee; /*图3,立体滚动条阴影的颜色*/
+    scrollbar-darkshadow-color: #eef4ee; /*图4,立体滚动条强阴影的颜色*/
+    scrollbar-track-color: #eef4ee; /*图7,立体滚动条背景颜色*/
+    scrollbar-base-color: #eef4ee; /*滚动条的基本颜色*/
 }
 
-::-webkit-scrollbar {width: 4px;height: 4px;}
-::-webkit-scrollbar-thumb {border-radius: 5px;-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.1);background: rgba(0,0,0,0.1);}
-::-webkit-scrollbar-track {-webkit-box-shadow: inset 0 0 5px rgba(0,0,0,0.2);border-radius: 0;background: rgba(0,0,0,0.1);}
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+    background: rgba(0, 0, 0, 0.1);
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    border-radius: 0;
+    background: rgba(0, 0, 0, 0.1);
+}
 
 /*
 jquery-confirm 自定义上下横线主题样式(wd-theme)开始
  */
-.jconfirm.jconfirm-wd-theme .jconfirm-bg{
+.jconfirm.jconfirm-wd-theme .jconfirm-bg {
     background-color: #444;
     opacity: .2;
 }
-.jconfirm.jconfirm-wd-theme .jconfirm-box{
+
+.jconfirm.jconfirm-wd-theme .jconfirm-box {
     -webkit-box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     padding: 0;
 }
-.jconfirm.jconfirm-wd-theme .jconfirm-box.loading{
+
+.jconfirm.jconfirm-wd-theme .jconfirm-box.loading {
 }
-.jconfirm.jconfirm-wd-theme .jconfirm-box.loading:before{
+
+.jconfirm.jconfirm-wd-theme .jconfirm-box.loading:before {
 }
-.jconfirm.jconfirm-wd-theme .jconfirm-box.loading:after{
+
+.jconfirm.jconfirm-wd-theme .jconfirm-box.loading:after {
 }
-.jconfirm.jconfirm-wd-theme .jconfirm-box .jconfirm-closeIcon{
+
+.jconfirm.jconfirm-wd-theme .jconfirm-box .jconfirm-closeIcon {
 
 }
-.jconfirm.jconfirm-wd-theme .jconfirm-box .jconfirm-title-c{
-    padding:10px;
+
+.jconfirm.jconfirm-wd-theme .jconfirm-box .jconfirm-title-c {
+    padding: 10px;
 }
-.jconfirm.jconfirm-wd-theme .jconfirm-box .jconfirm-content-pane{
+
+.jconfirm.jconfirm-wd-theme .jconfirm-box .jconfirm-content-pane {
     border-bottom: 1px solid #e5e5e5;
     border-top: 1px solid #e5e5e5;
     padding: 0 10px;
     margin-bottom: 10px;
 }
-.jconfirm.jconfirm-wd-theme .jconfirm-box .jconfirm-content{
+
+.jconfirm.jconfirm-wd-theme .jconfirm-box .jconfirm-content {
     padding: 5px 0;
 }
-.jconfirm.jconfirm-wd-theme .jconfirm-box .jconfirm-buttons{
+
+.jconfirm.jconfirm-wd-theme .jconfirm-box .jconfirm-buttons {
     float: right;
     padding-right: 8px;
     padding-bottom: 10px;
 }
-.jconfirm.jconfirm-wd-theme .jconfirm-box .jconfirm-buttons button{
+
+.jconfirm.jconfirm-wd-theme .jconfirm-box .jconfirm-buttons button {
     font-weight: bold;
     text-transform: uppercase;
     color: #333;
     margin-bottom: 0;
 }
+
 /*
 jquery-confirm 自定义上下横线主题样式结束
  */
 
 /*jquery-confirm 强制换行*/
-.jconfirm-content{
+.jconfirm-content {
     word-wrap: break-word;
+}
+
+.th-icon-desc {
+    font-size: 15px;
+    margin-left: 3px;
+    vertical-align: top;
+    height:12px;
+}
+
+.th-icon-asc {
+    font-size: 15px;
+    margin-left: 3px;
+    vertical-align: bottom;
+    height:12px;
+}
+
+.th-sort {
+    cursor: pointer;
+}
+
+.select-none {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

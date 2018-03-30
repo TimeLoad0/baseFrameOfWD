@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <body>
-<div id="mainBody" class="container-fluid"></div>
+<div id="mainBody1" class="container-fluid"></div>
 </body>
 <script type="text/javascript">
 var dataRowArray = [
@@ -96,35 +96,29 @@ $(function(){
         add:true,
         exportData:true,
         cellVisible:true,
-        searchFunc:search_onclick,
         cells:[
             {text:"账户编号",field:"tradingAccount",type:"text",search:true,click:"cellClick"},
             {text:"账户名称",field:"tradingAccountName",type:"text",search:true,display:false},
-            {text:"组织机构",field:"organCode",type:"select",search:true,selectOptions:orgs,key:"organCode",view:"organName"},
+            {text:"组织机构",field:"organCode",type:"select",search:true,selectOptions:orgs,key:"organCode",view:"organName",sort:true},
             {text:"投资者账户",field:"investorAccount",type:"text",search:true},
-            {text:"产品账户",field:"productAccount",type:"text",search:true},
+            {text:"产品账户",field:"productAccount",type:"text",search:true,sort:true},
             {text:"资产账户",field:"assetAccount",type:"text",search:true},
             {text:"账户类型",field:"tradingAccountType",type:"select",search:true,selectOptions:tradingAccountTypes,key:"subEntry",view:"dictPrompt"},
             {text:"资产属性",field:"AssetProp",type:"select",search:true,selectOptions:assetProps,key:"subEntry",view:"dictPrompt"},
             {text:"账户状态",field:"accountStatus",type:"select",search:true,selectOptions:accountStatuss,key:"subEntry",view:"dictPrompt"},
-            {text:"创建时间",field:"createdDate",type:"datetime",format:"datetime",search:true}
+            {text:"创建时间",field:"createdDate",type:"datetime",format:"datetime",search:true,sort:true}
         ]};
 
-//    createPage(tableOptions);
-    $.initPage();
-    $('#mainBody').createTable(tableOptions);
+    createPage(tableOptions,null,$('#mainBody1'));
     search_onclick(1);
 });
 
 function cellClick(src){
-    alert(JSON.stringify($(src).parent().attr("rowData")));
-//    $('#dataTable').find('thead tr th:eq(5)').toggle();
-//
-//    $.bindTbody({dataRows:$.getTBodyData()});
+    showAlert(JSON.stringify($(src).parent().attr("rowData")),null,null,"info");
 }
 
 function search_onclick(pageIndex){
-    var searchParams = $.getSearchParams();
+    var searchParams = getSearchParams();
 
     if(pageIndex === -1){
         pageIndex = 3;
@@ -146,12 +140,8 @@ function search_onclick(pageIndex){
 
     data['dataRows'] = dataRows;
 
-    $.bindTbody(data);
-    $.createPagination(data.pageSize,data.pageNo,data.totalSize);
-}
-
-function search_onclick1(){
-    alert(1);
+    bindTbody(data);
+    createPagination(data.pageSize,data.pageNo,data.totalSize);
 }
 </script>
 </html>

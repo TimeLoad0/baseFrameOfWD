@@ -24,7 +24,7 @@ if (!isEmpty(laydate)) {
 $.ajaxSetup({
     type: 'POST',
     dataType: 'json',
-    error: function (xhr, settings) {
+    error: function () {
         return false;
     },
     complete: function () {
@@ -42,6 +42,7 @@ $.ajaxSetup({
  * 创建绑定表格
  * @param options
  * @param data
+ * @param src
  * options:{
         add:true,                   //新增，默认true
         search:true,                //搜索，默认true
@@ -62,11 +63,12 @@ $.ajaxSetup({
             key:"key",              //字典key，当type=select时配合selectOptions使用，可以为空，默认为key
             view:"view",            //字典view，当type=select时配合selectOptions使用，可以为空，默认为view
             click:"function name",  //列点击事件，传入方法名字符串，默认回传当前对象和tableOptions表格选项两个参数
+            sort:false,             //是否排序，默认false
             display:false           //是否显示，默认true
         }]
     }
  */
-function createPage(options, data) {
+function createPage(options, data, src) {
     //默认选项
     var _defaultOptions = {
         add: true,                   //新增，默认true
@@ -83,11 +85,14 @@ function createPage(options, data) {
     //合并选项
     _tableOptions = $.extend(true, _defaultOptions, options);
 
+    //获取mainbody对象
+    var mainBody = $(isEmpty(src) ? '#mainBody' : src);
+
     //创建搜索工具栏
-    createSearchToolBar(_tableOptions);
+    createSearchToolBar(_tableOptions, mainBody);
 
     //创建表格
-    $('#mainBody').append('<div class="panel panel-default panel-table" style="position: relative"><table id="dataTable" class="table table-striped table-hover"></table></div>');
+    mainBody.append('<div class="panel panel-default panel-table" style="position: relative"><table id="dataTable" class="table table-striped table-hover"></table></div>');
 
     //创建表头
     createThead(_tableOptions);
@@ -111,10 +116,10 @@ function createPage(options, data) {
 }
 
 //创建搜索工具栏
-function createSearchToolBar(options) {
+function createSearchToolBar(options, src) {
     var toolBarDiv = $('<div class="panel panel-heading"></div>');
     var leftDiv = $('<div style="width: 80%;"></div>');
-    var form = $('<form id="search_form" class="form-inline" style="line-height: 34px;"></form>');
+    var form = $('<form class="form-inline" style="line-height: 34px;"></form>');
     var rightDiv = $('<div class="pull-right" style="width: 20%;"></div>');
     var rightBtnGroupDiv = $('<div class="btn-group pull-right"></div>');
 
@@ -208,7 +213,7 @@ function createSearchToolBar(options) {
     }
 
     leftDiv.append(form);
-    $('#mainBody').append(toolBarDiv.append(leftDiv));
+    $(src).append(toolBarDiv.append(leftDiv));
 
     //判断工具栏是否含有按钮
     if (form.find('div').length > 0) {
@@ -219,9 +224,9 @@ function createSearchToolBar(options) {
         toolBarDiv.css('min-height', rightDiv.height() + 20).css('padding', '10px 5px');
 
         if (options.combineSearch) {
-            createCombineSearch();
+            createCombineSearch(form);
         } else {
-            $('#mainBody').append($('<div style="height: 10px;"></div>'));
+            $(src).append($('<div style="height: 10px;"></div>'));
         }
     }
 }
@@ -246,7 +251,41 @@ function createThead(options) {
 
     //循环cells创建表头列
     for (var i = 0; i < cells.length; i++) {
-        var th = $('<th field="' + cells[i].field + '">' + cells[i].text + '</th>');
+
+        var th = $('<th class="select-none" field="' + cells[i].field + '">' + cells[i].text + '</th>');
+
+        //判断是否支持排序
+        if (nullToFalse(cells[i].sort)) {
+            $(th).addClass('th-sort').off('click').on('click', function () {
+                //移除所有排序图标
+                $(this).siblings().find('i').remove();
+
+                //获取当前表格数据
+                var tData = getTBodyData();
+
+                var thi = $(this).find('i');
+
+                if ($(thi).length < 1) {
+                    //倒序排序数据
+                    tData.sort(dataCompareDesc($(this).attr('field')));
+
+                    $(this).append('<i class="fa fa-sort-desc th-icon-desc"></i>');
+                } else if ($(thi).hasClass('fa-sort-desc')) {
+                    //正序排序数据
+                    tData.sort(dataCompareAsc($(this).attr('field')));
+
+                    $(thi).removeClass('fa-sort-desc').removeClass('th-icon-desc').addClass('fa-sort-asc').addClass('th-icon-asc');
+                } else if ($(thi).hasClass('fa-sort-asc')) {
+                    //按照第一次保存的数据顺序正序排序
+                    tData.sort(dataCompareAsc('dataSort'));
+
+                    $(thi).remove();
+                }
+
+                bindTbody({dataRows: tData});
+            });
+        }
+
         var li = $('<li class="form-inline"><label style="padding: 3px 15px;font-weight: 400;" field="' + cells[i].field + '"><input type="checkbox" class="checkbox" style="width: 15px;height: 15px;margin-right: 5px;" checked /><span>' + cells[i].text + '</span></label></li>');
 
         //绑定是否显示列checkbox点击事件及文本事件
@@ -302,7 +341,7 @@ function createThead(options) {
 
     //判断列显示控制按钮是否存在，存在则生成控制列表
     var cellVisible = $('#cellVisible');
-    if($(cellVisible).length > 0){
+    if ($(cellVisible).length > 0) {
         $(cellVisible).parent().append(ulList);
     }
 
@@ -311,7 +350,7 @@ function createThead(options) {
 }
 
 //绑定表格数据
-function bindTbody(data) {
+function bindTbody(data, src) {
     if (isEmpty(data) || data.length <= 0) {
         return;
     }
@@ -322,13 +361,24 @@ function bindTbody(data) {
         return;
     }
 
-    var dataTable = $('#dataTable'); //获取dataTable对象
-    var thead = dataTable.find('thead').prop('outerHTML'); //获取表头html
+    var dataTable; //获取dataTable对象
+
+    if (isEmpty(src)) {
+        dataTable = $('#dataTable');
+    } else {
+        dataTable = $(src);
+    }
+
     var ths = dataTable.find('thead tr th'); //获取表头所有th
-    var tbody = '<tbody>'; //tbody对象
+    var tbody = ''; //tbody对象
     $(dataTable).find('tbody').remove(); //清除表格数据
 
     for (var i = 0; i < dataRows.length; i++) {
+        //保存第一次加载的数据顺序留作排序备用
+        if (isEmpty(dataRows[i]['dataSort'])) {
+            dataRows[i]['dataSort'] = i + 1;
+        }
+
         var tr = '<tr rowData=' + JSON.stringify(dataRows[i]) + '>';
 
         //循环表头
@@ -389,9 +439,7 @@ function bindTbody(data) {
         tbody += tr;
     }
 
-    tbody += '</tbody>';
-
-    dataTable.html(thead + tbody);
+    $(dataTable).append('<tbody>').find('tbody').html(tbody);
 }
 
 //创建分页
@@ -400,7 +448,6 @@ function createPagination(pageSize, pageNo, totalSize, pageList) {
 
     //判断数据表格是否存在
     if (dataTable.length <= 0) {
-        showAlert("创建分页信息错误，不存在数据表格！", null, null, "danger");
         return;
     }
 
@@ -422,6 +469,8 @@ function createPagination(pageSize, pageNo, totalSize, pageList) {
         pageNo = pages;
     }
 
+    var paginate_pages;
+
     //判断分页元素是否已经存在
     if ($('#table_pagination').length <= 0) {
         var table_pagination = $('<div id="table_pagination" class="container-fluid" style="height: 45px;line-height: 45px;font-size:14px;"></div>');
@@ -434,7 +483,7 @@ function createPagination(pageSize, pageNo, totalSize, pageList) {
             pageList = [10, 20, 50, 100];
         }
 
-        var paginate_pages = $('#paginate_pages');
+        paginate_pages = $('#paginate_pages');
 
         //绑定切换每页显示条数事件
         $('#paginate_select').empty().off('change').on('change', function () {
@@ -470,11 +519,13 @@ function createPagination(pageSize, pageNo, totalSize, pageList) {
         $('#paginate_last').off('click').on('click', function () {
             search_onclick(-1);
         });
+    } else {
+        paginate_pages = $('#paginate_pages');
     }
 
     $('#paginate_totalSize').text(totalSize);
     $('#paginate_pageNo').text(pageNo);
-    $('#paginate_pages').text(pages);
+    $(paginate_pages).text(pages);
     $('#paginate_current').text(pageNo);
 }
 
@@ -485,7 +536,7 @@ function getCurrentPageIndex() {
 
 //空转空字符串
 function nullToEmpty(obj) {
-    if (undefined == obj || null == obj) {
+    if (undefined === obj || null === obj) {
         obj = "";
     }
 
@@ -494,7 +545,7 @@ function nullToEmpty(obj) {
 
 //空转自定义
 function nullToObject(obj, str) {
-    if (undefined == obj || null == obj || "" == obj) {
+    if (undefined === obj || null === obj || "" === obj) {
         obj = str;
     }
 
@@ -503,11 +554,11 @@ function nullToObject(obj, str) {
 
 //空转false
 function nullToFalse(obj) {
-    if (undefined == obj || null == obj) {
+    if (undefined === obj || null === obj) {
         obj = false;
-    } else if ("false" == obj || false == obj) {
+    } else if ("false" === obj || false === obj) {
         obj = false;
-    } else if ("true" == obj || true == obj) {
+    } else if ("true" === obj || true === obj) {
         obj = true;
     }
 
@@ -516,11 +567,11 @@ function nullToFalse(obj) {
 
 //空转true
 function nullToTrue(obj) {
-    if (undefined == obj || null == obj) {
+    if (undefined === obj || null === obj) {
         obj = true;
-    } else if ("false" == obj || false == obj) {
+    } else if ("false" === obj || false === obj) {
         obj = false;
-    } else if ("true" == obj || true == obj) {
+    } else if ("true" === obj || true === obj) {
         obj = true;
     }
 
@@ -556,18 +607,18 @@ function round(srcValuef, iCount) {
     var idot = value2.indexOf(".");
 
     //如果是小数
-    if (idot != -1) {
+    if (idot !== -1) {
         anumber = srcValue.toString().split(".");
 
         //如果是科学计数法结果
-        if (anumber[1].indexOf("e") != -1) {
+        if (anumber[1].indexOf("e") !== -1) {
             return Math.round(value1) / iB;
         }
 
         anumber1 = value2.split(".");
 
         if (anumber[1].length <= iCount) {
-            return parseFloat(srcValuef, 10);
+            return parseFloat(srcValuef);
         }
 
         var fvalue3 = parseInt(anumber[1].substring(iCount, iCount + 1), 10);
@@ -576,7 +627,7 @@ function round(srcValuef, iCount) {
             fvalue = parseInt(anumber1[0], 10) + 1;
         } else {
             //对于传入的形如111.834999999998 的处理（传入的计算结果就是错误的，应为111.835）
-            if (fvalue3 == 4 && anumber[1].length > 10 && parseInt(anumber[1].substring(iCount + 1, iCount + 2), 10) == 9) {
+            if (fvalue3 === 4 && anumber[1].length > 10 && parseInt(anumber[1].substring(iCount + 1, iCount + 2), 10) === 9) {
                 fvalue = parseInt(anumber1[0], 10) + 1;
             } else {
                 fvalue = parseInt(anumber1[0], 10);
@@ -615,7 +666,7 @@ Date.prototype.format = function (format) {
 
     for (var k in o) {
         if (new RegExp("(" + k + ")").test(format)) {
-            format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+            format = format.replace(RegExp.$1, RegExp.$1.length === 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
         }
     }
 
@@ -692,7 +743,7 @@ function getValueOfArray(array, key, view, value) {
     }
 
     for (var i = 0; i < array.length; i++) {
-        if (value == nullToEmpty(array[i][key])) {
+        if (value === nullToEmpty(array[i][key])) {
             return array[i][view];
         }
     }
@@ -704,14 +755,14 @@ function searchSelect_onchage(src) {
     var controlType = nullToEmpty(optionObj.attr("type"));
     $('#search_btn_a').parent().parent().nextAll().remove();
 
-    if ("text" == controlType) {
+    if ("text" === controlType) {
         $('#controlDiv').prevAll().each(function () {
             if ($(this).index() > 0) {
                 $(this).hide();
             }
         });
         $('#search_input').show().siblings().hide();
-    } else if ("select" == controlType) {
+    } else if ("select" === controlType) {
         $('#controlDiv').prevAll().each(function () {
             if ($(this).index() > 0) {
                 $(this).hide();
@@ -729,13 +780,13 @@ function searchSelect_onchage(src) {
         $.each(selectOptions, function (i, item) {
             $('#search_select').append($('<option value="' + nullToEmpty(item[key]) + '">' + nullToEmpty(item[view]) + '</option>'));
         });
-    } else if ("date" == controlType || "datetime" == controlType || "time" == controlType) {
+    } else if ("date" === controlType || "datetime" === controlType || "time" === controlType) {
         $('#controlDiv').prevAll().each(function () {
             if ($(this).index() > 0) {
                 $(this).hide();
             }
         }).end().children().each(function () {
-            if ("search_input_begin" == $(this).attr('id') || "search_input_end" == $(this).attr('id')) {
+            if ("search_input_begin" === $(this).attr('id') || "search_input_end" === $(this).attr('id')) {
                 $(this).show();
                 laydate.render({
                     elem: '#search_input_begin',
@@ -749,14 +800,18 @@ function searchSelect_onchage(src) {
                 $(this).hide();
             }
         })
-    } else if ("combineSearch" == controlType) {
-        createCombineSearch();
+    } else if ("combineSearch" === controlType) {
+        createCombineSearch($(src).parent().parent());
     }
 }
 
-function createCombineSearch() {
+function createCombineSearch(src) {
     var controlDiv = $('#controlDiv');
-    var searchForm = $('#search_form');
+    var searchForm = $(src);
+
+    if (searchForm.length < 1) {
+        return;
+    }
 
     if (_tableOptions.search) {
         if (controlDiv.children().length > 1) {
@@ -783,7 +838,7 @@ function createCombineSearch() {
         var controlsDiv = $('<div class="form-group">');
         var field = nullToEmpty(item.field);
 
-        if ("text" == optionType) {
+        if ("text" === optionType) {
             controlsDiv.append($('<label class="search-label text-right">' + item.text + '：</label>'));
             controlsDiv.append($('<input id="' + field + '" name="' + field + '" type="text" class="search-control form-control"/>'));
 
@@ -792,7 +847,7 @@ function createCombineSearch() {
             } else {
                 searchForm.append(controlsDiv);
             }
-        } else if ("select" == optionType) {
+        } else if ("select" === optionType) {
             var select = $('<select class="form-control search-control" id="' + field + '" name="' + field + '">');
 
             var selectOptions = nullToEmpty(item.selectOptions);
@@ -811,7 +866,7 @@ function createCombineSearch() {
             } else {
                 searchForm.append(controlsDiv);
             }
-        } else if ("date" == optionType || "datetime" == optionType || "time" == optionType) {
+        } else if ("date" === optionType || "datetime" === optionType || "time" === optionType) {
             controlsDiv.append($('<label class="search-label text-right">' + item.text + '起：</label>'));
             var dateBegin = $('<input id="' + field + '_begin" name="' + field + '_begin" placeholder="开始时间" type="text" class="search-control form-control"/>');
             controlsDiv.append(dateBegin);
@@ -912,14 +967,14 @@ function search_onclick() {
 //获取页面的宽度
 function getPageWidth(page) {
     if (isEmpty(page)) {
-        if (parseInt(document.documentElement.clientWidth) != 0) {
+        if (parseInt(document.documentElement.clientWidth) !== 0) {
             return document.documentElement.clientWidth;
         }
 
         return document.body.clientWidth;
     }
 
-    if (parseInt(page.document.documentElement.clientWidth) != 0) {
+    if (parseInt(page.document.documentElement.clientWidth) !== 0) {
         return page.document.documentElement.clientWidth;
     }
 
@@ -1198,4 +1253,46 @@ function getTBodyData() {
     });
 
     return jsonData;
+}
+
+//数据比较ASC
+function dataCompareAsc(prop) {
+    return function (obj1, obj2) {
+        var val1 = obj1[prop];
+        var val2 = obj2[prop];
+
+        if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+            val1 = Number(val1);
+            val2 = Number(val2);
+        }
+
+        if (val1 < val2) {
+            return -1;
+        } else if (val1 > val2) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+}
+
+//数据比较DESC
+function dataCompareDesc(prop) {
+    return function (obj1, obj2) {
+        var val1 = obj1[prop];
+        var val2 = obj2[prop];
+
+        if (!isNaN(Number(val1)) && !isNaN(Number(val2))) {
+            val1 = Number(val1);
+            val2 = Number(val2);
+        }
+
+        if (val1 < val2) {
+            return 1;
+        } else if (val1 > val2) {
+            return -1;
+        } else {
+            return 0;
+        }
+    }
 }
