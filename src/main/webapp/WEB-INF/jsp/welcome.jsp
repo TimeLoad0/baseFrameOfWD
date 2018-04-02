@@ -96,6 +96,28 @@ $(function(){
         add:true,
         exportData:true,
         cellVisible:true,
+        operation:[
+            {
+                "type":"edit",
+                "text":"编辑",
+                "action":function(){
+                    showAlert("this is edit");
+                }
+            },
+            {
+                "type":"remove",
+                "text":"删除",
+                "action":function(){
+                    showAlert("this is remove");
+                }
+            },
+            {
+                "text":"test",
+                "action":function(){
+                    showAlert("this is test");
+                }
+            }
+        ],
         cells:[
             {text:"账户编号",field:"tradingAccount",type:"text",search:true,click:"cellClick"},
             {text:"账户名称",field:"tradingAccountName",type:"text",search:true,display:false},
@@ -112,6 +134,10 @@ $(function(){
     createPage(tableOptions,null,$('#mainBody1'));
     search_onclick(1);
 });
+
+function test(){
+    showAlert("this is test");
+}
 
 function cellClick(src){
     showAlert(JSON.stringify($(src).parent().attr("rowData")),null,null,"info");

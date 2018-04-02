@@ -315,14 +315,20 @@ jquery-confirm 自定义上下横线主题样式结束
     word-wrap: break-word;
 }
 
-.th-icon-desc {
+.th-sort-icon {
+    font-size: 15px;
+    margin-left: 3px;
+    vertical-align: bottom;
+}
+
+.th-sort-icon-desc {
     font-size: 15px;
     margin-left: 3px;
     vertical-align: top;
     height:12px;
 }
 
-.th-icon-asc {
+.th-sort-icon-asc {
     font-size: 15px;
     margin-left: 3px;
     vertical-align: bottom;
@@ -338,4 +344,8 @@ jquery-confirm 自定义上下横线主题样式结束
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+}
+
+.inline-flex {
+    display: inline-flex!important;
 }

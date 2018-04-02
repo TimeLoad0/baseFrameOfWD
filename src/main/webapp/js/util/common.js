@@ -121,7 +121,7 @@ function createSearchToolBar(options, src) {
     var leftDiv = $('<div style="width: 80%;"></div>');
     var form = $('<form class="form-inline" style="line-height: 34px;"></form>');
     var rightDiv = $('<div class="pull-right" style="width: 20%;"></div>');
-    var rightBtnGroupDiv = $('<div class="btn-group pull-right"></div>');
+    var rightBtnGroupDiv = $('<div class="btn-group pull-right inline-flex"></div>');
 
     //是否添加新增按钮
     if (options.add) {
@@ -256,30 +256,34 @@ function createThead(options) {
 
         //判断是否支持排序
         if (nullToFalse(cells[i].sort)) {
-            $(th).addClass('th-sort').off('click').on('click', function () {
+            $(th).addClass('th-sort').append('<i class="fa fa-sort th-sort-icon"></i>').off('click').on('click', function () {
+                var that = this;
+
                 //移除所有排序图标
-                $(this).siblings().find('i').remove();
+                $(that).siblings().find('i').each(function () {
+                    $(this).removeClass('fa-sort-asc').removeClass('th-sort-icon-asc').removeClass('fa-sort-desc').removeClass('th-sort-icon-desc').addClass('fa-sort');
+                });
 
                 //获取当前表格数据
                 var tData = getTBodyData();
 
-                var thi = $(this).find('i');
+                var thi = $(that).find('i');
 
-                if ($(thi).length < 1) {
+                if ($(thi).hasClass('fa-sort')) {
                     //倒序排序数据
-                    tData.sort(dataCompareDesc($(this).attr('field')));
+                    tData.sort(dataCompareDesc($(that).attr('field')));
 
-                    $(this).append('<i class="fa fa-sort-desc th-icon-desc"></i>');
+                    $(thi).removeClass('fa-sort').addClass('fa-sort-desc').addClass('th-sort-icon-desc');
                 } else if ($(thi).hasClass('fa-sort-desc')) {
                     //正序排序数据
-                    tData.sort(dataCompareAsc($(this).attr('field')));
+                    tData.sort(dataCompareAsc($(that).attr('field')));
 
-                    $(thi).removeClass('fa-sort-desc').removeClass('th-icon-desc').addClass('fa-sort-asc').addClass('th-icon-asc');
+                    $(thi).removeClass('fa-sort-desc').removeClass('th-sort-icon-desc').addClass('fa-sort-asc').addClass('th-sort-icon-asc');
                 } else if ($(thi).hasClass('fa-sort-asc')) {
                     //按照第一次保存的数据顺序正序排序
                     tData.sort(dataCompareAsc('dataSort'));
 
-                    $(thi).remove();
+                    $(thi).removeClass('fa-sort-asc').removeClass('th-sort-icon-asc').addClass('fa-sort').addClass('th-sort-icon');
                 }
 
                 bindTbody({dataRows: tData});
@@ -339,6 +343,11 @@ function createThead(options) {
         tr.append(th);
     }
 
+    //判断是否添加操作列operation
+    if (options.operation) {
+        tr.append('<th operation="true">操作</th>');
+    }
+
     //判断列显示控制按钮是否存在，存在则生成控制列表
     var cellVisible = $('#cellVisible');
     if ($(cellVisible).length > 0) {
@@ -356,6 +365,7 @@ function bindTbody(data, src) {
     }
 
     var dataRows = data.dataRows; //获取数据行
+    var operation = _tableOptions.operation; //获取操作按钮数据
 
     if (isEmpty(dataRows)) {
         return;
@@ -392,6 +402,46 @@ function bindTbody(data, src) {
             //是否添加序号
             if (nullToFalse($(ths[j]).attr('serialNumber'))) {
                 tr += '<td>' + parseInt(i + 1) + '</td>';
+                continue;
+            }
+
+            //是否添加操作列operation
+            if (nullToFalse($(ths[j]).attr('operation'))) {
+                var btnGroupDiv = '<div class="btn-group inline-flex">';
+
+                for (var index in operation) {
+                    var operAction = nullToEmpty(operation[index]["action"]);
+                    var operText = nullToEmpty(operation[index]["text"]);
+                    var operDisplay = nullToTrue(operation[index]["display"]);
+
+                    //如果按钮文本为空
+                    if (isEmpty(operText)) {
+                        continue;
+                    }
+
+                    //是否显示
+                    if(!operDisplay){
+                        continue;
+                    }
+
+                    //是否添加编辑按钮
+                    if ("edit" === operation[index]["type"]) {
+                        btnGroupDiv += "<a class='btn btn-primary btn-xs' onclick='new " + operAction + "'>" + operText + "</a>";
+                        continue;
+                    }
+
+                    //是否添加删除按钮
+                    if ("remove" === operation[index]["type"]) {
+                        btnGroupDiv += "<a class='btn btn-primary btn-xs' onclick='new " + operAction + "'>" + operText + "</a>";
+                        continue;
+                    }
+
+                    btnGroupDiv += "<a class='btn btn-primary btn-xs' onclick='new " + operAction + "'>" + operText + "</a>";
+                }
+
+                btnGroupDiv += '</div>';
+
+                tr += '<td>' + btnGroupDiv + '</td>';
                 continue;
             }
 
