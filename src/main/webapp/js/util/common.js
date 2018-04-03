@@ -64,7 +64,14 @@ $.ajaxSetup({
             view:"view",            //字典view，当type=select时配合selectOptions使用，可以为空，默认为view
             click:"function name",  //列点击事件，传入方法名字符串，默认回传当前对象和tableOptions表格选项两个参数
             sort:false,             //是否排序，默认false
-            display:false           //是否显示，默认true
+            display:false,          //是否显示，默认true
+            operation: [{           //默认操作列
+                "text": "编辑",   //按钮文本
+                "action": "rowEditOnclick",     //按钮事件
+                "class":"btn-primary",      //按钮样式
+                "icon":"fa-pencil",          //按钮图标
+                "display":true      //是否显示，支持事件形式
+            }]
         }]
     }
  */
@@ -78,8 +85,9 @@ function createPage(options, data, src) {
         exportData: true,            //导出数据，默认true
         checkBox: true,              //复选框，默认true
         pagination: true,            //分页信息，默认true
-        pageList: [10, 20, 50, 100],    //默认分页条数
-        serialNumber: true           //序列号，默认true
+        pageList: [10, 20, 50, 100], //默认分页条数
+        serialNumber: true,          //序列号，默认true
+        cellVisible: false           //列可见选项，默认false
     };
 
     //合并选项
@@ -122,6 +130,47 @@ function createSearchToolBar(options, src) {
     var form = $('<form class="form-inline" style="line-height: 34px;"></form>');
     var rightDiv = $('<div class="pull-right" style="width: 20%;"></div>');
     var rightBtnGroupDiv = $('<div class="btn-group pull-right inline-flex"></div>');
+
+    //是否添加操作列工具按钮
+    if (nullToFalse(options.toolButtons)) {
+        for (var toolIndex in options.toolButtons) {
+            var operAction = nullToEmpty(options.toolButtons[toolIndex]["action"]);
+            var operText = nullToEmpty(options.toolButtons[toolIndex]["text"]);
+            var operDisplay = nullToTrue(options.toolButtons[toolIndex]["display"]);
+            var operClass = nullToEmpty(options.toolButtons[toolIndex]["class"]);
+            var operIcon = nullToEmpty(options.toolButtons[toolIndex]["icon"]);
+
+            //如果按钮文本为空
+            if (isEmpty(operText)) {
+                continue;
+            }
+
+            //是否显示
+            if (!operDisplay) {
+                continue;
+            }
+
+            var rightBtn = $('<a class="btn btn-primary"><i class="fa ' + operIcon + '"></i>&nbsp;'+operText+'</a>');
+
+            //自定义样式
+            if(!isEmpty(operClass)){
+                rightBtn.addClass(operClass);
+            }
+
+            //绑定事件
+            if(!isEmpty(operAction)){
+                //闭包
+                (function(){
+                    var action = operAction;
+                    rightBtn.off('click').on('click',function(){
+                        action();
+                    })
+                })();
+            }
+
+            rightBtnGroupDiv.append(rightBtn);
+        }
+    }
 
     //是否添加新增按钮
     if (options.add) {
@@ -413,6 +462,8 @@ function bindTbody(data, src) {
                     var operAction = nullToEmpty(operation[index]["action"]);
                     var operText = nullToEmpty(operation[index]["text"]);
                     var operDisplay = nullToTrue(operation[index]["display"]);
+                    var operClass = nullToEmpty(operation[index]["class"]);
+                    var operIcon = nullToEmpty(operation[index]["icon"]);
 
                     //如果按钮文本为空
                     if (isEmpty(operText)) {
@@ -420,23 +471,24 @@ function bindTbody(data, src) {
                     }
 
                     //是否显示
-                    if(!operDisplay){
+                    if (typeof operDisplay !== "boolean") {
+                        var isDisplay = new Function("return " + operDisplay + "('" + JSON.stringify(dataRows[i]) + "')");
+                        if (!isDisplay()) {
+                            continue;
+                        }
+                    } else if (!operDisplay) {
                         continue;
                     }
 
-                    //是否添加编辑按钮
-                    if ("edit" === operation[index]["type"]) {
-                        btnGroupDiv += "<a class='btn btn-primary btn-xs' onclick='new " + operAction + "'>" + operText + "</a>";
-                        continue;
+                    //判断事件是否为空
+                    if (isEmpty(operAction)) {
+                        operAction = "";
+                    } else {
+                        operAction += "(this)";
                     }
 
-                    //是否添加删除按钮
-                    if ("remove" === operation[index]["type"]) {
-                        btnGroupDiv += "<a class='btn btn-primary btn-xs' onclick='new " + operAction + "'>" + operText + "</a>";
-                        continue;
-                    }
-
-                    btnGroupDiv += "<a class='btn btn-primary btn-xs' onclick='new " + operAction + "'>" + operText + "</a>";
+                    btnGroupDiv += "<a class='btn btn-primary btn-xs " + operClass + "' onclick='" + operAction + "'>" +
+                        "<i class='fa " + operIcon + "'></i>&nbsp;" + operText + "</a>";
                 }
 
                 btnGroupDiv += '</div>';
@@ -1345,4 +1397,9 @@ function dataCompareDesc(prop) {
             return 0;
         }
     }
+}
+
+//获取tr行数据,src必须是tr子元素
+function getTrData(src,name){
+    return nullToEmpty($(src).parents('tr').attr(isEmpty(name) ? "rowData" : name));
 }
