@@ -126,9 +126,9 @@ function createPage(options, data, src) {
 //创建搜索工具栏
 function createSearchToolBar(options, src) {
     var toolBarDiv = $('<div class="panel panel-heading"></div>');
-    var leftDiv = $('<div style="width: 80%;"></div>');
+    var leftDiv = $('<div></div>');
     var form = $('<form class="form-inline" style="line-height: 34px;"></form>');
-    var rightDiv = $('<div class="pull-right" style="width: 20%;"></div>');
+    var rightDiv = $('<div class="pull-right"></div>');
     var rightBtnGroupDiv = $('<div class="btn-group pull-right inline-flex"></div>');
 
     //是否添加操作列工具按钮
