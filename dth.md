@@ -17,3 +17,4 @@ TODO AND DONE
   * 2018-01-04  &emsp;&emsp;绑定菜单增加tab页
   * 2018-01-05  &emsp;&emsp;修改页面基础框架的部分bug
   * 2018-01-05  &emsp;&emsp;增加菜单选中效果
+  * 2018-04-19  &emsp;&emsp;增加jdbc模版和mybatis支持

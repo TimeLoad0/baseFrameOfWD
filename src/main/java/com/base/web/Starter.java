@@ -1,5 +1,6 @@
 package com.base.web;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -10,6 +11,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
  * @author wd
  */
 @SpringBootApplication
+@MapperScan("com.base.web.dao")
 public class Starter extends SpringBootServletInitializer {
 
 	@Override
