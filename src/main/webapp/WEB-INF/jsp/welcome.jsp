@@ -113,13 +113,24 @@ $(function(){
         toolButtons:[{
                 "text":"新增",
                 "action":function(){
-                    showAlert("this is create");
+                    $.ajax({
+                        url:"errorTest",
+                        success:function(res){
+                            showAlert(JSON.stringify(res));
+                        }
+                    })
                 },
                 "icon":"fa-pencil"
             }, {
                 "text":"tooltest",
                 "action":function(){
-                    showAlert("this is tooltest");
+                    $.ajax({
+                        url:"test",
+                        type:"GET",
+                        success:function(res){
+                            showAlert(JSON.stringify(res));
+                        }
+                    })
                 },
                 "icon":"fa-list"
             }],

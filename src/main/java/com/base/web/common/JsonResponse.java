@@ -1,4 +1,4 @@
-package com.base.web.util;
+package com.base.web.common;
 
 import com.alibaba.fastjson.JSON;
 import org.springframework.util.StringUtils;
@@ -14,7 +14,7 @@ import java.util.Map;
  * @author wj
  * @date 2018-4-11 17:09:54
  */
-public class JsonResult {
+public class JsonResponse {
     private Integer code;
 
     private String msg;
@@ -27,22 +27,24 @@ public class JsonResult {
 
     private List<Map<String, Object>> rowData;
 
-    public JsonResult() {
-    }
-
-    public JsonResult(Integer code, String msg) {
+    public JsonResponse(Integer code, String msg) {
         this.code = code;
         this.msg = msg;
     }
 
-    public JsonResult(Integer code, String msg, Integer totalSize, List<Map<String, Object>> rowData) {
+    public JsonResponse(ResultCode resultCode) {
+        this.code = resultCode.getCode();
+        this.msg = resultCode.getMsg();
+    }
+
+    public JsonResponse(Integer code, String msg, Integer totalSize, List<Map<String, Object>> rowData) {
         this.code = code;
         this.msg = msg;
         this.totalSize = totalSize;
         this.rowData = rowData;
     }
 
-    public JsonResult(Integer code, String msg, Integer pageNo, Integer pageSize, Integer totalSize, List<Map<String, Object>> rowData) {
+    public JsonResponse(Integer code, String msg, Integer pageNo, Integer pageSize, Integer totalSize, List<Map<String, Object>> rowData) {
         this.code = code;
         this.msg = msg;
         this.pageNo = pageNo;
@@ -55,13 +57,13 @@ public class JsonResult {
         Map<String, Object> map = new HashMap<>(Constants.DEFAULT_HASHMAP_LENGTH);
 
         if (StringUtils.isEmpty(code)) {
-            map.put(Constants.RESULT_CODE, Constants.DEFAULT_CODE_SUCCESS);
+            map.put(Constants.RESULT_CODE, ResultCode.FAILED.getCode());
         } else {
             map.put(Constants.RESULT_CODE, code);
         }
 
         if (null == msg) {
-            map.put(Constants.RESULT_MSG, Constants.DEFAULT_MSG_SUCCESS);
+            map.put(Constants.RESULT_MSG, ResultCode.FAILED.getMsg());
         } else {
             map.put(Constants.RESULT_MSG, msg);
         }
