@@ -1,4 +1,4 @@
-package com.base.web.util;
+package com.base.web.common;
 
 /**
  * 常量类
@@ -14,11 +14,10 @@ public class Constants {
     public static final String RESULT_ROWDATA = "rowData";
 
     public static final Integer DEFAULT_HASHMAP_LENGTH = 16;
-    public static final String DEFAULT_MSG_SUCCESS = "成功";
-    public static final String DEFAULT_MSG_NULL = "";
-    public static final Integer DEFAULT_CODE_SUCCESS = 0;
-    public static final Integer DEFAULT_CODE_FAILED = 1;
     public static final Integer DEFAULT_PAGENO = 0;
     public static final Integer DEFAULT_PAGESIZE = 10;
     public static final Integer DEFAULT_TOTALSIZE = 0;
+
+    public static final String VIEW_LAYOUT_ERROR = "layout.error";
+    public static final String VIEW_LAYOUT_404 = "layout.404";
 }

@@ -23,4 +23,7 @@
 
 	<definition name="*.*" template="/WEB-INF/jsp/{1}/{2}.jsp">
 	</definition>
+
+    <definition name="login" template="/WEB-INF/jsp/login.jsp">
+    </definition>
 </tiles-definitions>
