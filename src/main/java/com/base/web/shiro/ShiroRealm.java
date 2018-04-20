@@ -44,6 +44,10 @@ public class ShiroRealm extends AuthorizingRealm {
         String username = token.getUsername();
         String password = String.valueOf(token.getPassword());
 
+        if (!"admin".equals(username)){
+            throw new AuthenticationException("用户名不存在");
+        }
+
         User user = new User();
         user.setUserId("112222");
         user.setUserName(username);

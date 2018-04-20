@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
-    public String jsonExceptionHandler(HttpServletRequest request, Exception e) throws Exception {
+    public String allExceptionHandler(HttpServletRequest request, Exception e) throws Exception {
         //如果是ajax请求响应头会有x-requested-with
         if (null == request.getHeader(Constants.X_REQUESTED_WITH) || !request.getHeader(Constants.X_REQUESTED_WITH).equalsIgnoreCase(Constants.XMLHTTPRESQUEST)) {
             request.setAttribute(Constants.RESULT_URL, request.getRequestURL());

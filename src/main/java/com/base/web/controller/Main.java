@@ -89,14 +89,15 @@ public class Main {
     }
 
     @PostMapping("/doLogin")
-    public String dologin(String username, String password, Boolean rememberMe) {
+    @ResponseBody
+    public Object dologin(String username, String password, Boolean rememberMe) {
         UsernamePasswordToken token = new UsernamePasswordToken(username, password, rememberMe != null);
         SecurityUtils.getSubject().login(token);
 
         //设置session超时时间
         SecurityUtils.getSubject().getSession().setTimeout(sessionTimeout);
 
-        return "redirect:index";
+        return new JsonResponse(ResultCode.SUCCESS).toString();
     }
 
     @RequestMapping(value = "/login")
