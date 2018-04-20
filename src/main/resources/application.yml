@@ -1,0 +1,29 @@
+logging:
+  config: classpath:log4j2.xml
+
+server:
+  tomcat:
+    uri-encoding: UTF-8
+  session:
+    timeout: 600000
+
+spring:
+  #指定编码为utf-8
+  http:
+    encoding:
+      force: true
+      charset: utf-8
+      enabled: true
+  #数据库连接配置
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/test?characterEncoding=utf8&useSSL=true&createDatabaseIfNotExist=true
+    username: root
+    password: dth312512
+
+#指定数据xml位置
+mybatis:
+  mapper-locations: classpath:**/mapper/*.xml
+
+
+

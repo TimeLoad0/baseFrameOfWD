@@ -24,4 +24,7 @@ public class Constants {
 
     public static final String VIEW_LAYOUT_ERROR = "layout.error";
     public static final String VIEW_LAYOUT_404 = "layout.404";
+
+    public static final String X_REQUESTED_WITH = "x-requested-with";
+    public static final String XMLHTTPRESQUEST = "XMLHttpRequest";
 }

@@ -18,8 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 @ControllerAdvice
 public class GlobalExceptionHandler {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
-    private static final String X_REQUESTED_WITH = "x-requested-with";
-    private static final String XMLHTTPRESQUEST = "XMLHttpRequest";
 
     @ExceptionHandler(value = WdException.class)
     @ResponseBody
@@ -28,7 +26,7 @@ public class GlobalExceptionHandler {
         Util.printExceptionLog(request, LOGGER, wde.getMsg(), request.getRequestURL().toString());
 
         //如果是ajax请求响应头会有x-requested-with
-        if (null == request.getHeader(X_REQUESTED_WITH) || !request.getHeader(X_REQUESTED_WITH).equalsIgnoreCase(XMLHTTPRESQUEST)) {
+        if (null == request.getHeader(Constants.X_REQUESTED_WITH) || !request.getHeader(Constants.X_REQUESTED_WITH).equalsIgnoreCase(Constants.XMLHTTPRESQUEST)) {
             request.setAttribute(Constants.RESULT_URL, request.getRequestURL());
 
             ModelAndView mav = new ModelAndView();
@@ -46,7 +44,7 @@ public class GlobalExceptionHandler {
     @ResponseBody
     public String jsonExceptionHandler(HttpServletRequest request, Exception e) throws Exception {
         //如果是ajax请求响应头会有x-requested-with
-        if (null == request.getHeader(X_REQUESTED_WITH) || !request.getHeader(X_REQUESTED_WITH).equalsIgnoreCase(XMLHTTPRESQUEST)) {
+        if (null == request.getHeader(Constants.X_REQUESTED_WITH) || !request.getHeader(Constants.X_REQUESTED_WITH).equalsIgnoreCase(Constants.XMLHTTPRESQUEST)) {
             request.setAttribute(Constants.RESULT_URL, request.getRequestURL());
 
             //抛出异常由HandlerExceptionResolver和ErrorController处理

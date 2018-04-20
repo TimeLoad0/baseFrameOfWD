@@ -1,7 +1,6 @@
 package com.base.web.aop;
 
 import com.base.web.common.Constants;
-import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -55,8 +54,6 @@ public class LogAspect {
      */
     @Before("webLog()")
     public void deBefore(JoinPoint joinPoint) throws Throwable {
-        request.setAttribute(Constants.RESULT_LOGINUSERID, SecurityUtils.getSubject().getSession().getAttribute(Constants.RESULT_USERID));
-
         // 记录下请求内容
         StringBuilder sb = new StringBuilder();
 
@@ -72,9 +69,9 @@ public class LogAspect {
         LOGGER.info(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>> REQUEST INFO");
         LOGGER.info("REQUEST_URL : " + request.getRequestURL().toString());
         LOGGER.info("HTTP_METHOD_TYPE : " + request.getMethod());
-        LOGGER.info("IP : " + request.getRemoteAddr());
+        LOGGER.info("REQUEST_IP : " + request.getRemoteAddr());
         LOGGER.info("CLASS_METHOD : " + joinPoint.getSignature().getDeclaringTypeName() + "." + joinPoint.getSignature().getName());
-        LOGGER.info("ARGS : " + sb.toString());
+        LOGGER.info("REQUEST_ARGS : " + (StringUtils.isEmpty(sb.toString()) ? null : sb.toString()));
     }
 
     /**
@@ -86,7 +83,14 @@ public class LogAspect {
     @Around("webLog()")
     public Object arround(ProceedingJoinPoint pjp) throws Throwable {
         Object o = pjp.proceed();
-        LOGGER.info("METHOD_RESPONSE : " + o);
+
+        //如果是ajax请求响应头会有x-requested-with
+        if (null == request.getHeader(Constants.X_REQUESTED_WITH) || !request.getHeader(Constants.X_REQUESTED_WITH).equalsIgnoreCase(Constants.XMLHTTPRESQUEST)) {
+            LOGGER.info("RESPONSE_VIEW : " + o);
+        } else {
+            LOGGER.info("RESPONSE_JSON : " + o);
+        }
+
         return o;
     }
 }

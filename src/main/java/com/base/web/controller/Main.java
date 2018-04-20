@@ -14,8 +14,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * 主控制器
  *
@@ -25,8 +23,8 @@ import javax.servlet.http.HttpServletRequest;
 public class Main {
     private Logger logger =  LoggerFactory.getLogger(this.getClass());
 
-    @Value("${application.message:Hello World}")
-    private String message = "Hello World";
+    @Value("${server.session.timeout:1800000}")
+    private long sessionTimeout;
 
     @RequestMapping("/")
     public String welcome() {
@@ -59,8 +57,7 @@ public class Main {
     }
 
     @RequestMapping("/index")
-    public String index(HttpServletRequest request) {
-        System.out.println("loginUserId:"+request.getAttribute("loginUserId"));
+    public String index() {
         return "index";
     }
 
@@ -95,7 +92,11 @@ public class Main {
     public String dologin(String username, String password, Boolean rememberMe) {
         UsernamePasswordToken token = new UsernamePasswordToken(username, password, rememberMe != null);
         SecurityUtils.getSubject().login(token);
-        return "index";
+
+        //设置session超时时间
+        SecurityUtils.getSubject().getSession().setTimeout(sessionTimeout);
+
+        return "redirect:index";
     }
 
     @RequestMapping(value = "/login")

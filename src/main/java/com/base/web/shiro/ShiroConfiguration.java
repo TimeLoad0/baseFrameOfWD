@@ -13,6 +13,11 @@ import javax.servlet.Filter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * shoiro配置
+ * @author wj
+ * @date 2018-4-20 13:24:18
+ */
 @Configuration
 public class ShiroConfiguration {
     /**
@@ -28,14 +33,14 @@ public class ShiroConfiguration {
         // 登录成功后要跳转的链接
         shiroFilterFactoryBean.setSuccessUrl("/index");
         // 未授权界面;
-        shiroFilterFactoryBean.setUnauthorizedUrl("/");
+        shiroFilterFactoryBean.setUnauthorizedUrl("/login");
 
         //自定义拦截器
-        Map<String, Filter> filtersMap = new LinkedHashMap<String, Filter>();
+        Map<String, Filter> filtersMap = new LinkedHashMap<>();
         shiroFilterFactoryBean.setFilters(filtersMap);
 
         // 配置拦截链接 顺序判断
-        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
+        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         //配置退出过滤器,其中的具体的退出代码Shiro已经实现
         filterChainDefinitionMap.put("/logout", "logout");
         //防止登录成功之后下载favicon.ico
