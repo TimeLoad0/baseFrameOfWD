@@ -1,5 +1,6 @@
 package com.base.web.aop;
 
+import com.base.web.common.Constants;
 import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -54,7 +55,7 @@ public class LogAspect {
      */
     @Before("webLog()")
     public void deBefore(JoinPoint joinPoint) throws Throwable {
-        request.setAttribute("loginUserId", SecurityUtils.getSubject().getSession().getAttribute("userId"));
+        request.setAttribute(Constants.RESULT_LOGINUSERID, SecurityUtils.getSubject().getSession().getAttribute(Constants.RESULT_USERID));
 
         // 记录下请求内容
         StringBuilder sb = new StringBuilder();

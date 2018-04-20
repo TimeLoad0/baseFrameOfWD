@@ -2,7 +2,7 @@
 <Configuration status="WARN">  
 	<Appenders>  
 		<Console name="Console" target="SYSTEM_OUT">  
-			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />  
+			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %message%n" />
 		</Console>  
 		
 		<!-- name可以自定义，作用是在Loggers中AppenderRef中使用 -->
@@ -10,7 +10,7 @@
 		<!-- filePattern定义输出文件名称（文件满足条件后自动截断，生成历史文件） -->
 		<RollingFile name="DEBUG_ROLLING_FILE" fileName="../logs/debug_logs.logs" filePattern="../logs/%d{yyyy-MM-dd}-debugs.log">
             <ThresholdFilter level="debug" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %message%xEx%n"/>
  
 			<!-- 文件截断的条件，具体参考文档 -->
 			<Policies>
@@ -23,7 +23,7 @@
 		<RollingFile name="ERROR_ROLLING_FILE" fileName="../logs/error_logs.logs" filePattern="../logs/%d{yyyy-MM-dd}-error.log">
 			<!-- 可以通过该参数来设置获取日志的权限 -->
 			<ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY"/>
-            <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %msg%xEx%n"/>
+            <PatternLayout pattern="%d{yyyy-MM-dd 'at' HH:mm:ss z} %-5level %class{36} %L %M - %message%xEx%n"/>
 			<Policies>
 				<TimeBasedTriggeringPolicy interval="24"/>
 				<SizeBasedTriggeringPolicy size="250MB"/>

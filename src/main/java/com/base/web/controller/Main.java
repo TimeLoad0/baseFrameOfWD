@@ -2,12 +2,14 @@ package com.base.web.controller;
 
 import com.base.web.common.JsonResponse;
 import com.base.web.common.ResultCode;
+import com.base.web.common.WdException;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -67,7 +69,7 @@ public class Main {
         return "index1";
     }
 
-    @PostMapping("/test")
+    @RequestMapping("/test")
     @ResponseBody
     public String test() {
         return new JsonResponse(ResultCode.SUCCESS).toString();
@@ -99,5 +101,21 @@ public class Main {
     @RequestMapping(value = "/login")
     public String login() {
         return "login";
+    }
+
+    @RequestMapping("/testAjax")
+    @ResponseBody
+    public String testAjax() {
+        throw new WdException(ResultCode.FAILED.getCode(),"test ajax error");
+    }
+
+    @GetMapping("/testView")
+    public String testView() {
+        throw new WdException(ResultCode.FAILED.getCode(),"test view get error");
+    }
+
+    @PostMapping("/testPost")
+    public String testPost() {
+        throw new WdException(ResultCode.FAILED.getCode(),"test view post error");
     }
 }

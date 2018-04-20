@@ -37,8 +37,13 @@ public class ViewExceptionHandler implements HandlerExceptionResolver {
     @Override
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         //打印日志
-        Util.printExceptionLog(request, LOGGER, HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+        Util.printExceptionLog(request, LOGGER, HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),request.getAttribute(Constants.RESULT_URL).toString());
 
-        return new ModelAndView(Constants.VIEW_LAYOUT_ERROR);
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName(Constants.VIEW_LAYOUT_ERROR);
+        mav.getModel().put(Constants.RESULT_MESSAGE, HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+        mav.getModel().put(Constants.RESULT_CODE, HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+        return mav;
     }
 }

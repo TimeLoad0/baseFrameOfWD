@@ -17,7 +17,7 @@ import java.util.Map;
 public class JsonResponse {
     private Integer code;
 
-    private String msg;
+    private String message;
 
     private Integer pageNo;
 
@@ -27,26 +27,26 @@ public class JsonResponse {
 
     private List<Map<String, Object>> rowData;
 
-    public JsonResponse(Integer code, String msg) {
+    public JsonResponse(Integer code, String message) {
         this.code = code;
-        this.msg = msg;
+        this.message = message;
     }
 
     public JsonResponse(ResultCode resultCode) {
         this.code = resultCode.getCode();
-        this.msg = resultCode.getMsg();
+        this.message = resultCode.getMsg();
     }
 
-    public JsonResponse(Integer code, String msg, Integer totalSize, List<Map<String, Object>> rowData) {
+    public JsonResponse(Integer code, String message, Integer totalSize, List<Map<String, Object>> rowData) {
         this.code = code;
-        this.msg = msg;
+        this.message = message;
         this.totalSize = totalSize;
         this.rowData = rowData;
     }
 
-    public JsonResponse(Integer code, String msg, Integer pageNo, Integer pageSize, Integer totalSize, List<Map<String, Object>> rowData) {
+    public JsonResponse(Integer code, String message, Integer pageNo, Integer pageSize, Integer totalSize, List<Map<String, Object>> rowData) {
         this.code = code;
-        this.msg = msg;
+        this.message = message;
         this.pageNo = pageNo;
         this.pageSize = pageSize;
         this.totalSize = totalSize;
@@ -62,10 +62,15 @@ public class JsonResponse {
             map.put(Constants.RESULT_CODE, code);
         }
 
-        if (null == msg) {
-            map.put(Constants.RESULT_MSG, ResultCode.FAILED.getMsg());
+        if (null == message) {
+            map.put(Constants.RESULT_MESSAGE, ResultCode.FAILED.getMsg());
         } else {
-            map.put(Constants.RESULT_MSG, msg);
+            map.put(Constants.RESULT_MESSAGE, message);
+        }
+
+        //如果请求失败直接返回map，不设置分页信息
+        if ((Integer) map.get(Constants.RESULT_CODE) != ResultCode.SUCCESS.getCode()) {
+            return map;
         }
 
         if (null == pageNo) {
@@ -108,12 +113,12 @@ public class JsonResponse {
         this.code = code;
     }
 
-    public String getMsg() {
-        return msg;
+    public String getMessage() {
+        return message;
     }
 
-    public void setMsg(String msg) {
-        this.msg = msg;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public Integer getPageNo() {

@@ -114,7 +114,7 @@ $(function(){
                 "text":"新增",
                 "action":function(){
                     $.ajax({
-                        url:"errorTest",
+                        url:"testAjax",
                         success:function(res){
                             showAlert(JSON.stringify(res));
                         }

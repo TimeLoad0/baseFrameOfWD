@@ -39,13 +39,13 @@ public class Util {
      * @param logger  日志对象
      * @param msg     消息
      */
-    public static void printExceptionLog(HttpServletRequest request, Logger logger, String msg) {
+    public static void printExceptionLog(HttpServletRequest request, Logger logger, String msg,String path) {
         Enumeration enumeration = request.getParameterNames();
 
         StringBuilder sb = new StringBuilder("Request Error:");
         StringBuilder params = new StringBuilder();
 
-        sb.append(nullToEmpty(msg)).append(" => ").append("URL:").append(request.getAttribute("url")).append(" PARAMS:");
+        sb.append(nullToEmpty(msg)).append(" => ").append("URL:").append(nullToEmpty(path)).append(" PARAMS:");
 
         while (enumeration.hasMoreElements()) {
             String name = enumeration.nextElement().toString();
