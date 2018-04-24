@@ -2,10 +2,13 @@ package com.base.web.shiro;
 
 import org.apache.shiro.codec.Base64;
 import org.apache.shiro.mgt.SecurityManager;
+import org.apache.shiro.session.mgt.SessionManager;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.CookieRememberMeManager;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.SimpleCookie;
+import org.apache.shiro.web.session.mgt.DefaultWebSessionManager;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,6 +23,9 @@ import java.util.Map;
  */
 @Configuration
 public class ShiroConfiguration {
+    @Value("${server.session.timeout:1800000}")
+    private long sessionTimeout;
+
     /**
      * ShiroFilterFactoryBean 处理拦截资源文件
      */
@@ -62,9 +68,20 @@ public class ShiroConfiguration {
         DefaultWebSecurityManager securityManager = new DefaultWebSecurityManager();
         // 设置realm.
         securityManager.setRealm(shiroRealm());
+        //设置sessionManager
+        securityManager.setSessionManager(sessionManager());
         //注入记住我管理器;
         securityManager.setRememberMeManager(rememberMeManager());
         return securityManager;
+    }
+
+    private SessionManager sessionManager() {
+        DefaultWebSessionManager sessionManager = new DefaultWebSessionManager();
+        //设置session超时时间
+        sessionManager.setGlobalSessionTimeout(sessionTimeout);
+        //设置登录url不显示sessionid
+        sessionManager.setSessionIdUrlRewritingEnabled(false);
+        return sessionManager;
     }
 
     private ShiroRealm shiroRealm() {

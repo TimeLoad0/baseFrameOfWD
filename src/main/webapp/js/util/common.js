@@ -24,8 +24,31 @@ if (!isEmpty(laydate)) {
 $.ajaxSetup({
     type: 'POST',
     dataType: 'json',
-    error: function () {
-        return false;
+    error: function (xhr) {
+        if (isEmpty(xhr.responseText)) {
+            return false;
+        }
+
+        //判断是否session超时
+        if (xhr.responseText.indexOf("login.css") !== -1) {
+            $.alert({
+                type: "orange",
+                content: "登录已超时，请重新登录",
+                title: "<span class='fa fa-exclamation-circle' style='color:#f1c40f;'>&nbsp;</span>系统信息",
+                boxWidth: "400px",
+                useBootstrap: false,
+                closeIcon: false,
+                buttons: {
+                    confirm: {
+                        text: '确认',
+                        btnClass: 'btn-orange',
+                        action: function () {
+                            window.top.location = window.top.ctx + "/login";
+                        }
+                    }
+                }
+            })
+        }
     },
     complete: function () {
         hideLoadingCover();
@@ -150,19 +173,19 @@ function createSearchToolBar(options, src) {
                 continue;
             }
 
-            var rightBtn = $('<a class="btn btn-primary"><i class="fa ' + operIcon + '"></i>&nbsp;'+operText+'</a>');
+            var rightBtn = $('<a class="btn btn-primary"><i class="fa ' + operIcon + '"></i>&nbsp;' + operText + '</a>');
 
             //自定义样式
-            if(!isEmpty(operClass)){
+            if (!isEmpty(operClass)) {
                 rightBtn.addClass(operClass);
             }
 
             //绑定事件
-            if(!isEmpty(operAction)){
+            if (!isEmpty(operAction)) {
                 //闭包
-                (function(){
+                (function () {
                     var action = operAction;
-                    rightBtn.off('click').on('click',function(){
+                    rightBtn.off('click').on('click', function () {
                         action();
                     })
                 })();
@@ -1400,6 +1423,6 @@ function dataCompareDesc(prop) {
 }
 
 //获取tr行数据,src必须是tr子元素
-function getTrData(src,name){
+function getTrData(src, name) {
     return nullToEmpty($(src).parents('tr').attr(isEmpty(name) ? "rowData" : name));
 }

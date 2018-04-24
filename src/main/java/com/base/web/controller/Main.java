@@ -1,5 +1,6 @@
 package com.base.web.controller;
 
+import com.base.web.common.Constants;
 import com.base.web.common.JsonResponse;
 import com.base.web.common.ResultCode;
 import com.base.web.common.WdException;
@@ -7,12 +8,12 @@ import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 /**
  * 主控制器
@@ -21,10 +22,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 public class Main {
-    private Logger logger =  LoggerFactory.getLogger(this.getClass());
-
-    @Value("${server.session.timeout:1800000}")
-    private long sessionTimeout;
+    private Logger LOGGER =  LoggerFactory.getLogger(this.getClass());
 
     @RequestMapping("/")
     public String welcome() {
@@ -94,15 +92,12 @@ public class Main {
         UsernamePasswordToken token = new UsernamePasswordToken(username, password, rememberMe != null);
         SecurityUtils.getSubject().login(token);
 
-        //设置session超时时间
-        SecurityUtils.getSubject().getSession().setTimeout(sessionTimeout);
-
         return new JsonResponse(ResultCode.SUCCESS).toString();
     }
 
     @RequestMapping(value = "/login")
-    public String login() {
-        return "login";
+    public ModelAndView login() {
+        return new ModelAndView(Constants.VIEW_LOGIN);
     }
 
     @RequestMapping("/testAjax")

@@ -4,8 +4,9 @@ logging:
 server:
   tomcat:
     uri-encoding: UTF-8
+  #超时时间，单位毫秒
   session:
-    timeout: 600000
+    timeout: 5000
 
 spring:
   #指定编码为utf-8

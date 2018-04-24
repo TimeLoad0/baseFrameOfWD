@@ -13,7 +13,6 @@
     <div class="wrapper">
         <div class="container">
             <h1 id="msg">登录</h1>
-
             <form id="loginForm" action="##" onsubmit="return false" method="post">
                 <input type="text" name="username" placeholder="Username" autocomplete="false"/>
                 <input type="password" name="password" placeholder="Password" autocomplete="false"/>
@@ -21,7 +20,6 @@
                 <input id="login-button" type="submit" value="登录" onclick="login()"/></p>
             </form>
         </div>
-
         <ul class="bg-bubbles">
             <li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li><li></li>
         </ul>
@@ -48,6 +46,7 @@
 
                     window.setTimeout(function(){
                         $('#msg').html("登录").css("color","white");
+                        $('input[name="username"]').focus();
                     },3000)
                 }
             }

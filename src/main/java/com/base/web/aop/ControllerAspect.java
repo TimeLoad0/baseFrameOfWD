@@ -24,13 +24,13 @@ import java.util.Enumeration;
  */
 @Component
 @Aspect
-public class LogAspect {
+public class ControllerAspect {
     private final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
     private HttpServletRequest request;
 
     @Autowired
-    public LogAspect(HttpServletRequest request) {
+    public ControllerAspect(HttpServletRequest request) {
         this.request = request;
     }
 
@@ -84,11 +84,11 @@ public class LogAspect {
     public Object arround(ProceedingJoinPoint pjp) throws Throwable {
         Object o = pjp.proceed();
 
-        //如果是ajax请求响应头会有x-requested-with
-        if (null == request.getHeader(Constants.X_REQUESTED_WITH) || !request.getHeader(Constants.X_REQUESTED_WITH).equalsIgnoreCase(Constants.XMLHTTPRESQUEST)) {
-            LOGGER.info("RESPONSE_VIEW : " + o);
-        } else {
+        //如果是ajax请求响应头会有x-requested-with，并且值为XMLHttpRequest
+        if (null != request.getHeader(Constants.X_REQUESTED_WITH) && request.getHeader(Constants.X_REQUESTED_WITH).equalsIgnoreCase(Constants.XMLHTTPRESQUEST)) {
             LOGGER.info("RESPONSE_JSON : " + o);
+        } else {
+            LOGGER.info("RESPONSE_VIEW : " + o);
         }
 
         return o;
